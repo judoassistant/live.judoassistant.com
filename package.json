@@ -1,0 +1,21 @@
+{
+  "name": "live.judoassistant.com",
+  "version": "1.0.0",
+  "description": "Live Web front-end for JudoAssistant",
+  "author": "Svend Christian Svendsen",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "cross-env": "^5.2.0",
+    "nuxt": "^2.4.0",
+    "nuxt-buefy": "^0.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
