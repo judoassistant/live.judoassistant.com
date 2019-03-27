@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-    <h1 class="title">Players {{counter}}</h1>
+    <h1 class="title">Players</h1>
     <b-table paginated :per-page=15 :data="players" default-sort="last_name">
       <template v-slot:default="props">
         <b-table-column sortable field="first_name" label="First Name">
@@ -37,35 +37,10 @@ import Card from '~/components/Card'
 
 export default {
   name: 'HomePage',
-  data() {
-    return {
-      columns: [
-        {
-          field: 'first_name',
-          label: 'First Name',
-        },
-        {
-          field: 'last_name',
-          label: 'Last Name',
-        },
-        {
-          field: 'grade',
-          label: 'Grade',
-        },
-        {
-          field: 'club',
-          label: 'Club',
-        },
-      ]
-    }
-  },
   computed: {
     players() {
       return this.$store.state.players
     },
-    counter() {
-      return this.$store.state.counter
-    }
   },
   components: {
     Card
