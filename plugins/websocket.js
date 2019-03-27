@@ -1,12 +1,10 @@
 function socketDelayedSend(socket, message) {
   if (socket.readyState == 1) {
-    console.log("Sending immidiate message");
     socket.send(message);
     return;
   }
 
   socket.addEventListener('open', (event) => {
-    console.log("Sending delayed message", message);
     socket.send(message);
   });
 }
@@ -27,7 +25,8 @@ export default ({ store }, inject) => {
 
   // Listen for messages
   socket.addEventListener('message', function (event) {
-    console.log('Message from server ', event.data);
+    const message = JSON.parse(event.data);
+    store.commit('updateTournament', message);
   });
 
   socket.addEventListener('error', function (event) {

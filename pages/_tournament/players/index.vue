@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <h1 class="title">Players</h1>
-    <b-table paginated :per-page=15 :data="players" default-sort="name">
+    <b-table paginated :per-page=50 :data="players" default-sort="name">
       <template v-slot:default="props">
         <b-table-column sortable field="name" label="Name">
           <nuxt-link :to='playerLink(props.row.id)'>{{ props.row.name}}</nuxt-link>
@@ -36,7 +36,9 @@ export default {
   name: 'HomePage',
   computed: {
     players() {
-      return this.$store.state.players
+      return this.$store.state.players.map((player) => {
+        return { name: player.firstName + ' ' + player.lastName, club: player.club, grade: player.grade, club: player.club };
+      });
     },
   },
   components: {

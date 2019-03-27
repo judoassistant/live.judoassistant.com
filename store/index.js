@@ -37,6 +37,18 @@ export const mutations = {
     state.connected = true;
     state.connecting = false;
   },
+  updateTournament (state, message) {
+    console.log("Update tournament", message);
+    state.tournamentLoading = false;
+    state.tournament = message.tournament;
+    state.players = message.players;
+    state.categories = message.categories;
+    console.log(message.tournament);
+
+    // if (message.
+    // state.tournament =
+
+  },
 }
 
 export const actions = {

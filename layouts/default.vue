@@ -55,7 +55,7 @@
 export default {
   computed: {
     showLoadingIndicator() {
-      return this.$store.state.connected;
+      return this.$store.state.connecting;
     },
     showConnectionMessage() {
       return !this.$store.state.connecting && !this.$store.state.connected;
