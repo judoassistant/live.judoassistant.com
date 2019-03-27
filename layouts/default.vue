@@ -69,5 +69,8 @@ export default {
   },
   methods: {
   },
+  mounted() {
+    this.$store.dispatch('selectTournament', this.$route.params.tournament);
+  },
 }
 </script>

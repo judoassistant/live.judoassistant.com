@@ -1,6 +1,6 @@
 export const state = () => ({
   connected: false,
-  connecting: false,
+  connecting: true,
 
   tournamentLoading: false,
   tournament: null,
@@ -22,11 +22,20 @@ export const mutations = {
     state.detailedPlayerLoading = true;
     state.detailedPlayer = null;
   },
+  clearTournament (state) {
+    state.tournamentLoading = true;
+    state.tournament = null;
+  },
   closeConnection (state) {
     state.connected = false;
+    state.connecting = false;
+    state.tournamentLoading = false;
     state.detailedPlayerLoading = false;
     state.detailedCategoryLoading = false;
-    state.loading = false;
+  },
+  openConnection (state) {
+    state.connected = true;
+    state.connecting = false;
   },
 }
 
@@ -38,5 +47,13 @@ export const actions = {
   selectPlayer ({ commit }, id) {
     commit('clearDetailedPlayer');
     this.$selectPlayer(id);
+  },
+  selectTournament ({ commit, state }, id) {
+    commit('clearTournament');
+
+    if (state.tournament != null && state.tournament.webName == id) {
+      return;
+    }
+    this.$selectTournament(id);
   }
 }
