@@ -1,52 +1,47 @@
 <template>
   <section class="section">
-       <b-table :data="data" :columns="columns"></b-table>
+    <h1 class="title">Categories</h1>
+    <b-table :data="data" :columns="columns"></b-table>
   </section>
 </template>
 
 <script>
-import Card from '~/components/Card'
+  import Card from '~/components/Card'
 
 export default {
-    name: 'HomePage',
-    data() {
-        return {
-            data: [
-                { 'id': 1, 'first_name': 'Jesse', 'last_name': 'Simmons', 'date': '2016-10-15 13:43:27', 'gender': 'Male' },
-                { 'id': 2, 'first_name': 'John', 'last_name': 'Jacobs', 'date': '2016-12-15 06:00:53', 'gender': 'Male' },
-                { 'id': 3, 'first_name': 'Tina', 'last_name': 'Gilbert', 'date': '2016-04-26 06:26:28', 'gender': 'Female' },
-                { 'id': 4, 'first_name': 'Clarence', 'last_name': 'Flores', 'date': '2016-04-10 10:28:46', 'gender': 'Male' },
-                { 'id': 5, 'first_name': 'Anne', 'last_name': 'Lee', 'date': '2016-12-06 14:38:38', 'gender': 'Female' }
-            ],
-            columns: [
-                {
-                    field: 'id',
-                    label: 'ID',
-                    width: '40',
-                    numeric: true
-                },
-                {
-                    field: 'first_name',
-                    label: 'First Name',
-                },
-                {
-                    field: 'last_name',
-                    label: 'Last Name',
-                },
-                {
-                    field: 'date',
-                    label: 'Date',
-                    centered: true
-                },
-                {
-                    field: 'gender',
-                    label: 'Gender',
-                }
-            ]
+  name: 'HomePage',
+  data() {
+    return {
+      data: [
+        { 'id': 1, 'name': 'Drenge A -45', 'state': 'finished', 'playerCount': 4},
+        { 'id': 2, 'name': 'Drenge A -50', 'state': 'not_started', 'playerCount': 7},
+        { 'id': 3, 'name': 'Drenge A -55', 'state': 'not_started', 'playerCount': 3},
+        { 'id': 4, 'name': 'Drenge A -66', 'state': 'in_progress', 'playerCount': 5},
+        { 'id': 5, 'name': 'Drenge A -81', 'state': 'in_progress', 'playerCount': 6},
+        { 'id': 6, 'name': 'Piger A -48', 'state': 'finished', 'playerCount': 3},
+        { 'id': 7, 'name': 'Piger A -52', 'state': 'not_started', 'playerCount': 5},
+        { 'id': 8, 'name': 'Piger A -57', 'state': 'not_started', 'playerCount': 6},
+        { 'id': 9, 'name': 'Piger B -48', 'state': 'in_progress', 'playerCount': 5},
+        { 'id': 10, 'name': 'Piger C -35', 'state': 'in_progress', 'playerCount': 2},
+      ],
+      columns: [
+        {
+          field: 'name',
+          label: 'Name',
+        },
+        {
+          field: 'state',
+          label: 'State',
+        },
+        {
+          field: 'playerCount',
+          label: 'Number of Players',
         }
-    },
-    components: {
-        Card
+      ]
     }
+  },
+  components: {
+    Card
+  }
 }
 </script>
