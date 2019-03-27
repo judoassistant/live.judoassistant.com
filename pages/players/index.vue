@@ -1,13 +1,10 @@
 <template>
   <section class="section">
     <h1 class="title">Players</h1>
-    <b-table paginated :per-page=15 :data="players" default-sort="last_name">
+    <b-table paginated :per-page=15 :data="players" default-sort="name">
       <template v-slot:default="props">
-        <b-table-column sortable field="first_name" label="First Name">
-          {{ props.row.first_name}}
-        </b-table-column>
-        <b-table-column sortable field="last_name" label="Last Name">
-          {{ props.row.last_name}}
+        <b-table-column sortable field="name" label="Name">
+          <nuxt-link :to='playerLink(props.row.id)'>{{ props.row.name}}</nuxt-link>
         </b-table-column>
         <b-table-column sortable field="grade" label="Grade">
           {{ props.row.grade}}
@@ -44,6 +41,11 @@ export default {
   },
   components: {
     Card
+  },
+  methods: {
+    playerLink(id) {
+      return '/players/' + id;
+    }
   }
 }
 </script>
