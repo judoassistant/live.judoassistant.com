@@ -11,8 +11,8 @@
           href="/"
         >
           <img
-            src="~assets/buefy.png"
-            alt="Buefy"
+            src="~assets/logo.svg"
+            alt="JudoAssistant"
             height="28"
           >
         </a>
@@ -70,6 +70,11 @@ export default {
           title: 'Categories',
           icon: 'account-group',
           to: { name: 'categories' }
+        },
+        {
+          title: 'Tatamis',
+          icon: 'account-group',
+          to: { name: 'tatamis' }
         }
       ]
     }
