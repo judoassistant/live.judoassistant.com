@@ -1,10 +1,11 @@
 <template>
   <section class="section">
-    <h1 class="title">Players</h1>
+    <h1 class="title">Bjergkøbing Grand Prix</h1>
+    <h2 class="subtitle">Players</h2>
     <b-table paginated :per-page=50 :data="players" default-sort="name">
       <template v-slot:default="props">
         <b-table-column sortable field="name" label="Name">
-          <nuxt-link :to='playerLink(props.row.id)'>{{ props.row.name}}</nuxt-link>
+          <nuxt-link :to="{ name: 'tournament-players-player', params: {category: props.row.id}}">{{ props.row.name}}</nuxt-link>
         </b-table-column>
         <b-table-column sortable field="grade" label="Grade">
           {{ props.row.grade}}
@@ -37,7 +38,7 @@ export default {
   computed: {
     players() {
       return this.$store.state.players.map((player) => {
-        return { name: player.firstName + ' ' + player.lastName, club: player.club, grade: player.grade, club: player.club };
+        return { name: player.firstName + ' ' + player.lastName, club: player.club, grade: player.grade, club: player.club, id: player.id };
       });
     },
   },

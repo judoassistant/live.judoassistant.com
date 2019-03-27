@@ -15,6 +15,7 @@ export default ({ store }, inject) => {
   inject('selectPlayer', (id) => console.log("Selecting player from plugin", id));
 
   inject('selectTournament', (id) => {
+    console.log("Selecting tournament");
     socketDelayedSend(socket, 'select-tournament ' + id);
   });
 

@@ -14,9 +14,6 @@
         <nuxt-link :to="{ name: 'tournament-categories', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
           Categories
         </nuxt-link>
-        <nuxt-link :to="{ name: 'tournament-tatamis', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
-          Tatamis
-        </nuxt-link>
 
         <!-- <div class="navbar-burger"> -->
         <!--   <span /> -->

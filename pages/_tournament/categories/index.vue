@@ -1,10 +1,11 @@
 <template>
   <section class="section">
-    <h1 class="title">Categories</h1>
+    <h1 class="title">Bjergkøbing Grand Prix</h1>
+    <h2 class="subtitle">Categories</h2>
     <b-table paginated :per-page=15 :data="categories" default-sort="name">
       <template v-slot:default="props">
         <b-table-column sortable field="name" label="Name">
-          <nuxt-link :to='categoryLink(props.row.id)'>{{ props.row.name}}</nuxt-link>
+          <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: props.row.id}}">{{ props.row.name}}</nuxt-link>
         </b-table-column>
         <b-table-column sortable field="state" label="State">
           {{ props.row.state}}
@@ -39,31 +40,10 @@ export default {
       return this.$store.state.categories
     },
   },
-  data() {
-    return {
-      columns: [
-        {
-          field: 'name',
-          label: 'Name',
-        },
-        {
-          field: 'state',
-          label: 'State',
-        },
-        {
-          field: 'playerCount',
-          label: 'Number of Players',
-        }
-      ]
-    }
-  },
   components: {
     Card
   },
   methods: {
-    categoryLink(id) {
-      return '/categories/' + id;
-    }
   }
 }
 </script>
