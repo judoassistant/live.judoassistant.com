@@ -35,6 +35,10 @@ export const state = () => ({
     { 'id': 9, 'name': 'Piger B -48', 'state': 'in_progress', 'playerCount': 5},
     { 'id': 10, 'name': 'Piger C -35', 'state': 'in_progress', 'playerCount': 2},
   ],
+  detailedCategoryLoading: true,
+  detailedCategory: {
+
+  },
 })
 
 export const mutations = {
