@@ -1,5 +1,6 @@
 export const state = () => ({
   counter: 0,
+  loading: false,
   players: [
     { 'id': 1, 'first_name': 'Jesse', 'last_name': 'Simmons', 'gender': 'Male', 'grade': '5. kyu', 'club': 'Aarhus Judo Klub'},
     { 'id': 2, 'first_name': 'John', 'last_name': 'Jacobs', 'gender': 'Male', 'grade': '5. kyu', 'club': 'Aarhus Judo Klub'},

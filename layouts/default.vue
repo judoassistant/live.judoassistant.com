@@ -24,37 +24,17 @@
     </nav>
 
     <section class="main-content">
-      <nuxt />
+      <b-loading :is-full-page=true :active.sync="loading"></b-loading>
+      <nuxt v-if="!loading"/>
     </section>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      items: [
-        {
-          title: 'Tournament',
-          icon: 'home',
-          to: { name: 'index' }
-        },
-        {
-          title: 'Players',
-          icon: 'account-multiple',
-          to: { name: 'players' }
-        },
-        {
-          title: 'Categories',
-          icon: 'account-group',
-          to: { name: 'categories' }
-        },
-        {
-          title: 'Tatamis',
-          icon: 'account-group',
-          to: { name: 'tatamis' }
-        }
-      ]
+  computed: {
+    loading() {
+      return this.$store.state.loading
     }
   }
 }
