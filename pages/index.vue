@@ -7,3 +7,16 @@
     <h3 class="subtitle is-6 has-text-grey">Author: <a href="https://github.com/anteriovieira">Antério Vieira</a></h3>
   </section>
 </template>
+
+<script>
+export default {
+  name: 'HomePage',
+  layout: 'frontpage',
+  computed: {
+  },
+  components: {
+  },
+  methods: {
+  }
+}
+</script>

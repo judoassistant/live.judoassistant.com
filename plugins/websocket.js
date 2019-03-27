@@ -1,11 +1,12 @@
 export default ({ store }, inject) => {
-  const socket = new WebSocket('ws://localhost:9000');
+  const socket = new WebSocket('ws://localhost:9001');
   inject('selectCategory', (id) => console.log("Selecting category from plugin", id));
   inject('selectPlayer', (id) => console.log("Selecting player from plugin", id));
 
   // Connection opened
   socket.addEventListener('open', function (event) {
     socket.send('Hello Server!');
+    store.commit('openConnection');
   });
 
   // Listen for messages
