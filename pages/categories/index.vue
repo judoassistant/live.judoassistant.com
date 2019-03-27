@@ -4,7 +4,7 @@
     <b-table paginated :per-page=15 :data="categories" default-sort="name">
       <template v-slot:default="props">
         <b-table-column sortable field="name" label="Name">
-          {{ props.row.name}}
+          <nuxt-link :to='categoryLink(props.row.id)'>{{ props.row.name}}</nuxt-link>
         </b-table-column>
         <b-table-column sortable field="state" label="State">
           {{ props.row.state}}
@@ -59,6 +59,11 @@ export default {
   },
   components: {
     Card
+  },
+  methods: {
+    categoryLink(id) {
+      return '/categories/' + id;
+    }
   }
 }
 </script>

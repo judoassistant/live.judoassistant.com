@@ -42,3 +42,9 @@ export const mutations = {
     state.counter++
   }
 }
+
+export const actions = {
+  selectCategory ({ commit }, id) {
+    console.log("Selected category", id);
+  }
+}

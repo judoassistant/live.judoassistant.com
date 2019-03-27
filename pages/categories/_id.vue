@@ -55,8 +55,14 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.$store.dispatch('selectCategory', this.$route.params.id);
+    //this.$nextTick(() => {
+    //  this.$nuxt.$loading.start();
+    //});
+  },
   components: {
     Card
-  }
+  },
 }
 </script>
