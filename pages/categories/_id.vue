@@ -13,7 +13,7 @@
       <h1 class="title">Drenge A -45</h1>
       <b-tabs>
         <b-tab-item label="Players" icon="account-multiple">
-          <b-table :data="data" :columns="columns"></b-table>
+          <!-- <b-table :data="data" :columns="columns"></b-table> -->
         </b-tab-item>
         <b-tab-item label="Matches" icon="tournament">
         </b-tab-item>

@@ -32,7 +32,12 @@ export default {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: ['plugins/websocket.js'],
+  plugins: [
+    {
+      src: 'plugins/websocket.js',
+      ssr: false,
+    }
+  ],
 
   /*
   ** Nuxt.js modules

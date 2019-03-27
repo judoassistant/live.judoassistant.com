@@ -1,6 +1,6 @@
 export const state = () => ({
-  counter: 0,
-  loading: false,
+  closed: false,
+  loading: true,
   players: [
     { 'id': 1, 'name': 'Jesse Simmons', 'gender': 'Male', 'grade': '5. kyu', 'club': 'Aarhus Judo Klub'},
     { 'id': 2, 'name': 'John Jacobs', 'gender': 'Male', 'grade': '5. kyu', 'club': 'Aarhus Judo Klub'},
@@ -35,20 +35,36 @@ export const state = () => ({
     { 'id': 9, 'name': 'Piger B -48', 'state': 'in_progress', 'playerCount': 5},
     { 'id': 10, 'name': 'Piger C -35', 'state': 'in_progress', 'playerCount': 2},
   ],
-  detailedCategoryLoading: true,
-  detailedCategory: {
-
-  },
+  detailedCategoryLoading: false,
+  detailedCategory: null,
+  detailedPlayerLoading: false,
+  detailedPlayer: null,
 })
 
 export const mutations = {
-  increment (state) {
-    state.counter++
-  }
+  clearDetailedCategory (state) {
+    state.detailedCategoryLoading = true;
+    state.detailedCategory = null;
+  },
+  clearDetailedPlayer (state) {
+    state.detailedPlayerLoading = true;
+    state.detailedPlayer = null;
+  },
+  closeConnection (state) {
+    state.closed = true;
+    state.detailedPlayerLoading = false;
+    state.detailedCategoryLoading = false;
+    state.loading = false;
+  },
 }
 
 export const actions = {
   selectCategory ({ commit }, id) {
-    console.log("Selected category", id);
+    commit('clearDetailedCategory');
+    this.$selectCategory(id);
+  },
+  selectPlayer ({ commit }, id) {
+    commit('clearDetailedPlayer');
+    this.$selectPlayer(id);
   }
 }

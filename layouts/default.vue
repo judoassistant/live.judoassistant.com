@@ -24,8 +24,17 @@
     </nav>
 
     <section class="main-content">
+      <section class="section" v-if="closed">
+        <div class="content has-text-grey has-text-centered">
+          <p>
+            <b-icon icon="close-network" size="is-large">
+            </b-icon>
+          </p>
+          <p>The connection to the server has been lost. Try to refresh the page</p>
+        </div>
+      </section>
       <b-loading :is-full-page=true :active.sync="loading"></b-loading>
-      <nuxt v-if="!loading"/>
+      <nuxt v-if="!loading && !closed"/>
     </section>
   </div>
 </template>
@@ -34,7 +43,10 @@
 export default {
   computed: {
     loading() {
-      return this.$store.state.loading
+      return this.$store.state.loading;
+    },
+    closed() {
+      return this.$store.state.closed;
     }
   }
 }
