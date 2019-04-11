@@ -11,12 +11,14 @@ function socketDelayedSend(socket, message) {
 
 export default ({ store }, inject) => {
   const socket = new WebSocket('ws://localhost:9001');
-  inject('selectCategory', (id) => console.log("Selecting category from plugin", id));
-  inject('selectPlayer', (id) => console.log("Selecting player from plugin", id));
-
-  inject('selectTournament', (id) => {
-    console.log("Selecting tournament");
-    socketDelayedSend(socket, 'select-tournament ' + id);
+  inject('subscribeCategory', (id) => {
+    socketDelayedSend(socket, 'subscribeCategory ' + id);
+  });
+  inject('subscribePlayer', (id) => {
+    socketDelayedSend(socket, 'subscribePlayer ' + id);
+  });
+  inject('subscribeTournament', (id) => {
+    socketDelayedSend(socket, 'subscribeTournament ' + id);
   });
 
   // Connection opened
@@ -27,7 +29,15 @@ export default ({ store }, inject) => {
   // Listen for messages
   socket.addEventListener('message', function (event) {
     const message = JSON.parse(event.data);
-    store.commit('updateTournament', message);
+
+    if (message.messageType == "tournamentSubscription")
+      store.commit('subscribeTournament', message);
+    else if (message.messageType == "tournamentChanged")
+      store.commit('changeTournament', message);
+    else if (message.messageType == "playerSubscription")
+      store.commit('subscribePlayer', message);
+    else if (message.messageType == "categorySubscription")
+      store.commit('subscribeCategory', message);
   });
 
   socket.addEventListener('error', function (event) {

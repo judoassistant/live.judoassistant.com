@@ -39,7 +39,7 @@
             <b-icon icon="emoticon-sad" size="is-large">
             </b-icon>
           </p>
-          <p>Invalid tournament specified</p>
+          <p>The selected tournament does not exist</p>
         </div>
       </section>
       <b-loading :active.sync="showLoadingIndicator"></b-loading>
@@ -67,7 +67,7 @@ export default {
   methods: {
   },
   mounted() {
-    this.$store.dispatch('selectTournament', this.$route.params.tournament);
+    this.$store.dispatch('subscribeTournament', this.$route.params.tournament);
   },
 }
 </script>

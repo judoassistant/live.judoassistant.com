@@ -29,7 +29,7 @@
 export default {
   name: 'HomePage',
   mounted() {
-    this.$store.dispatch('selectCategory', this.$route.params.id);
+    this.$store.dispatch('subscribeCategory', this.$route.params.category);
     //this.$nextTick(() => {
     //  this.$nuxt.$loading.start();
     //});

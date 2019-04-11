@@ -6,66 +6,88 @@ export const state = () => ({
   tournament: null,
   players: null,
   categories: null,
+  matches: null,
 
-  detailedCategoryLoading: false,
-  detailedCategory: null,
-  detailedPlayerLoading: false,
-  detailedPlayer: null,
+  subscribedCategoryLoading: false,
+  subscribedCategory: null,
+  subscribedPlayerLoading: false,
+  subscribedPlayer: null,
 })
 
 export const mutations = {
-  clearDetailedCategory (state) {
-    state.detailedCategoryLoading = true;
-    state.detailedCategory = null;
+  clearSubscribedCategory(state) {
+    state.subscribedCategoryLoading = true;
+    state.subscribedCategory = null;
+    state.subscribedPlayer = null;
   },
-  clearDetailedPlayer (state) {
-    state.detailedPlayerLoading = true;
-    state.detailedPlayer = null;
+  clearSubscribedPlayer(state) {
+    state.subscribedPlayerLoading = true;
+    state.subscribedPlayer = null;
+    state.subscribedCategory = null;
   },
-  clearTournament (state) {
+  clearTournament(state) {
     state.tournamentLoading = true;
     state.tournament = null;
   },
-  closeConnection (state) {
+  closeConnection(state) {
     state.connected = false;
     state.connecting = false;
     state.tournamentLoading = false;
-    state.detailedPlayerLoading = false;
-    state.detailedCategoryLoading = false;
+    state.subscribedPlayerLoading = false;
+    state.subscribedCategoryLoading = false;
   },
-  openConnection (state) {
+  openConnection(state) {
     state.connected = true;
     state.connecting = false;
   },
-  updateTournament (state, message) {
-    console.log("Update tournament", message);
+  subscribeTournament(state, message) {
+    console.log("Subscribed tournament");
+
     state.tournamentLoading = false;
     state.tournament = message.tournament;
-    state.players = message.players;
     state.categories = message.categories;
+    state.players = message.categories;
+    state.subscribedCategory = message.subscribedCategory;
+    state.subscribedPlayer = message.subscribedPlayer;
+    state.matches = message.matches;
+
     console.log(message.tournament);
+  },
+  subscribePlayer(state, message) {
+    console.log("Subscribe player", message);
+    state.subscribedPlayerLoading = false;
+    state.subscribedPlayer = message.subscribedPlayer;
+    state.matches = message.matches;
+  },
+  subscribeCategory(state, message) {
+    console.log("Subscribe category", message);
 
-    // if (message.
-    // state.tournament =
-
+    state.subscribedCategoryLoading = false;
+    state.subscribedCategory = message.subscribedCategory;
+    state.matches = message.matches;
+  },
+  changeTournament(state, message) {
+    // TODO: Implement
+    console.log("Change tournament data", message);
   },
 }
 
 export const actions = {
-  selectCategory ({ commit }, id) {
-    commit('clearDetailedCategory');
-    this.$selectCategory(id);
+  subscribeCategory({ commit }, id) {
+    console.log("Subscribing category", id);
+    commit('clearSubscribedCategory');
+    this.$subscribeCategory(id);
   },
-  selectPlayer ({ commit }, id) {
-    commit('clearDetailedPlayer');
-    this.$selectPlayer(id);
+  subscribePlayer({ commit }, id) {
+    commit('clearSubscribedPlayer');
+    this.$subscribePlayer(id);
   },
-  selectTournament ({ commit, state }, id) {
+  subscribeTournament({ commit, state }, id) {
     commit('clearTournament');
 
-    if (state.tournament != null && state.tournament.webName == id) {
-      return;
-    }
-    this.$selectTournament(id);
+    // if (state.tournament != null && state.tournament.webName == id)
+    //   return;
+    this.$subscribeTournament(id);
   }
 }
+
