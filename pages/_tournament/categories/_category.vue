@@ -72,7 +72,7 @@ export default {
     players() {
       //const category = this.$store.state.subscribedCategory;
       //return category.players.map((player) => {
-      //  return { name: player.firstName + ' ' + player.lastName, club: player.club, grade: player.rank, club: player.club, id: player.id };
+      //  return { name: player.firstName + ' ' + player.lastName, club: player.club, rank: player.rank, club: player.club, id: player.id };
       //});
       return [];
     },
