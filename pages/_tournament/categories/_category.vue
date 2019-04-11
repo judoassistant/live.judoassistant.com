@@ -5,7 +5,7 @@
       <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li><nuxt-link :to="{ name: 'index' }">JudoAssistant</nuxt-link></li>
-          <li><nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}">Bjergkøbing Grandprix</nuxt-link></li>
+          <li><nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}">{{ tournament.name }}</nuxt-link></li>
           <li><nuxt-link :to="{ name: 'tournament-categories', params: {tournament: this.$route.params.tournament }}">Categories</nuxt-link></li>
           <li class="is-active"><a href="#" aria-current="page">{{ category.name }}</a></li>
         </ul>
@@ -76,6 +76,9 @@ export default {
       //});
       return [];
     },
+    tournament() {
+      return this.$store.state.tournament;
+    }
   },
   components: {
     Card

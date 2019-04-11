@@ -5,7 +5,7 @@
       <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li><nuxt-link :to="{ name: 'index' }">JudoAssistant</nuxt-link></li>
-          <li><nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}">Bjergkøbing Grandprix</nuxt-link></li>
+          <li><nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}">{{ tournament.name }}</nuxt-link></li>
           <li><nuxt-link :to="{ name: 'tournament-players', params: {tournament: this.$route.params.tournament }}">Players</nuxt-link></li>
           <li class="is-active"><a href="#" aria-current="page">{{ playerName }}</a></li>
         </ul>
@@ -67,6 +67,9 @@ export default {
     playerName() {
       const player = this.$store.state.subscribedPlayer;
       return player.firstName + ' ' + player.lastName;
+    },
+    tournament() {
+      return this.$store.state.tournament;
     },
   },
   components: {

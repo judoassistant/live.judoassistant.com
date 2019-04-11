@@ -62,7 +62,7 @@ export default {
     },
     showTournament() {
       return this.$store.state.connected && this.$store.state.tournament != null;
-    }
+    },
   },
   methods: {
   },
