@@ -5,7 +5,7 @@
     <b-table paginated :per-page=50 :data="players" default-sort="name">
       <template v-slot:default="props">
         <b-table-column sortable field="name" label="Name">
-          <nuxt-link :to="{ name: 'tournament-players-player', params: {category: props.row.id}}">{{ props.row.name}}</nuxt-link>
+          <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name}}</nuxt-link>
         </b-table-column>
         <b-table-column sortable field="grade" label="Grade">
           {{ props.row.grade}}
