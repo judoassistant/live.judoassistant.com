@@ -56,7 +56,7 @@ export const mutations = {
 
     state.matches = new Map();
     for (const match of message.matches)
-      state.matches.set(match.combinedId.matchId, match);
+      state.matches.set(match.combinedId.matchId, match); // TODO: Figure out of to use combinedId object as key
 
     state.subscribedCategory = message.subscribedCategory;
     state.subscribedPlayer = message.subscribedPlayer;

@@ -37,6 +37,26 @@
           </table>
         </b-tab-item>
         <b-tab-item label="Matches" icon="tournament">
+          <b-table paginated :per-page=50 :data="matches" default-sort="title">
+            <template v-slot:default="props">
+              <b-table-column sortable field="title" label="Title">
+                <!-- <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name}}</nuxt-link> -->
+                {{ props.row.title }}
+              </b-table-column>
+            </template>
+
+            <template v-slot:empty>
+              <section class="section">
+                <div class="content has-text-grey has-text-centered">
+                  <p>
+                    <b-icon icon="tournament" size="is-large">
+                    </b-icon>
+                  </p>
+                  <p>There are no matches in this category</p>
+                </div>
+              </section>
+            </template>
+          </b-table>
         </b-tab-item>
       </b-tabs>
     </div>
@@ -70,6 +90,14 @@ export default {
     },
     tournament() {
       return this.$store.state.tournament;
+    },
+    matches() {
+      const player = this.$store.state.subscribedPlayer;
+      return player.matches.map((combinedId) => {
+        const match = this.$store.state.matches.get(combinedId.matchId);
+
+        return match;
+      });
     },
   },
   components: {
