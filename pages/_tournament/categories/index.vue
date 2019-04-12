@@ -44,7 +44,7 @@ export default {
   name: 'HomePage',
   computed: {
     categories() {
-      return this.$store.state.categories
+      return Array.from(this.$store.state.categories.values())
     },
     tournament() {
       return this.$store.state.tournament;

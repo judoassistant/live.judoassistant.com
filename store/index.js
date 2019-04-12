@@ -45,26 +45,38 @@ export const mutations = {
 
     state.tournamentLoading = false;
     state.tournament = message.tournament;
-    state.categories = message.categories;
-    state.players = message.players;
+
+    state.categories = new Map();
+    for (const category of message.categories)
+      state.categories.set(category.id, category);
+
+    state.players = new Map();
+    for (const player of message.players)
+      state.players.set(player.id, player);
+
+    state.matches = new Map();
+    for (const match of message.matches)
+      state.matches.set(match.combinedId.matchId, match);
+
     state.subscribedCategory = message.subscribedCategory;
     state.subscribedPlayer = message.subscribedPlayer;
-    state.matches = message.matches;
-
-    console.log(message.tournament);
   },
   subscribePlayer(state, message) {
     console.log("Subscribe player", message);
     state.subscribedPlayerLoading = false;
     state.subscribedPlayer = message.subscribedPlayer;
-    state.matches = message.matches;
+    state.matches = new Map();
+    for (const match of message.matches)
+      state.matches.set(match.combinedId.matchId, match);
   },
   subscribeCategory(state, message) {
     console.log("Subscribe category", message);
 
     state.subscribedCategoryLoading = false;
     state.subscribedCategory = message.subscribedCategory;
-    state.matches = message.matches;
+    state.matches = new Map();
+    for (const match of message.matches)
+      state.matches.set(match.combinedId.matchId, match);
   },
   changeTournament(state, message) {
     // TODO: Implement

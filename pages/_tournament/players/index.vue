@@ -44,9 +44,17 @@ export default {
   name: 'HomePage',
   computed: {
     players() {
-      return this.$store.state.players.map((player) => {
-        return { name: player.firstName + ' ' + player.lastName, club: player.club, rank: player.rank, club: player.club, id: player.id };
-      });
+      var res = []
+      for (const player of this.$store.state.players.values()) {
+        res.push({
+          id: player.id,
+          name: player.firstName + ' ' + player.lastName,
+          club: player.club,
+          rank: player.rank,
+        });
+      }
+
+      return res;
     },
     tournament() {
       return this.$store.state.tournament;
@@ -58,7 +66,7 @@ export default {
   methods: {
     playerLink(id) {
       return '/players/' + id;
-    }
+    },
   }
 }
 </script>
