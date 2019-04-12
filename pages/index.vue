@@ -1,11 +1,14 @@
 <template>
   <section class="section">
+    <div class="container">
       <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li class="is-active"><a href="#" aria-current="page">JudoAssistant</a></li>
         </ul>
       </nav>
-    <h1 class="title">JudoAssistant</h1>
+
+      <h1 class="title">JudoAssistant</h1>
+    </div>
   </section>
 </template>
 

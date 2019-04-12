@@ -1,64 +1,68 @@
 <template>
   <section class="section">
-    <b-loading :is-full-page=false :active.sync="loading"></b-loading>
-    <div v-if="hasPlayer">
-      <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-          <li><nuxt-link :to="{ name: 'index' }">JudoAssistant</nuxt-link></li>
-          <li><nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}">{{ tournament.name }}</nuxt-link></li>
-          <li><nuxt-link :to="{ name: 'tournament-players', params: {tournament: this.$route.params.tournament }}">Players</nuxt-link></li>
-          <li class="is-active"><a href="#" aria-current="page">{{ playerName }}</a></li>
-        </ul>
-      </nav>
-      <h1 class="title">{{ playerName }}</h1>
-      <b-tabs>
-        <b-tab-item label="Information" icon="account">
-          <!-- <b-table :data="data" :columns="columns"></b-table> -->
-          <table class="table is-striped is-fullwidth">
-            <tbody>
-              <tr>
-                <td>Name</td>
-                <td>{{ playerName }}</td>
-              </tr>
-              <tr>
-                <td>Rank</td>
-                <td>{{ player.rank }}</td>
-              </tr>
-              <tr>
-                <td>Club</td>
-                <td>{{ player.club }}</td>
-              </tr>
-              <tr>
-                <td>Country</td>
-                <td>{{ player.country }}</td>
-              </tr>
-            </tbody>
+    <div class="container">
+      <b-loading :is-full-page=false :active.sync="loading"></b-loading>
+      <div v-if="hasPlayer">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li><nuxt-link :to="{ name: 'index' }">JudoAssistant</nuxt-link></li>
+            <li><nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}">{{ tournament.name }}</nuxt-link></li>
+            <li><nuxt-link :to="{ name: 'tournament-players', params: {tournament: this.$route.params.tournament }}">Players</nuxt-link></li>
+            <li class="is-active"><a href="#" aria-current="page">{{ playerName }}</a></li>
+          </ul>
+        </nav>
+        <h1 class="title">{{ tournament.name }}</h1>
+        <h2 class="subtitle">{{ playerName }}</h2>
 
-          </table>
-        </b-tab-item>
-        <b-tab-item label="Matches" icon="tournament">
-          <b-table paginated :per-page=50 :data="matches" default-sort="title">
-            <template v-slot:default="props">
-              <b-table-column sortable field="title" label="Title">
-                <!-- <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name}}</nuxt-link> -->
-                {{ props.row.title }}
-              </b-table-column>
-            </template>
+        <b-tabs>
+          <b-tab-item label="Information" icon="account">
+            <!-- <b-table :data="data" :columns="columns"></b-table> -->
+            <table class="table is-striped is-fullwidth">
+              <tbody>
+                <tr>
+                  <td>Name</td>
+                  <td>{{ playerName }}</td>
+                </tr>
+                <tr>
+                  <td>Rank</td>
+                  <td>{{ player.rank }}</td>
+                </tr>
+                <tr>
+                  <td>Club</td>
+                  <td>{{ player.club }}</td>
+                </tr>
+                <tr>
+                  <td>Country</td>
+                  <td>{{ player.country }}</td>
+                </tr>
+              </tbody>
 
-            <template v-slot:empty>
-              <section class="section">
-                <div class="content has-text-grey has-text-centered">
-                  <p>
-                    <b-icon icon="tournament" size="is-large">
-                    </b-icon>
-                  </p>
-                  <p>There are no matches in this category</p>
-                </div>
-              </section>
-            </template>
-          </b-table>
-        </b-tab-item>
-      </b-tabs>
+            </table>
+          </b-tab-item>
+          <b-tab-item label="Matches" icon="tournament">
+            <b-table paginated :per-page=50 :data="matches" default-sort="title">
+              <template v-slot:default="props">
+                <b-table-column sortable field="title" label="Title">
+                  <!-- <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name}}</nuxt-link> -->
+                  {{ props.row.title }}
+                </b-table-column>
+              </template>
+
+              <template v-slot:empty>
+                <section class="section">
+                  <div class="content has-text-grey has-text-centered">
+                    <p>
+                      <b-icon icon="tournament" size="is-large">
+                      </b-icon>
+                    </p>
+                    <p>There are no matches in this category</p>
+                  </div>
+                </section>
+              </template>
+            </b-table>
+          </b-tab-item>
+        </b-tabs>
+      </div>
     </div>
   </section>
 </template>
