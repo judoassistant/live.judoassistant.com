@@ -39,7 +39,7 @@
                   <td>Categories</td>
                   <td>
                     <b-taglist class="category-list">
-                      <b-tag type="is-info" v-for="category in categories" :key="category.id">
+                      <b-tag type="is-primary" v-for="category in categories" :key="category.id">
                         <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: category.id}}">{{ category.name }}</nuxt-link>
                       </b-tag>
                     </b-taglist>
