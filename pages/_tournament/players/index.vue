@@ -41,8 +41,6 @@
 </template>
 
 <script>
-import Card from '~/components/Card'
-
 export default {
   name: 'HomePage',
   computed: {
@@ -64,7 +62,6 @@ export default {
     },
   },
   components: {
-    Card
   },
   methods: {
     playerLink(id) {

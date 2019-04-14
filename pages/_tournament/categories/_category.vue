@@ -73,8 +73,6 @@
 </template>
 
 <script>
-  import Card from '~/components/Card'
-
 export default {
   name: 'HomePage',
   mounted() {
@@ -119,7 +117,6 @@ export default {
     }
   },
   components: {
-    Card
   },
 }
 </script>

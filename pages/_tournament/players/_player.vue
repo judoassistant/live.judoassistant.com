@@ -40,26 +40,16 @@
             </table>
           </b-tab-item>
           <b-tab-item label="Matches" icon="tournament">
-            <b-table paginated :per-page=50 :data="matches" default-sort="title">
-              <template v-slot:default="props">
-                <b-table-column sortable field="title" label="Title">
-                  <!-- <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name}}</nuxt-link> -->
-                  {{ props.row.title }}
-                </b-table-column>
-              </template>
-
-              <template v-slot:empty>
-                <section class="section">
-                  <div class="content has-text-grey has-text-centered">
-                    <p>
-                      <b-icon icon="tournament" size="is-large">
-                      </b-icon>
-                    </p>
-                    <p>There are no matches in this category</p>
-                  </div>
-                </section>
-              </template>
-            </b-table>
+            <MatchCard v-for="match in matches" :key="match.combinedId.matchId" :match="match"></MatchCard>
+            <section class="section" v-if="matches.length == 0">
+              <div class="content has-text-grey has-text-centered">
+                <p>
+                  <b-icon icon="tournament" size="is-large">
+                  </b-icon>
+                </p>
+                <p>This player has no matches</p>
+              </div>
+            </section>
           </b-tab-item>
         </b-tabs>
       </div>
@@ -68,44 +58,44 @@
 </template>
 
 <script>
-  import Card from '~/components/Card'
+  import MatchCard from '~/components/MatchCard'
 
-export default {
-  name: 'Player',
-  mounted() {
-    this.$store.dispatch('subscribePlayer', this.$route.params.player);
-    //this.$nextTick(() => {
-    //  this.$nuxt.$loading.start();
-    //});
-  },
-  computed: {
-    loading() {
-      return this.$store.state.subscribePlayerLoading;
+  export default {
+    name: 'Player',
+    mounted() {
+      this.$store.dispatch('subscribePlayer', this.$route.params.player);
+      //this.$nextTick(() => {
+      //  this.$nuxt.$loading.start();
+      //});
     },
-    hasPlayer() {
-      return this.$store.state.subscribedPlayer != null;
-    },
-    player() {
-      return this.$store.state.subscribedPlayer;
-    },
-    playerName() {
-      const player = this.$store.state.subscribedPlayer;
-      return player.firstName + ' ' + player.lastName;
-    },
-    tournament() {
-      return this.$store.state.tournament;
-    },
-    matches() {
-      const player = this.$store.state.subscribedPlayer;
-      return player.matches.map((combinedId) => {
-        const match = this.$store.state.matches.get(combinedId.matchId);
+    computed: {
+      loading() {
+        return this.$store.state.subscribePlayerLoading;
+      },
+      hasPlayer() {
+        return this.$store.state.subscribedPlayer != null;
+      },
+      player() {
+        return this.$store.state.subscribedPlayer;
+      },
+      playerName() {
+        const player = this.$store.state.subscribedPlayer;
+        return player.firstName + ' ' + player.lastName;
+      },
+      tournament() {
+        return this.$store.state.tournament;
+      },
+      matches() {
+        const player = this.$store.state.subscribedPlayer;
+        return player.matches.map((combinedId) => {
+          const match = this.$store.state.matches.get(combinedId.matchId);
 
-        return match;
-      });
+          return match;
+        });
+      },
     },
-  },
-  components: {
-    Card
-  },
-}
+    components: {
+      MatchCard,
+    },
+  }
 </script>
