@@ -96,12 +96,11 @@
         });
       },
       matches() {
-        const category = this.$store.state.subscribedCategory;
-        return category.matches.map((combinedId) => {
-          const match = this.$store.state.matches.get(combinedId.matchId);
+        var res = Array();
+        for (const matchId of this.$store.state.subscribedCategory.matches)
+          res.push(this.$store.state.matches.get(matchId));
 
-          return match;
-        });
+        return res;
       },
       tournament() {
         return this.$store.state.tournament;

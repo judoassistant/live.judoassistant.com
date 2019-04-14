@@ -128,7 +128,6 @@ export default {
       return player.firstName + ' ' + player.lastName;
     },
     whiteScore() {
-      console.log(this.match)
       if (this.match.whitePlayer == null)
         return "";
       return this.match.whiteScore.ippon + " " + this.match.whiteScore.wazari;

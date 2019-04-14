@@ -32,7 +32,7 @@ export default ({ store }, inject) => {
 
     if (message.messageType == "tournamentSubscription")
       store.commit('subscribeTournament', message);
-    else if (message.messageType == "tournamentChanged")
+    else if (message.messageType == "tournamentChanges")
       store.commit('changeTournament', message);
     else if (message.messageType == "playerSubscription")
       store.commit('subscribePlayer', message);

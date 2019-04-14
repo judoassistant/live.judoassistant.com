@@ -86,12 +86,10 @@
         return this.$store.state.tournament;
       },
       matches() {
-        const player = this.$store.state.subscribedPlayer;
-        return player.matches.map((combinedId) => {
-          const match = this.$store.state.matches.get(combinedId.matchId);
-
-          return match;
-        });
+        var res = Array();
+        for (const matchId of this.$store.state.subscribedPlayer.matches)
+          res.push(this.$store.state.matches.get(matchId));
+        return res;
       },
     },
     components: {
