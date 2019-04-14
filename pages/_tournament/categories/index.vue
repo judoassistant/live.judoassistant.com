@@ -15,12 +15,6 @@
           <b-table-column sortable field="name" label="Name" :custom-sort="numeric_sort">
             <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: props.row.id}}">{{ props.row.name}}</nuxt-link>
           </b-table-column>
-          <b-table-column sortable field="state" label="State">
-            {{ props.row.state}}
-          </b-table-column>
-          <b-table-column sortable field="playerCount" label="Number of Players">
-            {{ props.row.playerCount}}
-          </b-table-column>
         </template>
 
         <template v-slot:empty>
