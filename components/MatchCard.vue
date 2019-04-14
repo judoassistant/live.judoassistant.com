@@ -6,19 +6,19 @@
           <div class="column">
             <a v-on:click="isExpanded = !isExpanded"><b-icon :icon="isExpanded ? 'menu-down' : 'menu-right'"></b-icon></a> {{ match.title }}
           </div>
-          <div class="column">
+          <div class="column" v-bind:class="{winner: match.winner == 'WHITE'}">
             <nuxt-link v-if="match.whitePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.whitePlayer }}">{{ whiteName }}</nuxt-link>
           </div>
-          <div class="column">
-            <strong>{{ whiteScore }}</strong>
+          <div class="column" v-bind:class="{winner: match.winner == 'WHITE'}">
+            {{ whiteScore }}
           </div>
           <div class="column">
             {{ match.status != "NOT_STARTED" ? formatDuration(match.duration) : "" }}
           </div>
-          <div class="column">
+          <div class="column" v-bind:class="{winner: match.winner == 'BLUE'}">
             {{ blueScore }}
           </div>
-          <div class="column">
+          <div class="column" v-bind:class="{winner: match.winner == 'BLUE'}">
             <nuxt-link v-if="match.bluePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.bluePlayer }}">{{ blueName }}</nuxt-link>
           </div>
           <div class="column">
@@ -76,6 +76,10 @@
 
   .match-events .columns .column:nth-child(1) {
     text-align: right;
+  }
+
+  .match-header .winner {
+    font-weight: bold;
   }
 
   .match-events .columns .column:nth-child(2) {
