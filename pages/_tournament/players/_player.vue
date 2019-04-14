@@ -35,6 +35,16 @@
                   <td>Country</td>
                   <td>{{ player.country }}</td>
                 </tr>
+                <tr>
+                  <td>Categories</td>
+                  <td>
+                    <b-taglist class="category-list">
+                      <b-tag type="is-info" v-for="category in categories" :key="category.id">
+                        <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: category.id}}">{{ category.name }}</nuxt-link>
+                      </b-tag>
+                    </b-taglist>
+                  </td>
+                </tr>
               </tbody>
 
             </table>
@@ -56,6 +66,12 @@
     </div>
   </section>
 </template>
+
+<style>
+  .category-list a {
+    color: white;
+  }
+</style>
 
 <script>
   import MatchCard from '~/components/MatchCard'
@@ -89,6 +105,14 @@
         var res = Array();
         for (const matchId of this.$store.state.subscribedPlayer.matches)
           res.push(this.$store.state.matches.get(matchId));
+        return res;
+      },
+      categories() {
+        var res = Array();
+        for (const categoryId of this.$store.state.subscribedPlayer.categories) {
+          console.log("Getting category", categoryId, this.$store.state.categories);
+          res.push(this.$store.state.categories.get(categoryId));
+        }
         return res;
       },
     },
