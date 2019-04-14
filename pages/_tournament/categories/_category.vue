@@ -43,7 +43,7 @@
             </b-table>
           </b-tab-item>
           <b-tab-item label="Matches" icon="tournament">
-            <MatchCard v-for="match in matches" :key="match.combinedId.matchId" :match="match"></MatchCard>
+            <MatchCard v-for="match in matches" v-if="!match.bye" :key="match.combinedId.matchId" :match="match"></MatchCard>
             <section class="section" v-if="matches.length == 0">
               <div class="content has-text-grey has-text-centered">
                 <p>
@@ -54,7 +54,7 @@
               </div>
             </section>
           </b-tab-item>
-          <b-tab-item label="Results" icon="tournament"></b-tab-item>
+          <!-- <b-tab-item label="Results" icon="tournament"></b-tab-item> -->
         </b-tabs>
       </div>
     </div>
