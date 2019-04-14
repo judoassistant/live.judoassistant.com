@@ -4,7 +4,7 @@
       <div class="card-content match-header">
         <div class="columns">
           <div class="column">
-            <a v-on:click="isExpanded = !isExpanded"><b-icon :icon="isExpanded ? 'menu-down' : 'menu-right'"></b-icon></a> {{ match.title }}
+            <a v-on:click="isExpanded = !isExpanded"><b-icon :icon="isExpanded ? 'chevron-down' : 'chevron-right'"></b-icon></a> {{ match.title }}
           </div>
           <div class="column" v-bind:class="{winner: match.winner == 'WHITE'}">
             <nuxt-link v-if="match.whitePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.whitePlayer }}">{{ whiteName }}</nuxt-link>
