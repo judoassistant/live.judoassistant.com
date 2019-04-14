@@ -12,7 +12,7 @@
       <h2 class="subtitle">Categories</h2>
       <b-table paginated :per-page=15 :data="categories" default-sort="name">
         <template v-slot:default="props">
-          <b-table-column sortable field="name" label="Name">
+          <b-table-column sortable field="name" label="Name" :custom-sort="numeric_sort">
             <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: props.row.id}}">{{ props.row.name}}</nuxt-link>
           </b-table-column>
           <b-table-column sortable field="state" label="State">
@@ -53,6 +53,52 @@ export default {
   components: {
   },
   methods: {
+    numeric_sort(a, b, isAsc) {
+      // Split the string and compare each part
+      // Compare numbers as numbers
+      const aName = a.name.split(" ");
+      const bName = b.name.split(" ");
+
+      if (aName == bName)
+        return 0;
+
+      for (var i = 0; i < aName.length && i < bName.length; i++) {
+        const aPart = aName[i]
+        const bPart = bName[i]
+
+        if (aPart == bPart)
+          continue;
+
+        const aNumber = Number(aPart);
+        const bNumber = Number(bPart);
+
+        // Compare parts as numbers
+        if (!Number.isNaN(aNumber) && !Number.isNaN(bNumber)) {
+          if (aNumber == bNumber)
+            continue;
+          return (aNumber < bNumber && isAsc ? -1 : 1);
+        }
+
+        // Compare parts as strings
+        if (Number.isNaN(aNumber) && Number.isNaN(bNumber)) {
+          if (aPart == bPart)
+            continue;
+          return (aPart < bPart && isAsc ? -1 : 1);
+        }
+
+        // Numbers should appear first in the ordering
+        if (!Number.isNaN(aNumber))
+          return (isAsc ? -1 : 1);
+
+        // if (!Number.isNaN(bNumber))
+        return (isAsc ? 1 : -1);
+      }
+
+      // Both compare equal so far. The shortest should appear first
+      if (isAsc)
+        return aName.length < bName.length;
+      return bName.length < aName.length;
+    }
   }
 }
 </script>
