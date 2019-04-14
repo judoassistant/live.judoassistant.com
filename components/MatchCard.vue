@@ -16,7 +16,7 @@
             {{ match.status != "NOT_STARTED" ? formatDuration(match.duration) : "" }}
           </div>
           <div class="column">
-            1 0
+            {{ blueScore }}
           </div>
           <div class="column">
             <nuxt-link v-if="match.bluePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.bluePlayer }}">{{ blueName }}</nuxt-link>
