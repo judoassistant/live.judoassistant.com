@@ -6,19 +6,19 @@
           <div class="column">
             <a v-on:click="isExpanded = !isExpanded"><b-icon :icon="isExpanded ? 'chevron-down' : 'chevron-right'"></b-icon></a> {{ match.title }}
           </div>
-          <div class="column" v-bind:class="{winner: match.winner == 'WHITE'}">
+          <div class="column" :class="{winner: match.winner == 'WHITE'}">
             <nuxt-link v-if="match.whitePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.whitePlayer }}">{{ whiteName }}</nuxt-link>
           </div>
-          <div class="column" v-bind:class="{winner: match.winner == 'WHITE'}">
+          <div class="column" :class="{winner: match.winner == 'WHITE'}">
             {{ whiteScore }}
           </div>
           <div class="column">
-            {{ match.status != "NOT_STARTED" ? formatDuration(match.duration) : "" }}
+            {{ match.status != "NOT_STARTED" ? formatDuration(duration) : "" }}
           </div>
-          <div class="column" v-bind:class="{winner: match.winner == 'BLUE'}">
+          <div class="column" :class="{winner: match.winner == 'BLUE'}">
             {{ blueScore }}
           </div>
-          <div class="column" v-bind:class="{winner: match.winner == 'BLUE'}">
+          <div class="column" :class="{winner: match.winner == 'BLUE'}">
             <nuxt-link v-if="match.bluePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.bluePlayer }}">{{ blueName }}</nuxt-link>
           </div>
           <div class="column">
@@ -103,10 +103,19 @@ export default {
   data() {
     return {
       isExpanded: false,
+      duration: 1000,
+      interval: null,
     }
   },
   props: ['match'],
   methods: {
+    calcDuration() {
+      if (this.match.status != 'UNPAUSED')
+        return this.match.duration;
+
+      const diff = Date.now() - new Date(this.match.resumeTime);
+      return this.match.duration + diff;
+    },
     formatDuration(duration) {
       const seconds = Math.floor(duration / 1000) % 60;
       const minutes = Math.floor(duration / (1000 * 60));
@@ -123,21 +132,30 @@ export default {
         return 'Shido';
     }
   },
+  mounted() {
+    this.duration = this.calcDuration();
+    this.interval = setInterval(() => {
+        this.duration = this.calcDuration();
+    }, 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
   computed: {
     whiteName() {
       const id = this.match.whitePlayer;
       if (id == null)
         return "";
-      const player = this.$store.state.players.get(id);
-      return player.firstName + ' ' + player.lastName;
+      const player = this.$store.getters.getPlayerById(id);
+      return player.name;
     },
     whiteScore() {
-      if (this.match.whitePlayer == null)
+      if (this.match.status == 'NOT_STARTED')
         return "";
       return this.match.whiteScore.ippon + " " + this.match.whiteScore.wazari;
     },
     blueScore() {
-      if (this.match.bluePlayer == null)
+      if (this.match.status == 'NOT_STARTED')
         return "";
       return this.match.blueScore.ippon + " " + this.match.blueScore.wazari;
     },
@@ -145,8 +163,8 @@ export default {
       const id = this.match.bluePlayer;
       if (id == null)
         return "";
-      const player = this.$store.state.players.get(id);
-      return player.firstName + ' ' + player.lastName;
+      const player = this.$store.getters.getPlayerById(id);
+      return player.name;
     },
   },
 }
