@@ -43,11 +43,11 @@ export default {
     numeric_sort(a, b, isAsc) {
       // Split the string and compare each part
       // Compare numbers as numbers
+      if (a == b)
+        return 0;
+
       const aName = a.name.split(" ");
       const bName = b.name.split(" ");
-
-      if (aName == bName)
-        return 0;
 
       for (var i = 0; i < aName.length && i < bName.length; i++) {
         const aPart = aName[i]
@@ -82,9 +82,7 @@ export default {
       }
 
       // Both compare equal so far. The shortest should appear first
-      if (isAsc)
-        return aName.length < bName.length;
-      return bName.length < aName.length;
+      return (aName.length < bName.length && isAsc ? -1 : 1);
     }
   }
 }
