@@ -10,13 +10,18 @@
             <nuxt-link v-if="match.whitePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.whitePlayer }}">{{ whiteName }}</nuxt-link>
           </div>
           <div class="column" :class="{winner: match.winner == 'WHITE'}">
+            <span class="penalty-card"></span><span class="penalty-card"></span> <!-- invisible; used for alignment -->
             {{ whiteScore }}
+            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 0 && match.whiteScore.hansokuMake == 0, hansokuCard: match.whiteScore.hansokuMake > 0}"></span>
+            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 1 && match.whiteScore.hansokuMake == 0}"></span>
           </div>
           <div class="column" :class="{unfinishedDuration: match.status != 'FINISHED'}">
             {{ match.status != "NOT_STARTED" ? formatDuration(duration) : "" }}
           </div>
           <div class="column" :class="{winner: match.winner == 'BLUE'}">
             {{ blueScore }}
+            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 0 && match.blueScore.hansokuMake == 0, hansokuCard: match.blueScore.hansokuMake > 0}"></span>
+            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 1 && match.blueScore.hansokuMake == 0}"></span>
           </div>
           <div class="column" :class="{winner: match.winner == 'BLUE'}">
             <nuxt-link v-if="match.bluePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.bluePlayer }}">{{ blueName }}</nuxt-link>
@@ -52,7 +57,6 @@
   .match-card {
     margin-bottom: 10px;
   }
-
 
   .match-header .columns .column:nth-child(2) { /* White player name */
     text-align: right;
@@ -92,6 +96,21 @@
 
   .unfinishedDuration {
     color: green;
+  }
+
+  .penalty-card {
+    display: inline-block;
+    width: 8px;
+    height: .8em;
+    margin-left: 7px;
+  }
+
+  .shidoCard {
+    background: #ebcb8b;
+  }
+
+  .hansokuCard {
+    background: #bf616a;
   }
 </style>
 
