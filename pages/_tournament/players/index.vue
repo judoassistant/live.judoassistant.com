@@ -14,7 +14,7 @@
       <b-table paginated :per-page=50 :data="players" default-sort="name">
         <template v-slot:default="props">
           <b-table-column sortable field="name" label="Name">
-            <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name}}</nuxt-link>
+            <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name }}</nuxt-link>
           </b-table-column>
           <b-table-column sortable field="rank" label="Rank">
             {{ props.row.rank}}
@@ -41,32 +41,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'HomePage',
-  computed: {
-    players() {
-      var res = []
-      for (const player of this.$store.state.players.values()) {
-        res.push({
-          id: player.id,
-          name: player.firstName + ' ' + player.lastName,
-          club: player.club,
-          rank: player.rank,
-        });
-      }
-
-      return res;
-    },
-    tournament() {
-      return this.$store.state.tournament;
-    },
-  },
-  components: {
-  },
-  methods: {
-    playerLink(id) {
-      return '/players/' + id;
-    },
-  }
+  computed: mapState(['tournament', 'players']),
 }
 </script>

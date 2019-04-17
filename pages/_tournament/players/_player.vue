@@ -2,17 +2,17 @@
   <section class="section">
     <div class="container">
       <b-loading :is-full-page=false :active.sync="loading"></b-loading>
-      <div v-if="hasPlayer">
+      <div v-if="player != null">
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><nuxt-link :to="{ name: 'index' }">JudoAssistant</nuxt-link></li>
             <li><nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}">{{ tournament.name }}</nuxt-link></li>
             <li><nuxt-link :to="{ name: 'tournament-players', params: {tournament: this.$route.params.tournament }}">Players</nuxt-link></li>
-            <li class="is-active"><a href="#" aria-current="page">{{ playerName }}</a></li>
+            <li class="is-active"><a href="#" aria-current="page">{{ player.name }}</a></li>
           </ul>
         </nav>
         <h1 class="title">{{ tournament.name }}</h1>
-        <h2 class="subtitle">{{ playerName }}</h2>
+        <h2 class="subtitle">{{ player.name }}</h2>
 
         <b-tabs>
           <b-tab-item label="Information" icon="account">
@@ -21,7 +21,7 @@
               <tbody>
                 <tr>
                   <td>Name</td>
-                  <td>{{ playerName }}</td>
+                  <td>{{ player.name }}</td>
                 </tr>
                 <tr>
                   <td>Rank</td>
@@ -75,46 +75,23 @@
 
 <script>
   import MatchCard from '~/components/MatchCard'
+  import { mapState, mapGetters } from 'vuex'
 
   export default {
     name: 'Player',
     mounted() {
       this.$store.dispatch('subscribePlayer', this.$route.params.player);
-      //this.$nextTick(() => {
-      //  this.$nuxt.$loading.start();
-      //});
     },
     computed: {
-      loading() {
-        return this.$store.state.subscribePlayerLoading;
-      },
-      hasPlayer() {
-        return this.$store.state.subscribedPlayer != null;
-      },
-      player() {
-        return this.$store.state.subscribedPlayer;
-      },
-      playerName() {
-        const player = this.$store.state.subscribedPlayer;
-        return player.firstName + ' ' + player.lastName;
-      },
-      tournament() {
-        return this.$store.state.tournament;
-      },
-      matches() {
-        var res = Array();
-        for (const matchId of this.$store.state.subscribedPlayer.matches)
-          res.push(this.$store.state.matches.get(matchId));
-        return res;
-      },
-      categories() {
-        var res = Array();
-        for (const categoryId of this.$store.state.subscribedPlayer.categories) {
-          console.log("Getting category", categoryId, this.$store.state.categories);
-          res.push(this.$store.state.categories.get(categoryId));
-        }
-        return res;
-      },
+      ...mapState({
+        loading: state => state.subscribePlayerLoading,
+        player: state => state.subscribedPlayer,
+        tournament: state => state.tournament,
+      }),
+      ...mapGetters({
+        categories: 'subscribedPlayerCategories',
+        matches: 'subscribedPlayerMatches',
+      }),
     },
     components: {
       MatchCard,

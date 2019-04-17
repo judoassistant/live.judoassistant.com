@@ -2,7 +2,7 @@
   <section class="section">
     <div class="container">
       <b-loading :is-full-page=false :active.sync="loading"></b-loading>
-      <div v-if="hasCategory">
+      <div v-if="category != null">
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><nuxt-link :to="{ name: 'index' }">JudoAssistant</nuxt-link></li>
@@ -63,48 +63,23 @@
 
 <script>
   import MatchCard from '~/components/MatchCard'
+  import { mapState, mapGetters } from 'vuex'
 
   export default {
     name: 'HomePage',
     mounted() {
       this.$store.dispatch('subscribeCategory', this.$route.params.category);
-      //this.$nextTick(() => {
-      //  this.$nuxt.$loading.start();
-      //});
     },
     computed: {
-      loading() {
-        return this.$store.state.subscribeCategoryLoading;
-      },
-      hasCategory() {
-        return this.$store.state.subscribedCategory != null;
-      },
-      category() {
-        return this.$store.state.subscribedCategory;
-      },
-      players() {
-        const category = this.$store.state.subscribedCategory;
-        return category.players.map((id) => {
-          const player = this.$store.state.players.get(id);
-
-          return {
-            id: player.id,
-            name: player.firstName + ' ' + player.lastName,
-            club: player.club,
-            rank: player.rank,
-          };
-        });
-      },
-      matches() {
-        var res = Array();
-        for (const matchId of this.$store.state.subscribedCategory.matches)
-          res.push(this.$store.state.matches.get(matchId));
-
-        return res;
-      },
-      tournament() {
-        return this.$store.state.tournament;
-      }
+      ...mapState({
+        loading: state => state.subscribeCategoryLoading,
+        category: state => state.subscribedCategory,
+        tournament: state => state.tournament,
+      }),
+      ...mapGetters({
+        players: 'subscribedCategoryPlayers',
+        matches: 'subscribedCategoryMatches',
+      }),
     },
     components: {
       MatchCard

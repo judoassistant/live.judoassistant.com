@@ -34,18 +34,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'HomePage',
-  computed: {
-    categories() {
-      return Array.from(this.$store.state.categories.values())
-    },
-    tournament() {
-      return this.$store.state.tournament;
-    },
-  },
-  components: {
-  },
+  name: 'Categories',
+  computed: mapState(['categories', 'tournament']),
   methods: {
     numeric_sort(a, b, isAsc) {
       // Split the string and compare each part
