@@ -12,7 +12,7 @@
           <div class="column" :class="{winner: match.winner == 'WHITE'}">
             {{ whiteScore }}
           </div>
-          <div class="column">
+          <div class="column" :class="{unfinishedDuration: match.status != 'FINISHED'}">
             {{ match.status != "NOT_STARTED" ? formatDuration(duration) : "" }}
           </div>
           <div class="column" :class="{winner: match.winner == 'BLUE'}">
@@ -88,6 +88,10 @@
 
   .match-events .columns .column:nth-child(3) {
     text-align: left;
+  }
+
+  .unfinishedDuration {
+    color: green;
   }
 </style>
 
