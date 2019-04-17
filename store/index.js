@@ -1,5 +1,9 @@
-function playerMapper(player) {
+function mapPlayer(player) {
   return { ...player, name : player.firstName + ' ' + player.lastName };
+}
+
+function mapId(combinedId) {
+  return combinedId.matchId;
 }
 
 export const state = () => ({
@@ -48,14 +52,14 @@ export const mutations = {
     state.tournamentLoading = false;
     state.tournament = message.tournament;
     state.categories = message.categories;
-    state.players = message.players.map(playerMapper);
+    state.players = message.players.map(mapPlayer);
     state.matches = message.matches;
     state.subscribedCategory = message.subscribedCategory;
     state.subscribedPlayer = message.subscribedPlayer;
   },
   subscribePlayer(state, message) {
     state.subscribedPlayerLoading = false;
-    state.subscribedPlayer = playerMapper(message.subscribedPlayer);
+    state.subscribedPlayer = mapPlayer(message.subscribedPlayer);
     state.matches = message.matches;
   },
   subscribeCategory(state, message) {
@@ -64,50 +68,89 @@ export const mutations = {
     state.matches = message.matches;
   },
   changeTournament(state, message) {
-    // if ('tournament' in message)
-    //   state.tournament = message.tournament;
+    if ('tournament' in message)
+      state.tournament = message.tournament;
 
-    // // update categories
-    // for (const categoryId of message.erasedCategories)
-    //   state.categories.delete(categoryId);
+    // update categories
+    const erasedCategories = new Set(message.erasedCategories);
+    const changedCategories = new Map(message.categories.map(category => [category.id, category]));
 
-    // for (const category of message.categories)
-    //   state.categories.set(category.id, category);
+    var categories = [];
+    for (const category of state.categories) {
+      if (erasedCategories.has(category.id))
+        continue;
 
-    // if ('subscribedCategory' in message) {
-    //   state.subscribedCategory = message.subscribedCategory;
+      if (changedCategories.has(category.id)) {
+        categories.push(changedCategories.get(category.id));
+        changedCategories.delete(category.id);
+        continue;
+      }
 
-    //   if (state.subscribedCategory != null) {
-    //     const subscribedMatches = message.subscribedCategory.matches;
-    //     state.subscribedCategory.matches = new Set();
-    //     for (const combinedId of subscribedMatches)
-    //       state.subscribedCategory.matches.add(combinedId.matchId);
-    //   }
-    // }
+      categories.push(category);
+    }
 
-    // // update players
-    // for (const playerId of message.erasedPlayers)
-    //   state.players.delete(playerId);
+    for (const category of changedCategories.values())
+      categories.push(category);
 
-    // for (const player of message.players)
-    //   state.players.set(player.id, player);
+    state.categories = categories;
 
-    // if ('subscribedPlayer' in message) {
-    //   state.subscribedPlayer = message.subscribedPlayer;
-    // }
+    if ('subscribedCategory' in message)
+      state.subscribedCategory = message.subscribedCategory;
 
-    // // update matches
-    // for (const match of message.matches)
-    //   state.matches.set(match.combinedId.matchId, match);
+    // update players
+    const erasedPlayers = new Set(message.erasedPlayers);
+    const changedPlayers = new Map(message.players.map(player => [player.id, player]));
 
-    // // remove orphan matches
-    // for (const matchId of state.matches.keys()) {
-    //   if (state.subscribedPlayer != null && state.subscribedPlayer.matches.has(matchId))
-    //     continue;
-    //   if (state.subscribedCategory != null && state.subscribedCategory.matches.has(matchId))
-    //     continue;
-    //   state.matches.delete(matchId);
-    // }
+    var players = [];
+    for (const player of state.players) {
+      if (erasedPlayers.has(player.id))
+        continue;
+
+      if (changedPlayers.has(player.id)) {
+        players.push(mapPlayer(changedPlayers.get(player.id)));
+        changedPlayers.delete(player.id);
+        continue;
+      }
+
+      players.push(player);
+    }
+
+    for (const player of changedPlayers.values())
+      players.push(mapPlayer(player));
+
+    state.players = players;
+
+    if ('subscribedPlayer' in message)
+      state.subscribedPlayer = message.subscribedPlayer;
+
+    // update matches
+    const changedMatches = new Map(message.matches.map(match => [mapId(match.combinedId), match]));
+    const relevantMatches = new Set(); // ids of all matches to keep
+    if (state.subscribedPlayer != null) {
+      for (const matchId of state.subscribedPlayer.matches)
+        relevantMatches.add(mapId(matchId));
+    }
+
+    if (state.subscribedCategory != null) {
+      for (const matchId of state.subscribedCategory.matches)
+        relevantMatches.add(mapId(matchId));
+    }
+
+    var matches = []
+    for (const match of state.matches) {
+      const matchId = mapId(match.combinedId);
+      if (!relevantMatches.has(matchId))
+        continue;
+      if (changedMatches.has(matchId)) {
+        matches.push(changedMatches.get(matchId));
+        changedMatches.delete(matchId);
+        continue;
+      }
+
+      matches.push(match);
+    }
+
+    state.matches = matches;
   },
 }
 
@@ -131,16 +174,43 @@ export const actions = {
 
 export const getters = {
   subscribedPlayerMatches(state, getters) {
+    if (state.subscribedPlayer == null) return [];
     return [];
   },
   subscribedPlayerCategories(state, getters) {
-    return [];
+    if (state.subscribedPlayer == null) return [];
+
+    const categories = new Set(state.subscribedPlayer.categories);
+    return state.categories.filter(category => categories.has(category.id));
   },
   subscribedCategoryMatches(state, getters) {
-    return [];
+    if (state.subscribedCategory == null) return [];
+
+    var matchIds = new Map();
+    for (const [i, combinedId] of state.subscribedCategory.matches.entries())
+      matchIds.set(mapId(combinedId), i);
+
+    const orderPred = (a, b) => (matchIds.get(mapId(a.combinedId)) - matchIds.get(mapId(b.combinedId)));
+    return state.matches.filter(match => matchIds.has(mapId(match.combinedId))).sort(orderPred);
+  },
+  subscribedPlayerMatches(state, getters) {
+    if (state.subscribedPlayer == null) return [];
+
+    var matchIds = new Map();
+    for (const [i, combinedId] of state.subscribedPlayer.matches.entries())
+      matchIds.set(mapId(combinedId), i);
+
+    const orderPred = (a, b) => (matchIds.get(mapId(a.combinedId)) - matchIds.get(mapId(b.combinedId)));
+    return state.matches.filter(match => matchIds.has(mapId(match.combinedId))).sort(orderPred );
   },
   subscribedCategoryPlayers(state, getters) {
-    return [];
+    if (state.subscribedCategory == null) return [];
+
+    const players = new Set(state.subscribedCategory.players);
+    return state.players.filter(player => players.has(player.id));
+  },
+  getPlayerById: (state) => (id) => {
+    return state.players.find(player => player.id == id);
   },
 }
 
