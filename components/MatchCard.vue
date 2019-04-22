@@ -1,33 +1,41 @@
 <template>
   <div class="match-card">
     <div class="card">
-      <div class="card-content match-header">
-        <div class="columns">
-          <div class="column">
+      <div class="card-content match-header" :class="{smallMatchHeader: this.size == 'small', bigMatchHeader: this.size != 'small'}">
+        <div :class="{columns: this.size != 'small'}">
+          <div :class="{column: this.size != 'small', 'is-1': this.size != 'small'}">
             <a v-on:click="isExpanded = !isExpanded"><b-icon :icon="isExpanded ? 'chevron-down' : 'chevron-right'"></b-icon></a> {{ match.title }}
           </div>
-          <div class="column" :class="{winner: match.winner == 'WHITE'}">
-            <nuxt-link v-if="match.whitePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.whitePlayer }}">{{ whiteName }}</nuxt-link>
+          <div class="column is-4">
+            <div class="white-name" :class="{winner: match.winner == 'WHITE'}">
+              <nuxt-link v-if="match.whitePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.whitePlayer }}">{{ whiteName }}</nuxt-link>
+            </div>
+            <div class="white-score" :class="{winner: match.winner == 'WHITE'}">
+              {{ whiteScore }}
+              <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 0 && match.whiteScore.hansokuMake == 0, hansokuCard: match.whiteScore.hansokuMake > 0}"></span>
+              <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 1 && match.whiteScore.hansokuMake == 0}"></span>
+            </div>
           </div>
-          <div class="column" :class="{winner: match.winner == 'WHITE'}">
-            <span class="penalty-card"></span><span class="penalty-card"></span> <!-- invisible; used for alignment -->
-            {{ whiteScore }}
-            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 0 && match.whiteScore.hansokuMake == 0, hansokuCard: match.whiteScore.hansokuMake > 0}"></span>
-            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 1 && match.whiteScore.hansokuMake == 0}"></span>
+          <div class="column is-2">
+            <div class="match-duration" :class="{unfinished: match.status != 'FINISHED'}">
+              {{ match.status != 'NOT_STARTED' ? formatDuration(duration) : "" }}
+            </div>
           </div>
-          <div class="column" :class="{unfinishedDuration: match.status != 'FINISHED'}">
-            {{ match.status != "NOT_STARTED" ? formatDuration(duration) : "" }}
+          <div class="column is-4">
+            <div class="blue-score" :class="{winner: match.winner == 'WHITE'}">
+              <span class="penalty-card"></span><span class="penalty-card"></span> <!-- invisible; used for alignment -->
+              {{ blueScore }}
+              <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 0 && match.blueScore.hansokuMake == 0, hansokuCard: match.blueScore.hansokuMake > 0}"></span>
+              <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 1 && match.blueScore.hansokuMake == 0}"></span>
+            </div>
+            <div class="blue-name" :class="{winner: match.winner == 'WHITE'}">
+              <nuxt-link v-if="match.bluePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.bluePlayer }}">{{ blueName }}</nuxt-link>
+            </div>
           </div>
-          <div class="column" :class="{winner: match.winner == 'BLUE'}">
-            {{ blueScore }}
-            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 0 && match.blueScore.hansokuMake == 0, hansokuCard: match.blueScore.hansokuMake > 0}"></span>
-            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 1 && match.blueScore.hansokuMake == 0}"></span>
-          </div>
-          <div class="column" :class="{winner: match.winner == 'BLUE'}">
-            <nuxt-link v-if="match.bluePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.bluePlayer }}">{{ blueName }}</nuxt-link>
-          </div>
-          <div class="column">
-            <strong v-if="match.bye">bye</strong>
+          <div class="column is-1">
+            <div class="bye" v-if="match.bye">
+              bye
+            </div>
           </div>
         </div>
       </div>
@@ -38,13 +46,13 @@
           {{ match.status == 'NOT_STARTED' ? 'This match has not yet started' : 'No scores have been awarded yet' }}
         </div>
         <div class="columns" v-for="event in match.events">
-          <div class="column">
+          <div class="column white-event">
             {{ event.playerIndex == 'WHITE' ? formatEventType(event.type) : "" }}
           </div>
-          <div class="column">
+          <div class="column is-2 duration-event">
             {{ formatDuration(event.duration) }}
           </div>
-          <div class="column">
+          <div class="column blue-event">
             {{ event.playerIndex == 'BLUE' ? formatEventType(event.type) : "" }}
           </div>
         </div>
@@ -58,44 +66,16 @@
     margin-bottom: 10px;
   }
 
-  .match-header .columns .column:nth-child(2) { /* White player name */
-    text-align: right;
+  .match-header .unfinished {
+    color: green;
   }
 
-  .match-header .columns .column:nth-child(4) { /* Match duration */
-    text-align: center;
-  }
-
-  .match-header .columns .column:nth-child(5) { /* Blue player score */
-    text-align: right;
-  }
-
-  .match-header .columns .column:nth-child(6) { /* Blue player name */
-    text-align: left;
-  }
-
-  .match-header .columns .column:nth-child(7) { /* Is Bye */
-    text-align: right;
-  }
-
-  .match-events .columns .column:nth-child(1) {
-    text-align: right;
+  .match-header .bye {
+    font-weight: bold;
   }
 
   .match-header .winner {
     font-weight: bold;
-  }
-
-  .match-events .columns .column:nth-child(2) {
-    text-align: center;
-  }
-
-  .match-events .columns .column:nth-child(3) {
-    text-align: left;
-  }
-
-  .unfinishedDuration {
-    color: green;
   }
 
   .penalty-card {
@@ -111,6 +91,66 @@
 
   .hansokuCard {
     background: #bf616a;
+  }
+
+  .bigMatchHeader .white-name {
+    float: left;
+  }
+
+  .bigMatchHeader .white-score {
+    float: right;
+  }
+
+  .bigMatchHeader .match-duration {
+    text-align: center;
+  }
+
+  .bigMatchHeader .blue-name {
+    float: right;
+  }
+
+  .bigMatchHeader .blue-score {
+    float: left;
+  }
+
+  .bigMatchHeader .bye {
+    float: right;
+  }
+
+  .smallMatchHeader .white-name {
+    float: left;
+  }
+
+  .smallMatchHeader .white-score {
+    float: right;
+  }
+
+  .smallMatchHeader .match-duration {
+    text-align: right;
+  }
+
+  .smallMatchHeader .blue-name {
+    float: left;
+  }
+
+  .smallMatchHeader .blue-score {
+    float: right;
+  }
+
+  .smallMatchHeader .bye {
+    float: left;
+  }
+
+  .match-events .white-event {
+    text-align: right;
+  }
+
+  .match-events .duration-event {
+    text-align: center;
+  }
+
+  .match-events .blue-event {
+    text-align: left;
   }
 </style>
 
@@ -130,7 +170,7 @@ export default {
       interval: null,
     }
   },
-  props: ['match'],
+  props: ['match', 'size'],
   methods: {
     calcDuration() {
       if (this.match.status != 'UNPAUSED')

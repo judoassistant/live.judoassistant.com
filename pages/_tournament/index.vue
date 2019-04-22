@@ -33,7 +33,7 @@
       <div class="columns">
         <div class="column" v-for="(matches, index) of tatamis">
           <h3>Tatami {{ index + 1 }}</h3>
-          <MatchCard v-for="match in matches" v-if="!match.bye" :key="match.combinedId.matchId" :match="match"></MatchCard>
+          <MatchCard v-for="match in matches" v-if="!match.bye" :key="match.combinedId.matchId" :match="match" size="small"></MatchCard>
           <div class="has-text-grey has-text-centered" v-if="matches.length == 0">
             <p>This tatami has no upcoming matches</p>
           </div>
