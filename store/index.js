@@ -6,6 +6,42 @@ function mapId(combinedId) {
   return combinedId.matchId;
 }
 
+function mergeMatches(state, matches) {
+    const changedMatches = new Map(matches.map(match => [mapId(match.combinedId), match]));
+    const currentMatches = new Map(state.matches.map(match => [mapId(match.combinedId), match]));
+
+    const relevantMatches = new Set(); // ids of all matches to keep
+    if (state.subscribedPlayer != null) {
+      for (const matchId of state.subscribedPlayer.matches)
+        relevantMatches.add(mapId(matchId));
+    }
+
+    if (state.subscribedCategory != null) {
+      for (const matchId of state.subscribedCategory.matches)
+        relevantMatches.add(mapId(matchId));
+    }
+
+    for (const tatami of state.tatamis) {
+      for (const matchId of tatami.matches)
+        relevantMatches.add(mapId(matchId));
+    }
+
+    var res = []
+    for (const matchId of relevantMatches) {
+      if (changedMatches.has(matchId)) {
+        res.push(changedMatches.get(matchId));
+        continue;
+      }
+
+      if (currentMatches.has(matchId)) {
+        res.push(currentMatches.get(matchId));
+        continue;
+      }
+    }
+
+  return res;
+}
+
 export const state = () => ({
   connected: false,
   connecting: true,
@@ -15,6 +51,7 @@ export const state = () => ({
   players: null,
   categories: null,
   matches: null,
+  tatamis: null,
 
   subscribedCategoryLoading: false,
   subscribedCategory: null,
@@ -56,16 +93,17 @@ export const mutations = {
     state.matches = message.matches;
     state.subscribedCategory = message.subscribedCategory;
     state.subscribedPlayer = message.subscribedPlayer;
+    state.tatamis = message.tatamis;
   },
   subscribePlayer(state, message) {
     state.subscribedPlayerLoading = false;
     state.subscribedPlayer = mapPlayer(message.subscribedPlayer);
-    state.matches = message.matches;
+    state.matches = mergeMatches(state, message.matches);
   },
   subscribeCategory(state, message) {
     state.subscribedCategoryLoading = false;
     state.subscribedCategory = message.subscribedCategory;
-    state.matches = message.matches;
+    state.matches = mergeMatches(state, message.matches);
   },
   changeTournament(state, message) {
     if ('tournament' in message)
@@ -123,34 +161,22 @@ export const mutations = {
     if ('subscribedPlayer' in message)
       state.subscribedPlayer = message.subscribedPlayer;
 
-    // update matches
-    const changedMatches = new Map(message.matches.map(match => [mapId(match.combinedId), match]));
-    const relevantMatches = new Set(); // ids of all matches to keep
-    if (state.subscribedPlayer != null) {
-      for (const matchId of state.subscribedPlayer.matches)
-        relevantMatches.add(mapId(matchId));
-    }
-
-    if (state.subscribedCategory != null) {
-      for (const matchId of state.subscribedCategory.matches)
-        relevantMatches.add(mapId(matchId));
-    }
-
-    var matches = []
-    for (const match of state.matches) {
-      const matchId = mapId(match.combinedId);
-      if (!relevantMatches.has(matchId))
-        continue;
-      if (changedMatches.has(matchId)) {
-        matches.push(changedMatches.get(matchId));
-        changedMatches.delete(matchId);
-        continue;
+    // update tatamis
+    console.log("Updating tatamis", message.tatamis);
+    var tatamis = [];
+    var j = 0;
+    for (var i = 0; i < state.tournament.tatamiCount; ++i) {
+      if (j < message.tatamis.length && message.tatamis[j].index == i) {
+        tatamis.push(message.tatamis[j]);
+        ++j;
+      } else {
+        tatamis.push(state.tatamis[i]);
       }
-
-      matches.push(match);
     }
+    state.tatamis = tatamis;
 
-    state.matches = matches;
+    // update matches
+    state.matches = mergeMatches(state, message.matches);
   },
 }
 
@@ -211,6 +237,18 @@ export const getters = {
   },
   getPlayerById: (state) => (id) => {
     return state.players.find(player => player.id == id);
+  },
+  tatamiMatches(state, getters) {
+    var matches = [];
+    for (const tatami of state.tatamis) {
+      var matchIds = new Map();
+      for (const [i, combinedId] of tatami.matches.entries())
+        matchIds.set(mapId(combinedId), i);
+
+      const orderPred = (a, b) => (matchIds.get(mapId(a.combinedId)) - matchIds.get(mapId(b.combinedId)));
+      matches.push(state.matches.filter(match => matchIds.has(mapId(match.combinedId))).sort(orderPred));
+    }
+    return matches;
   },
 }
 
