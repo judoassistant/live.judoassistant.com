@@ -31,14 +31,12 @@
         </table>
       <h2 class="subtitle">Upcoming Matches</h2>
       <div class="columns">
-        <div class="column">
-          Tatami 1
-        </div>
-        <div class="column">
-          Tatami 2
-        </div>
-        <div class="column">
-          Tatami 3
+        <div class="column" v-for="(matches, index) of tatamis">
+          <h3>Tatami {{ index + 1 }}</h3>
+          <MatchCard v-for="match in matches" v-if="!match.bye" :key="match.combinedId.matchId" :match="match"></MatchCard>
+          <div class="has-text-grey has-text-centered" v-if="matches.length == 0">
+            <p>This tatami has no upcoming matches</p>
+          </div>
         </div>
       </div>
     </div>
@@ -46,7 +44,9 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
+  import MatchCard from '~/components/MatchCard'
+
   export default {
     name: 'Tournament',
     computed: {
@@ -59,9 +59,13 @@
         const clubs = this.$store.state.players.map(player => player.club);
         const uniqueClubs = new Set(clubs);
         return uniqueClubs.size;
-      }
+      },
+      ...mapGetters({
+        tatamis: 'tatamiMatches',
+      }),
     },
     components: {
+      MatchCard,
     },
     methods: {
     }
