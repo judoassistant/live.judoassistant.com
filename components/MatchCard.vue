@@ -20,8 +20,11 @@
           </div>
         </div>
         <div>
-          <div class="match-duration" :class="{unfinished: match.status != 'FINISHED'}">
+          <div v-if="osaekomi == null" class="match-duration" :class="{unfinished: match.status != 'FINISHED'}">
             {{ match.status != 'NOT_STARTED' ? formatDuration(duration) : "" }}
+          </div>
+          <div v-if="osaekomi != null" class="match-osaekomi">
+            OSK {{ formatOsaekomi(osaekomi) }}
           </div>
         </div>
         <div>
@@ -94,6 +97,10 @@
     text-align: center;
   }
 
+  .match-header .match-osaekomi {
+    text-align: center;
+  }
+
   .match-header .winner {
     font-weight: bold;
   }
@@ -138,7 +145,8 @@ export default {
   data() {
     return {
       isExpanded: false,
-      duration: 1000,
+      duration: 0,
+      osaekomi: null,
       interval: null,
     }
   },
@@ -150,6 +158,16 @@ export default {
 
       const diff = Date.now() - new Date(this.match.resumeTime);
       return this.match.duration + diff;
+    },
+    calcOsaekomi() {
+      if (this.match.osaekomi == null)
+        return null;
+
+      return Date.now() - new Date(this.match.osaekomi.start);
+    },
+    formatOsaekomi(osaekomi) {
+      const seconds = Math.floor(osaekomi / 1000);
+      return pad(seconds,2);
     },
     formatDuration(duration) {
       const seconds = Math.floor(duration / 1000) % 60;
@@ -165,12 +183,18 @@ export default {
         return 'Hansoku Make';
       if (type == 'SHIDO')
         return 'Shido';
+      if (type == 'IPPON_OSAEKOMI')
+        return 'Ippon (Osaekomi)';
+      if (type == 'WAZARI_OSAEKOMI')
+        return 'Wazari (Osaekomi)';
     }
   },
   mounted() {
     this.duration = this.calcDuration();
+    this.osaekomi = this.calcOsaekomi();
     this.interval = setInterval(() => {
-        this.duration = this.calcDuration();
+      this.duration = this.calcDuration();
+      this.osaekomi = this.calcOsaekomi();
     }, 1000);
   },
   beforeDestroy() {
