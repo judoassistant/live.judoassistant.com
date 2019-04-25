@@ -10,7 +10,7 @@ function socketDelayedSend(socket, message) {
 }
 
 export default ({ store }, inject) => {
-  const socket = new WebSocket('ws://localhost:9001');
+  const socket = new WebSocket('ws://live.judoassistant.com:9001');
   inject('subscribeCategory', (id) => {
     socketDelayedSend(socket, 'subscribeCategory ' + id);
   });
