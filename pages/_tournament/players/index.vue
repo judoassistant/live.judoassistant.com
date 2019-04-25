@@ -11,7 +11,7 @@
 
       <h1 class="title">{{ tournament.name }}</h1>
       <h2 class="subtitle">Players</h2>
-      <b-table paginated :per-page=50 :data="players" default-sort="name">
+      <b-table paginated :per-page=50 :data="players" default-sort="name" :mobile-cards="false">
         <template v-slot:default="props">
           <b-table-column sortable field="name" label="Name">
             <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name }}</nuxt-link>

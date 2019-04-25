@@ -10,7 +10,7 @@
       </nav>
       <h1 class="title">{{ tournament.name }}</h1>
       <h2 class="subtitle">Categories</h2>
-      <b-table paginated :per-page=15 :data="categories" default-sort="name">
+      <b-table paginated :per-page=15 :data="categories" default-sort="name" :mobile-cards="false">
         <template v-slot:default="props">
           <b-table-column sortable field="name" label="Name" :custom-sort="numeric_sort">
             <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: props.row.id}}">{{ props.row.name}}</nuxt-link>
