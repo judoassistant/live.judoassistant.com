@@ -216,7 +216,7 @@ export const getters = {
     for (const [i, combinedId] of state.subscribedCategory.matches.entries())
       matchIds.set(mapId(combinedId), i);
 
-    const orderPred = (a, b) => (matchIds.get(mapId(b.combinedId)) - matchIds.get(mapId(a.combinedId)));
+    const orderPred = (a, b) => (matchIds.get(mapId(a.combinedId)) - matchIds.get(mapId(b.combinedId)));
     return state.matches.filter(match => matchIds.has(mapId(match.combinedId))).sort(orderPred);
   },
   subscribedPlayerMatches(state, getters) {
@@ -226,7 +226,7 @@ export const getters = {
     for (const [i, combinedId] of state.subscribedPlayer.matches.entries())
       matchIds.set(mapId(combinedId), i);
 
-    const orderPred = (a, b) => (matchIds.get(mapId(b.combinedId)) - matchIds.get(mapId(a.combinedId)));
+    const orderPred = (a, b) => (matchIds.get(mapId(a.combinedId)) - matchIds.get(mapId(b.combinedId)));
     return state.matches.filter(match => matchIds.has(mapId(match.combinedId))).sort(orderPred );
   },
   subscribedCategoryPlayers(state, getters) {
