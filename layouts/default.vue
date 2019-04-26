@@ -5,13 +5,13 @@
         <nuxt-link class="navbar-item" :to="{ name: 'index' }" exact-active-class="is-active">
           <img src="~assets/logo.svg" alt="JudoAssistant" height="28" />
         </nuxt-link>
-        <nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
+        <nuxt-link v-if="showTournament" :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
           Overview
         </nuxt-link>
-        <nuxt-link :to="{ name: 'tournament-players', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
+        <nuxt-link v-if="showTournament" :to="{ name: 'tournament-players', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
           Players
         </nuxt-link>
-        <nuxt-link :to="{ name: 'tournament-categories', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
+        <nuxt-link v-if="showTournament" :to="{ name: 'tournament-categories', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
           Categories
         </nuxt-link>
 
