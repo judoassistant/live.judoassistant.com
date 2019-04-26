@@ -54,7 +54,33 @@
               </div>
             </section>
           </b-tab-item>
-          <!-- <b-tab-item label="Results" icon="tournament"></b-tab-item> -->
+          <b-tab-item label="Results" icon="tournament">
+            <b-table paginated :per-page=50 :data="results" :mobile-cards="false" default-sort="pos" >
+              <template v-slot:default="props">
+                <b-table-column sortable field="name" label="Name">
+                  <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name}}</nuxt-link>
+                </b-table-column>
+                <b-table-column sortable field="pos" label="Position">
+                  {{ props.row.pos }}
+                </b-table-column>
+                <b-table-column sortable field="club" label="Club">
+                  {{ props.row.club}}
+                </b-table-column>
+              </template>
+
+              <template v-slot:empty>
+                <section class="section">
+                  <div class="content has-text-grey has-text-centered">
+                    <p>
+                      <b-icon icon="tournament" size="is-large">
+                      </b-icon>
+                    </p>
+                    <p>There are no results for this category yet</p>
+                  </div>
+                </section>
+              </template>
+            </b-table>
+          </b-tab-item>
         </b-tabs>
       </div>
     </div>
@@ -79,6 +105,7 @@
       ...mapGetters({
         players: 'subscribedCategoryPlayers',
         matches: 'subscribedCategoryMatches',
+        results: 'subscribedCategoryResults',
       }),
     },
     components: {
