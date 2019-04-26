@@ -30,7 +30,7 @@
             <b-icon icon="close-network" size="is-large">
             </b-icon>
           </p>
-          <p>The connection to the server failed. Refresh the page to retry</p>
+          <p>The connection to the server failed. Refresh the page to reconnect</p>
         </div>
       </section>
       <section class="section" v-if="showInvalidTournament">

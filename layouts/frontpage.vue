@@ -21,7 +21,7 @@
             <b-icon icon="close-network" size="is-large">
             </b-icon>
           </p>
-          <p>The connection has been lost. Try to refresh the page</p>
+          <p>The connection to the server failed. Refresh the page to reconnect</p>
         </div>
       </section>
       <b-loading :is-full-page=true :active.sync="loading"></b-loading>
