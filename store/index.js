@@ -84,6 +84,17 @@ export const mutations = {
   openConnection(state) {
     state.connected = true;
   },
+  failSubscribeTournament(state, message) {
+    state.connecting = false;
+    state.tournamentLoading = false;
+    state.tournament = null;
+    state.categories = null;
+    state.players = null;
+    state.matches = null;
+    state.subscribedCategory = null;
+    state.subscribedPlayer = null;
+    state.tatamis = null;
+  },
   subscribeTournament(state, message) {
     state.connecting = false;
     state.tournamentLoading = false;

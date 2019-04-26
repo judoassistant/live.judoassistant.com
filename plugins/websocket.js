@@ -38,6 +38,8 @@ export default ({ store }, inject) => {
       store.commit('subscribePlayer', message);
     else if (message.messageType == "categorySubscription")
       store.commit('subscribeCategory', message);
+    else if (message.messageType == "tournamentSubscriptionFail")
+      store.commit('failSubscribeTournament', message);
   });
 
   socket.addEventListener('error', function (event) {
