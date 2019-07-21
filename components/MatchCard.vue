@@ -15,8 +15,8 @@
           </div>
           <div class="white-score" :class="{winner: match.winner == 'WHITE'}" v-if="match.status != 'NOT_STARTED' && !match.bye">
             {{ whiteScore }}
-            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 0 && match.whiteScore.hansokuMake == 0, hansokuCard: match.whiteScore.hansokuMake > 0}"></span>
-            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 1 && match.whiteScore.hansokuMake == 0}"></span>
+            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 0 && !(match.whiteScore.hansokuMake) , hansokuCard: match.whiteScore.hansokuMake}"></span>
+            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 1 && !(match.whiteScore.hansokuMake)}"></span>
           </div>
         </div>
         <div>
@@ -33,8 +33,8 @@
           </div>
           <div class="blue-score" :class="{winner: match.winner == 'BLUE'}" v-if="match.status != 'NOT_STARTED' && !match.bye">
             {{ blueScore }}
-            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 0 && match.blueScore.hansokuMake == 0, hansokuCard: match.blueScore.hansokuMake > 0}"></span>
-            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 1 && match.blueScore.hansokuMake == 0}"></span>
+            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 0 && !(match.blueScore.hansokuMake), hansokuCard: match.blueScore.hansokuMake}"></span>
+            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 1 && !(match.blueScore.hansokuMake)}"></span>
           </div>
         </div>
       </div>
@@ -175,18 +175,26 @@ export default {
       return pad(minutes, 2) + ":" + pad(seconds,2);
     },
     formatEventType(type) {
-      if (type == 'WAZARI')
-        return 'Wazari';
       if (type == 'IPPON')
         return 'Ippon';
-      if (type == 'HANSOKU_MAKE')
-        return 'Hansoku Make';
+      if (type == 'WAZARI')
+        return 'Wazari';
       if (type == 'SHIDO')
         return 'Shido';
+      if (type == 'HANSOKU_MAKE')
+        return 'Hansoku Make';
       if (type == 'IPPON_OSAEKOMI')
         return 'Ippon (Osaekomi)';
       if (type == 'WAZARI_OSAEKOMI')
         return 'Wazari (Osaekomi)';
+      if (type == 'CANCEL_IPPON')
+        return 'Cancel Ippon';
+      if (type == 'CANCEL_WAZARI')
+        return 'Cancel Wazari';
+      if (type == 'CANCEL_SHIDO')
+        return 'Cancel Shido';
+      if (type == 'CANCEL_HANSOKU_MAKE')
+        return 'Cancel Hansoku-Make';
     }
   },
   mounted() {
@@ -211,12 +219,12 @@ export default {
     whiteScore() {
       if (this.match.status == 'NOT_STARTED')
         return "";
-      return this.match.whiteScore.ippon + " " + this.match.whiteScore.wazari;
+      return (this.match.whiteScore.ippon ? 1 : 0) + " " + this.match.whiteScore.wazari;
     },
     blueScore() {
       if (this.match.status == 'NOT_STARTED')
         return "";
-      return this.match.blueScore.ippon + " " + this.match.blueScore.wazari;
+      return (this.match.blueScore.ippon ? 1 : 0) + " " + this.match.blueScore.wazari;
     },
     blueName() {
       const id = this.match.bluePlayer;
