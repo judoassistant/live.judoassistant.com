@@ -57,6 +57,8 @@ export const state = () => ({
   subscribedCategory: null,
   subscribedPlayerLoading: false,
   subscribedPlayer: null,
+  subscribedTatamiLoading: false,
+  subscribedTatami: null,
 })
 
 export const mutations = {
@@ -64,9 +66,17 @@ export const mutations = {
     state.subscribedCategoryLoading = true;
     state.subscribedCategory = null;
     state.subscribedPlayer = null;
+    state.subscribedTatami = null;
   },
   clearSubscribedPlayer(state) {
     state.subscribedPlayerLoading = true;
+    state.subscribedPlayer = null;
+    state.subscribedCategory = null;
+    state.subscribedTatami = null;
+  },
+  clearSubscribedTatami(state) {
+    state.subscribedTatamiLoading = true;
+    state.subscribedTatami = null;
     state.subscribedPlayer = null;
     state.subscribedCategory = null;
   },
@@ -80,6 +90,7 @@ export const mutations = {
     state.tournamentLoading = false;
     state.subscribedPlayerLoading = false;
     state.subscribedCategoryLoading = false;
+    state.subscribedTatamiLoading = false;
   },
   openConnection(state) {
     state.connected = true;
@@ -93,6 +104,7 @@ export const mutations = {
     state.matches = null;
     state.subscribedCategory = null;
     state.subscribedPlayer = null;
+    state.subscribedTatami = null;
     state.tatamis = null;
   },
   subscribeTournament(state, message) {
@@ -104,6 +116,7 @@ export const mutations = {
     state.matches = message.matches;
     state.subscribedCategory = message.subscribedCategory;
     state.subscribedPlayer = message.subscribedPlayer;
+    state.subscribedTatami = message.subscribedTatami;
     state.tatamis = message.tatamis;
   },
   subscribePlayer(state, message) {
@@ -114,6 +127,11 @@ export const mutations = {
   subscribeCategory(state, message) {
     state.subscribedCategoryLoading = false;
     state.subscribedCategory = message.subscribedCategory;
+    state.matches = mergeMatches(state, message.matches);
+  },
+  subscribeTatami(state, message) {
+    state.subscribedTatamiLoading = false;
+    state.subscribedTatami = message.subscribedTatami;
     state.matches = mergeMatches(state, message.matches);
   },
   changeTournament(state, message) {
@@ -172,6 +190,9 @@ export const mutations = {
     if ('subscribedPlayer' in message)
       state.subscribedPlayer = message.subscribedPlayer;
 
+    if ('subscribedTatami' in message)
+      state.subscribedTatami = message.subscribedTatami;
+
     // update tatamis
     console.log("Updating tatamis", message.tatamis);
     var tatamis = [];
@@ -198,7 +219,13 @@ export const actions = {
   },
   subscribePlayer({ commit }, id) {
     commit('clearSubscribedPlayer');
+
     this.$subscribePlayer(id);
+  },
+  subscribeTatami({ commit }, id) {
+    commit('clearSubscribedTatami');
+
+    this.$subscribeTatami(id);
   },
   subscribeTournament({ commit, state }, id) {
     commit('clearTournament');
