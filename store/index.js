@@ -3,7 +3,7 @@ function mapPlayer(player) {
 }
 
 function mapId(combinedId) {
-  return combinedId.matchId;
+  return String(combinedId.categoryId) + "_" + String(combinedId.matchId);
 }
 
 function mergeMatches(state, matches) {
