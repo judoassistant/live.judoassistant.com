@@ -17,7 +17,8 @@
             <div class="tile is-ancestor" v-for="concurrentGroup in tatami.blocks">
               <div class="tile is-parent is-vertical" v-for="sequentialGroup in concurrentGroup">
                 <div class="tile is-child tatami-block" :class="{finished: block.status == 'FINISHED', started: block.status == 'STARTED', notstarted: block.status == 'NOT_STARTED'}" v-for="block in sequentialGroup ">
-                  <nuxt-link class="tatami-link" :to="{ name: 'tournament-categories-category', params: {category: block.id}}">{{ block.name }} ({{block.type}})</nuxt-link>
+                  <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: block.id}}">{{ block.name }}</nuxt-link>
+                  <p>({{block.type}})</p>
                 </div>
               </div>
             </div>
@@ -102,12 +103,15 @@ export default {
     background: #d08770;
   }
 
-  .tatami-block a {
+  .tatami-block a, p {
     text-decoration: none;
     color: #4c566a;
+    display: block;
+    text-align: center;
   }
 
   .tatami-block a:hover {
     color: #2e3440
   }
+
 </style>
