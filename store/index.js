@@ -115,7 +115,7 @@ export const mutations = {
     state.players = message.players.map(mapPlayer);
     state.matches = message.matches;
     state.subscribedCategory = message.subscribedCategory;
-    state.subscribedPlayer = message.subscribedPlayer;
+    state.subscribedPlayer = mapPlayer(message.subscribedPlayer);
     state.subscribedTatami = message.subscribedTatami;
     state.tatamis = message.tatamis;
   },
@@ -187,7 +187,7 @@ export const mutations = {
     state.players = players;
 
     if ('subscribedPlayer' in message)
-      state.subscribedPlayer = message.subscribedPlayer;
+      state.subscribedPlayer = mapPlayer(message.subscribedPlayer);
 
     if ('subscribedTatami' in message)
       state.subscribedTatami = message.subscribedTatami;
