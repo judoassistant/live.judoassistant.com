@@ -130,7 +130,6 @@ export const mutations = {
     state.matches = mergeMatches(state, message.matches);
   },
   subscribeTatami(state, message) {
-    console.log("SubscribeTatami", message);
     state.subscribedTatamiLoading = false;
     state.subscribedTatami = message.subscribedTatami;
   },
@@ -194,7 +193,6 @@ export const mutations = {
       state.subscribedTatami = message.subscribedTatami;
 
     // update tatamis
-    console.log("Updating tatamis", message.tatamis);
     var tatamis = [];
     var j = 0;
     for (var i = 0; i < state.tournament.tatamiCount; ++i) {
