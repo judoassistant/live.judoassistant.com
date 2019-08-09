@@ -1,4 +1,6 @@
 function mapPlayer(player) {
+  if (player == null)
+    return null;
   return { ...player, name : player.firstName + ' ' + player.lastName };
 }
 
