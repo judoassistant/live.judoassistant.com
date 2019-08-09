@@ -16,8 +16,8 @@
           <div v-if="tatamiLoaded(tatamiIndex - 1, loading, tatami)">
             <div class="tile is-ancestor" v-for="concurrentGroup in tatami.blocks">
               <div class="tile is-parent is-vertical" v-for="sequentialGroup in concurrentGroup">
-                <div class="tile is-child notification" v-for="block in sequentialGroup ">
-                  <h3>{{ block.name }} ({{block.type}})</h3>
+                <div class="tile is-child tatami-block" :class="{finished: block.status == 'FINISHED', started: block.status == 'STARTED', notstarted: block.status == 'NOT_STARTED'}" v-for="block in sequentialGroup ">
+                  <nuxt-link class="tatami-link" :to="{ name: 'tournament-categories-category', params: {category: block.id}}">{{ block.name }} ({{block.type}})</nuxt-link>
                 </div>
               </div>
             </div>
@@ -54,7 +54,8 @@ export default {
           var sequentialGroupInfo = [];
           for (const block of sequentialGroup) {
             const category = this.$store.getters.getCategoryById(block.categoryId);
-            sequentialGroupInfo.push({name: category.name, type: block.type});
+            const type = block.type.charAt(0) + block.type.slice(1).toLowerCase();
+            sequentialGroupInfo.push({id: category.id, name: category.name, type: type, status: block.status});
             // blocks.push({id: category.id, name: category.name});
           }
           concurrentGroupInfo.push(sequentialGroupInfo);
@@ -85,5 +86,28 @@ export default {
 <style>
   .tatami-tab {
     min-height: 100px;
+  }
+
+  .tatami-block {
+    border-radius: 4px;
+    background: #d8dee9;
+    padding: 10px 20px 10px 12px;
+  }
+
+  .tatami-block.started {
+    background: #a3be8c;
+  }
+
+  .tatami-block.finished {
+    background: #d08770;
+  }
+
+  .tatami-block a {
+    text-decoration: none;
+    color: #4c566a;
+  }
+
+  .tatami-block a:hover {
+    color: #2e3440
   }
 </style>
