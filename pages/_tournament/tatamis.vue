@@ -10,57 +10,18 @@
       </nav>
       <h1 class="title">{{ tournament.name }}</h1>
       <h2 class="subtitle">Tatamis</h2>
-      <b-tabs>
-        <b-tab-item label="Tatami 1" icon="account">
-          <div class="tile is-ancestor">
-            <div class="tile is-parent is-vertical">
-              <div class="tile is-child notification">
-                <h3>Pulje 1</h3>
-              </div>
-            </div>
-            <div class="tile is-parent is-vertical">
-              <div class="tile is-child notification">
-                <h3>Pulje 2</h3>
-              </div>
-              <div class="tile is-child notification">
-                <h3>Pulje 3</h3>
-              </div>
-            </div>
-            <div class="tile is-parent is-vertical">
-              <div class="tile is-child notification">
-                <h3>Pulje 2</h3>
-              </div>
-              <div class="tile is-child notification">
-                <h3>Pulje 3</h3>
-              </div>
-              <div class="tile is-child notification">
-                <h3>Pulje 3</h3>
+      <b-tabs @change=subscribeTab>
+        <b-tab-item :label="'Tatami ' + tatamiIndex" v-for="tatamiIndex in tatamiCount" :key="tatamiIndex" class="tatami-tab">
+          <b-loading :is-full-page=false :active=true v-if="!tatamiLoaded(tatamiIndex - 1, loading, tatami)"></b-loading>
+          <div v-if="tatamiLoaded(tatamiIndex - 1, loading, tatami)">
+            <div class="tile is-ancestor" v-for="concurrentGroup in tatami.blocks">
+              <div class="tile is-parent is-vertical" v-for="sequentialGroup in concurrentGroup">
+                <div class="tile is-child notification" v-for="block in sequentialGroup ">
+                  <h3>Pulje 1 (Finished)</h3>
+                </div>
               </div>
             </div>
           </div>
-          <div class="tile is-ancestor">
-            <div class="tile is-parent is-vertical">
-              <div class="tile is-child notification">
-                <h3>Pulje 2</h3>
-              </div>
-              <div class="tile is-child notification">
-                <h3>Pulje 3</h3>
-              </div>
-            </div>
-            <div class="tile is-parent is-vertical">
-              <div class="tile is-child notification">
-                <h3>Pulje 2</h3>
-              </div>
-              <div class="tile is-child notification">
-                <h3>Pulje 3</h3>
-              </div>
-              <div class="tile is-child notification">
-                <h3>Pulje 3</h3>
-              </div>
-            </div>
-          </div>
-        </b-tab-item>
-        <b-tab-item label="Tatami 2" icon="account">
         </b-tab-item>
       </b-tabs>
     </div>
@@ -72,6 +33,30 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'Tatamis',
-  computed: mapState(['tournament']),
+  mounted() {
+    this.$store.dispatch('subscribeTatami', 0);
+  },
+  computed: {
+    ...mapState({
+      loading: state => state.subscribeTatamiLoading,
+      tatami: state => state.subscribedTatami,
+      tournament: state => state.tournament,
+      tatamiCount: state => state.tournament.tatamiCount,
+    }),
+  },
+  methods: {
+    subscribeTab: function(index) {
+      this.$store.dispatch('subscribeTatami', index);
+    },
+    tatamiLoaded: function(index, loading, tatami) {
+      return !loading && tatami != null && tatami.index == index;
+    }
+  }
 }
 </script>
+
+<style>
+  .tatami-tab {
+    min-height: 100px;
+  }
+</style>

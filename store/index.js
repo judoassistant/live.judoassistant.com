@@ -130,9 +130,9 @@ export const mutations = {
     state.matches = mergeMatches(state, message.matches);
   },
   subscribeTatami(state, message) {
+    console.log("SubscribeTatami", message);
     state.subscribedTatamiLoading = false;
     state.subscribedTatami = message.subscribedTatami;
-    state.matches = mergeMatches(state, message.matches);
   },
   changeTournament(state, message) {
     if ('tournament' in message)
