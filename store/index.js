@@ -296,6 +296,9 @@ export const getters = {
   getPlayerById: (state) => (id) => {
     return state.players.find(player => player.id == id);
   },
+  getCategoryById: (state) => (id) => {
+    return state.categories.find(category => category.id == id);
+  },
   tatamiMatches(state, getters) {
     var matches = [];
     for (const tatami of state.tatamis) {

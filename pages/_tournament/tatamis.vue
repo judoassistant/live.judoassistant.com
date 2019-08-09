@@ -17,7 +17,7 @@
             <div class="tile is-ancestor" v-for="concurrentGroup in tatami.blocks">
               <div class="tile is-parent is-vertical" v-for="sequentialGroup in concurrentGroup">
                 <div class="tile is-child notification" v-for="block in sequentialGroup ">
-                  <h3>Pulje 1 (Finished)</h3>
+                  <h3>{{ block.name }} ({{block.type}})</h3>
                 </div>
               </div>
             </div>
@@ -39,10 +39,37 @@ export default {
   computed: {
     ...mapState({
       loading: state => state.subscribeTatamiLoading,
-      tatami: state => state.subscribedTatami,
       tournament: state => state.tournament,
       tatamiCount: state => state.tournament.tatamiCount,
     }),
+    tatami: function() {
+      const subscribedTatami = this.$store.state.subscribedTatami;
+      if (subscribedTatami == null)
+        return null;
+
+      var blocksInfo = [];
+      for (const concurrentGroup of subscribedTatami.blocks) {
+        var concurrentGroupInfo = [];
+        for (const sequentialGroup of concurrentGroup) {
+          var sequentialGroupInfo = [];
+          for (const block of sequentialGroup) {
+            const category = this.$store.getters.getCategoryById(block.categoryId);
+            sequentialGroupInfo.push({name: category.name, type: block.type});
+            // blocks.push({id: category.id, name: category.name});
+          }
+          concurrentGroupInfo.push(sequentialGroupInfo);
+        }
+
+        blocksInfo.push(concurrentGroupInfo);
+      }
+
+      console.log(blocksInfo);
+
+      return {
+        index: subscribedTatami.index,
+        blocks: blocksInfo,
+      };
+    }
   },
   methods: {
     subscribeTab: function(index) {
