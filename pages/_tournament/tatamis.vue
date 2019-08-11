@@ -14,9 +14,9 @@
         <b-tab-item :label="'Tatami ' + tatamiIndex" v-for="tatamiIndex in tatamiCount" :key="tatamiIndex" class="tatami-tab">
           <b-loading :is-full-page=false :active=true v-if="!tatamiLoaded(tatamiIndex - 1, loading, tatami)"></b-loading>
           <div v-if="tatamiLoaded(tatamiIndex - 1, loading, tatami)">
-            <div class="tile is-ancestor" v-for="concurrentGroup in tatami.blocks">
-              <div class="tile is-parent is-vertical" v-for="sequentialGroup in concurrentGroup">
-                <div class="tile is-child tatami-block" :class="{finished: block.status == 'FINISHED', started: block.status == 'STARTED', notstarted: block.status == 'NOT_STARTED'}" v-for="block in sequentialGroup ">
+            <div class="concurrent-group" v-for="concurrentGroup in tatami.blocks">
+              <div class="sequential-group" v-for="sequentialGroup in concurrentGroup">
+                <div class="tatami-block" :class="{finished: block.status == 'FINISHED', started: block.status == 'STARTED', 'not-started': block.status == 'NOT_STARTED'}" v-for="block in sequentialGroup ">
                   <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: block.id}}">{{ block.name }}</nuxt-link>
                   <p>({{block.type}})</p>
                 </div>
@@ -93,6 +93,8 @@ export default {
     border-radius: 4px;
     background: #d8dee9;
     padding: 10px 20px 10px 12px;
+    flex: 1;
+    margin: 10px;
   }
 
   .tatami-block.started {
@@ -112,6 +114,17 @@ export default {
 
   .tatami-block a:hover {
     color: #2e3440
+  }
+
+  .concurrent-group {
+      display: flex;
+      align-items: stretch;
+  }
+
+  .sequential-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
   }
 
 </style>
