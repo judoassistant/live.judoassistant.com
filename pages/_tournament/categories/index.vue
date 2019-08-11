@@ -1,13 +1,6 @@
 <template>
   <section class="section">
     <div class="container">
-      <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-          <li><nuxt-link :to="{ name: 'index' }">JudoAssistant</nuxt-link></li>
-          <li><nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}">{{ tournament.name }}</nuxt-link></li>
-          <li class="is-active"><a href="#" aria-current="page">Categories</a></li>
-        </ul>
-      </nav>
       <h1 class="title">{{ tournament.name }}</h1>
       <h2 class="subtitle">Categories</h2>
       <b-table paginated :per-page=15 :data="categories" default-sort="name" :mobile-cards="false">

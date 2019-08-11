@@ -3,14 +3,6 @@
     <div class="container">
       <b-loading :is-full-page=false :active.sync="loading"></b-loading>
       <div v-if="player != null">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-          <ul>
-            <li><nuxt-link :to="{ name: 'index' }">JudoAssistant</nuxt-link></li>
-            <li><nuxt-link :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}">{{ tournament.name }}</nuxt-link></li>
-            <li><nuxt-link :to="{ name: 'tournament-players', params: {tournament: this.$route.params.tournament }}">Players</nuxt-link></li>
-            <li class="is-active"><a href="#" aria-current="page">{{ player.name }}</a></li>
-          </ul>
-        </nav>
         <h1 class="title">{{ tournament.name }}</h1>
         <h2 class="subtitle">{{ player.name }}</h2>
 
