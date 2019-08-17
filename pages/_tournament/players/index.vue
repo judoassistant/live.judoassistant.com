@@ -8,9 +8,9 @@
           <b-table-column sortable field="name" label="Name">
             <nuxt-link :to="{ name: 'tournament-players-player', params: {player: props.row.id}}">{{ props.row.name }}</nuxt-link>
           </b-table-column>
-          <b-table-column sortable field="rank" label="Rank">
-            {{ props.row.rank}}
-          </b-table-column>
+          <!-- <b-table-column sortable field="rank" label="Rank"> -->
+          <!--   {{ props.row.rank}} -->
+          <!-- </b-table-column> -->
           <b-table-column sortable field="club" label="Club">
             {{ props.row.club}}
           </b-table-column>
