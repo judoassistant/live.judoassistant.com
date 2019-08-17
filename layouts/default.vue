@@ -5,7 +5,7 @@
         <nuxt-link class="navbar-item" :to="{ name: 'index' }" exact-active-class="is-active">
           <img src="~assets/logo.svg" alt="JudoAssistant" height="28" />
         </nuxt-link>
-        <a role="button" class="navbar-burger" :class="{'is-active': menuActive}" aria-label="menu" aria-expanded="false" v-on:click="toggleMenu()">
+        <a role="button" class="navbar-burger" :class="{'is-active': menuActive}" aria-label="menu" aria-expanded="false" @click="toggleMenu()">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -14,16 +14,16 @@
 
       <div class="navbar-menu" :class="{'is-active': menuActive}">
         <div class="navbar-start">
-          <nuxt-link v-if="showTournament" :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
+          <nuxt-link v-if="showTournament" :to="{ name: 'tournament', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active" @click.native="toggleMenu()">
             Overview
           </nuxt-link>
-          <nuxt-link v-if="showTournament" :to="{ name: 'tournament-players', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
+          <nuxt-link v-if="showTournament" :to="{ name: 'tournament-players', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active" @click.native="toggleMenu()">
             Players
           </nuxt-link>
-          <nuxt-link v-if="showTournament" :to="{ name: 'tournament-categories', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
+          <nuxt-link v-if="showTournament" :to="{ name: 'tournament-categories', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active" @click.native="toggleMenu()">
             Categories
           </nuxt-link>
-          <nuxt-link v-if="showTournament" :to="{ name: 'tournament-tatamis', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active">
+          <nuxt-link v-if="showTournament" :to="{ name: 'tournament-tatamis', params: {tournament: this.$route.params.tournament }}" class="navbar-item" exact-active-class="is-active" @click.native="toggleMenu()">
             Tatamis
           </nuxt-link>
         </div>
