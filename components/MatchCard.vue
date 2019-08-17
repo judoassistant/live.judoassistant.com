@@ -5,7 +5,7 @@
         <div>
           <div class="match-title">
             <a v-on:click="isExpanded = !isExpanded"><b-icon :icon="isExpanded ? 'chevron-down' : 'chevron-right'"></b-icon></a>
-            {{ match.title }}
+            <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: match.combinedId.categoryId}}">{{ categoryName }} - {{ match.title }}</nuxt-link>
           </div>
           <div class="bye" v-if="match.bye">bye</div>
         </div>
@@ -209,6 +209,11 @@ export default {
     clearInterval(this.interval);
   },
   computed: {
+    categoryName() {
+      const id = this.match.combinedId.categoryId
+      const category = this.$store.getters.getCategoryById(id);
+      return category.name;
+    },
     whiteName() {
       const id = this.match.whitePlayer;
       if (id == null)
