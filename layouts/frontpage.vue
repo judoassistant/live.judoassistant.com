@@ -39,6 +39,11 @@ export default {
     connected() {
       return this.$store.state.connected;
     }
+  },
+  head() {
+    return {
+      title: "JudoAssistant"
+    }
   }
 }
 </script>

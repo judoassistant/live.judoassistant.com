@@ -72,5 +72,18 @@ export default {
   mounted() {
     this.$store.dispatch('subscribeTournament', this.$route.params.tournament);
   },
+  head() {
+    const tournament = this.$store.state.tournament;
+
+    if (tournament == null) {
+      return {
+        title: "JudoAssistant"
+      };
+    }
+
+    return {
+      title: tournament.name
+    }
+  }
 }
 </script>
