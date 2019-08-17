@@ -13,8 +13,10 @@
             <div class="concurrent-group" v-for="concurrentGroup in tatami.blocks">
               <div class="sequential-group" v-for="sequentialGroup in concurrentGroup">
                 <div class="tatami-block" :class="{finished: block.status == 'FINISHED', started: block.status == 'STARTED', 'not-started': block.status == 'NOT_STARTED'}" v-for="block in sequentialGroup ">
-                  <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: block.id}}">{{ block.name }}</nuxt-link>
-                  <p>({{block.type}})</p>
+                  <div class="inner">
+                      <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: block.id}}">{{ block.name }}</nuxt-link>
+                      <p>({{block.type}})</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -88,7 +90,7 @@ export default {
   .tatami-block {
     border-radius: 4px;
     background: #d8dee9;
-    padding: 10px 20px 10px 12px;
+    padding: 10px 20px 10px 20px;
     flex: 1;
     margin: 10px;
   }
@@ -121,6 +123,16 @@ export default {
       flex: 1;
       display: flex;
       flex-direction: column;
+  }
+
+  @media (max-width: 767px) {
+    .tatami-block {
+      margin: 5px;
+    }
+
+    .tatami-block .inner {
+      writing-mode: vertical-rl;
+    }
   }
 
 </style>
