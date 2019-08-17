@@ -63,8 +63,6 @@ export default {
         blocksInfo.push(concurrentGroupInfo);
       }
 
-      console.log(blocksInfo);
-
       return {
         index: subscribedTatami.index,
         blocks: blocksInfo,
