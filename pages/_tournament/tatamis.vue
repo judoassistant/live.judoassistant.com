@@ -7,6 +7,9 @@
         <b-tab-item :label="'Tatami ' + tatamiIndex" v-for="tatamiIndex in tatamiCount" :key="tatamiIndex" class="tatami-tab">
           <b-loading :is-full-page=false :active=true v-if="!tatamiLoaded(tatamiIndex - 1, loading, tatami)"></b-loading>
           <div v-if="tatamiLoaded(tatamiIndex - 1, loading, tatami)">
+            <div class="has-text-grey has-text-centered" v-if="tatami.blocks.length == 0">
+              <p>This tatami has no matches</p>
+            </div>
             <div class="concurrent-group" v-for="concurrentGroup in tatami.blocks">
               <div class="sequential-group" v-for="sequentialGroup in concurrentGroup">
                 <div class="tatami-block" :class="{finished: block.status == 'FINISHED', started: block.status == 'STARTED', 'not-started': block.status == 'NOT_STARTED'}" v-for="block in sequentialGroup ">
