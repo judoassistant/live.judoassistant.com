@@ -48,7 +48,7 @@ export default {
           var sequentialGroupInfo = [];
           for (const block of sequentialGroup) {
             const category = this.$store.getters.getCategoryById(block.categoryId);
-            const type = block.type.charAt(0) + block.type.slice(1).toLowerCase();
+            const type = ( block.type == 'ELIMINATION' ? 'Elimination' : 'Finals');
             sequentialGroupInfo.push({id: category.id, name: category.name, type: type, status: block.status});
             // blocks.push({id: category.id, name: category.name});
           }
