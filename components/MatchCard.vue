@@ -1,59 +1,59 @@
 <template>
   <div class="match-card">
-    <div class="card">
-      <div class="card-content match-header">
-        <div>
-          <div class="match-title">
-            <a v-on:click="isExpanded = !isExpanded"><b-icon :icon="isExpanded ? 'chevron-down' : 'chevron-right'"></b-icon></a>
-            <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: match.combinedId.categoryId}}">{{ categoryName }} - {{ match.title }}</nuxt-link>
-          </div>
-          <div class="bye" v-if="match.bye">bye</div>
+    <div class="match-card-header">
+      <div class="match-title">
+        <nuxt-link :to="{ name: 'tournament-categories-category', params: {category: match.combinedId.categoryId}}">{{ categoryName }} - {{ match.title }}</nuxt-link>
+      </div>
+      <div class="bye" v-if="match.bye">bye</div>
+      <div class="expand-button" v-if="!match.bye">
+        <a v-on:click="isExpanded = !isExpanded">
+          <b-icon :icon="isExpanded ? 'chevron-down' : 'chevron-right'" />
+        </a>
+      </div>
+    </div>
+    <div class="match-card-content">
+      <div>
+        <div class="white-name" :class="{winner: match.winner == 'WHITE'}">
+          <nuxt-link v-if="match.whitePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.whitePlayer }}">{{ whiteName }}</nuxt-link>
         </div>
-        <div>
-          <div class="white-name" :class="{winner: match.winner == 'WHITE'}">
-            <nuxt-link v-if="match.whitePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.whitePlayer }}">{{ whiteName }}</nuxt-link>
-          </div>
-          <div class="white-score" :class="{winner: match.winner == 'WHITE'}" v-if="match.status != 'NOT_STARTED' && !match.bye">
-            {{ whiteScore }}
-            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 0 && !(match.whiteScore.hansokuMake) , hansokuCard: match.whiteScore.hansokuMake}"></span>
-            <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 1 && !(match.whiteScore.hansokuMake)}"></span>
-          </div>
+        <div class="white-score" :class="{winner: match.winner == 'WHITE'}" v-if="match.status != 'NOT_STARTED' && !match.bye">
+          {{ whiteScore }}
+          <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 0 && !(match.whiteScore.hansokuMake) , hansokuCard: match.whiteScore.hansokuMake}"></span>
+          <span class="penalty-card" :class="{shidoCard: match.whiteScore.shido > 1 && !(match.whiteScore.hansokuMake)}"></span>
         </div>
-        <div>
-          <div v-if="osaekomi == null" class="match-duration" :class="{unfinished: match.status != 'FINISHED'}">
-            {{ match.status != 'NOT_STARTED' ? formatDuration(duration) : "" }}
-          </div>
-          <div v-if="osaekomi != null" class="match-osaekomi">
-            OSK {{ formatOsaekomi(osaekomi) }}
-          </div>
+      </div>
+      <div>
+        <div v-if="osaekomi == null" class="match-duration" :class="{unfinished: match.status != 'FINISHED'}">
+          {{ match.status != 'NOT_STARTED' ? formatDuration(duration) : "" }}
         </div>
-        <div>
-          <div class="blue-name" :class="{winner: match.winner == 'BLUE'}">
-            <nuxt-link v-if="match.bluePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.bluePlayer }}">{{ blueName }}</nuxt-link>
-          </div>
-          <div class="blue-score" :class="{winner: match.winner == 'BLUE'}" v-if="match.status != 'NOT_STARTED' && !match.bye">
-            {{ blueScore }}
-            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 0 && !(match.blueScore.hansokuMake), hansokuCard: match.blueScore.hansokuMake}"></span>
-            <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 1 && !(match.blueScore.hansokuMake)}"></span>
-          </div>
+        <div v-if="osaekomi != null" class="match-osaekomi">
+          OSK {{ formatOsaekomi(osaekomi) }}
+        </div>
+      </div>
+      <div>
+        <div class="blue-name" :class="{winner: match.winner == 'BLUE'}">
+          <nuxt-link v-if="match.bluePlayer != null" :to="{ name: 'tournament-players-player', params: {player: match.bluePlayer }}">{{ blueName }}</nuxt-link>
+        </div>
+        <div class="blue-score" :class="{winner: match.winner == 'BLUE'}" v-if="match.status != 'NOT_STARTED' && !match.bye">
+          {{ blueScore }}
+          <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 0 && !(match.blueScore.hansokuMake), hansokuCard: match.blueScore.hansokuMake}"></span>
+          <span class="penalty-card" :class="{shidoCard: match.blueScore.shido > 1 && !(match.blueScore.hansokuMake)}"></span>
         </div>
       </div>
     </div>
-    <div class="card" v-if="isExpanded">
-      <div class="card-content match-events">
-        <div class="content has-text-grey has-text-centered" v-if="match.events.length == 0">
-          {{ match.status == 'NOT_STARTED' ? 'This match has not yet started' : 'No scores have been awarded yet' }}
+    <div class="match-card-footer" v-if="isExpanded">
+      <div class="content has-text-grey has-text-centered" v-if="match.events.length == 0">
+        {{ match.status == 'NOT_STARTED' ? 'This match has not yet started' : 'No scores have been awarded yet' }}
+      </div>
+      <div class="columns is-mobile match-events" v-for="event in match.events">
+        <div class="column white-event">
+          {{ event.playerIndex == 'WHITE' ? formatEventType(event.type) : "" }}
         </div>
-        <div class="columns is-mobile" v-for="event in match.events">
-          <div class="column white-event">
-            {{ event.playerIndex == 'WHITE' ? formatEventType(event.type) : "" }}
-          </div>
-          <div class="column is-2 duration-event">
-            {{ formatDuration(event.duration) }}
-          </div>
-          <div class="column blue-event">
-            {{ event.playerIndex == 'BLUE' ? formatEventType(event.type) : "" }}
-          </div>
+        <div class="column is-2 duration-event">
+          {{ formatDuration(event.duration) }}
+        </div>
+        <div class="column blue-event">
+          {{ event.playerIndex == 'BLUE' ? formatEventType(event.type) : "" }}
         </div>
       </div>
     </div>
@@ -62,46 +62,82 @@
 
 <style>
   .match-card {
+    border: 1px solid #dcdcdc;
     margin-bottom: 10px;
+    box-shadow: 1px 1px 2px 0px rgba(10, 10, 10, 0.1);
   }
 
-  .match-header .unfinished {
-    color: green;
+  .match-card-header {
+    padding: 20px;
+    border-bottom: 1px solid #e8e8e8;
   }
 
-  .match-header .bye {
+  .match-card-header .bye {
     font-weight: bold;
   }
 
-  .match-header > div {
+  .match-card-content {
+    padding: 20px;
+  }
+
+  .match-card-footer {
+    border-top: 1px solid #e8e8e8;
+    padding: 20px;
+  }
+
+  .match-events .white-event {
+    text-align: right;
+  }
+
+  .match-events .duration-event {
+    text-align: center;
+  }
+
+  .match-events .blue-event {
+    text-align: left;
+  }
+
+  .match-card-header {
     overflow: hidden;
   }
 
-  .match-header .match-title {
+  .match-card-header .match-title {
     float: left;
   }
 
-  .match-header .bye {
+  .match-card-header .bye {
     float: right;
   }
 
-  .match-header .white-name, .blue-name {
+  .match-card-header .expand-button {
+    float: right;
+  }
+
+  .match-card-content {
+    overflow: hidden;
+  }
+
+  .match-card-content > div {
+    overflow: hidden;
+  }
+
+  .match-card-content .white-name, .blue-name {
     float: left;
   }
 
-  .match-header .white-score, .blue-score {
+  .match-card-content .white-score, .blue-score {
     float: right;
   }
 
-  .match-header .match-duration {
+  .match-card-content .match-duration {
     text-align: center;
   }
 
-  .match-header .match-osaekomi {
+  .match-card-content .match-osaekomi {
     text-align: center;
   }
 
-  .match-header .winner {
+  .match-card-content .winner {
     font-weight: bold;
   }
 
@@ -118,18 +154,6 @@
 
   .hansokuCard {
     background: #bf616a;
-  }
-
-  .match-events .white-event {
-    text-align: right;
-  }
-
-  .match-events .duration-event {
-    text-align: center;
-  }
-
-  .match-events .blue-event {
-    text-align: left;
   }
 </style>
 
