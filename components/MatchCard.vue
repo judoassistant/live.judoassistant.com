@@ -23,7 +23,7 @@
         </div>
       </div>
       <div>
-        <div v-if="osaekomi == null" class="match-duration" :class="{paused: match.status == 'PAUSED', unpaused: match.status.status == 'UNPAUSED'}">
+        <div v-if="osaekomi == null" class="match-duration" :class="{paused: match.status == 'PAUSED', unpaused: match.status == 'UNPAUSED'}">
           {{ match.status != 'NOT_STARTED' ? formatDuration(duration) : "" }}
         </div>
         <div v-if="osaekomi != null" class="match-osaekomi">
