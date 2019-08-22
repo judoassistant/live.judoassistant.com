@@ -7,7 +7,7 @@
       <div class="bye" v-if="match.bye">bye</div>
       <div class="expand-button" v-if="!match.bye">
         <a v-on:click="isExpanded = !isExpanded">
-          <b-icon :icon="isExpanded ? 'chevron-down' : 'chevron-right'" />
+          <b-icon v-if="match.status != 'NOT_STARTED'" :icon="isExpanded ? 'chevron-down' : 'chevron-right'" />
         </a>
       </div>
     </div>
