@@ -23,7 +23,7 @@
         </div>
       </div>
       <div>
-        <div v-if="osaekomi == null" class="match-duration" :class="{unfinished: match.status != 'FINISHED'}">
+        <div v-if="osaekomi == null" class="match-duration" :class="{paused: match.status == 'PAUSED', unpaused: match.status.status == 'UNPAUSED'}">
           {{ match.status != 'NOT_STARTED' ? formatDuration(duration) : "" }}
         </div>
         <div v-if="osaekomi != null" class="match-osaekomi">
@@ -139,6 +139,14 @@
 
   .match-card-content .winner {
     font-weight: bold;
+  }
+
+  .match-card-content .paused {
+    color: #f4b849;
+  }
+
+  .match-card-content .unpaused {
+    color: #77af46;
   }
 
   .penalty-card {
