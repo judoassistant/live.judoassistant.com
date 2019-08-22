@@ -24,7 +24,7 @@
           </tbody>
         </table>
       <h2 class="subtitle">Upcoming Matches</h2>
-      <div class="columns">
+      <div class="columns is-desktop">
         <div class="column" v-for="(matches, index) of tatamis">
           <h3>Tatami {{ index + 1 }}</h3>
           <MatchCard v-for="match in matches" v-if="!match.bye" :key="String(match.combinedId.categoryId) + '_' + String(match.combinedId.matchId)" :match="match" size="small"></MatchCard>
