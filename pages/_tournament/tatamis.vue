@@ -87,7 +87,7 @@ export default {
 
   .tatami-block {
     border-radius: 4px;
-    background: #d8dee9;
+    background: #eceff4;
     padding: 10px 20px 10px 20px;
     flex: 1;
     margin: 10px;
@@ -95,10 +95,6 @@ export default {
 
   .tatami-block.started {
     background: #a3be8c;
-  }
-
-  .tatami-block.finished {
-    background: #d08770;
   }
 
   .tatami-block a, p {
