@@ -15,7 +15,7 @@
     </nav>
 
     <section class="main-content">
-      <section class="section" v-if="!connected">
+      <section class="section" v-if="showConnectionMessage">
         <div class="content has-text-grey has-text-centered">
           <p>
             <b-icon icon="close-network" size="is-large">
@@ -24,8 +24,8 @@
           <p>The connection to the server failed. Refresh the page to reconnect</p>
         </div>
       </section>
-      <b-loading :is-full-page=true :active.sync="loading"></b-loading>
-      <nuxt v-if="!loading && connected"/>
+      <b-loading :is-full-page=true :active.sync="showLoadingIndicator"></b-loading>
+      <nuxt v-if="showContent"/>
     </section>
   </div>
 </template>
@@ -33,10 +33,13 @@
 <script>
 export default {
   computed: {
-    loading() {
-      return this.$store.state.loading;
+    showConnectionMessage() {
+      return !this.$store.state.connecting && !this.$store.state.connected;
     },
-    connected() {
+    showLoadingIndicator() {
+      return !this.$store.state.connected && this.$store.state.connecting;
+    },
+    showContent() {
       return this.$store.state.connected;
     }
   },
