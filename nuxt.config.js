@@ -57,5 +57,12 @@ export default {
     */
     extend(config, ctx) {
     }
+  },
+
+  /*
+  ** Environment variables
+  */
+  env: {
+    webSocketUrl: process.env.WEB_SOCKET_URL || 'ws://localhost:9001'
   }
 }
