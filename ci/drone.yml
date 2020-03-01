@@ -1,0 +1,26 @@
+---
+kind: pipeline
+type: docker
+name: linux
+
+steps:
+- name: dockerfiles
+  image: alpine/git
+  commands:
+  - git clone https://github.com/judoassistant/docker.git docker
+- name: web-publish
+  image: plugins/docker
+  depends_on:
+  - dockerfiles
+  settings:
+    repo: judoassistant/judoassistant-web-frontend
+    dockerfile: docker/web-frontend/Dockerfile
+    username:
+        from_secret: docker_username
+    password:
+        from_secret: docker_password
+    tags:
+    - latest
+    custom_dns: [10.83.252.10, 10.83.16.53, 10.88.1.95]
+    cache_from: "judoassistant/judoassistant-web-frontend:latest"
+
