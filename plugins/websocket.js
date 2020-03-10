@@ -23,6 +23,9 @@ export default ({ store }, inject) => {
   inject('subscribeTatami', (id) => {
     socketDelayedSend(socket, 'subscribeTatami ' + id);
   });
+  inject('listTournaments', () => {
+    socketDelayedSend(socket, 'listTournaments');
+  });
 
   // Connection opened
   socket.addEventListener('open', function (event) {
@@ -45,6 +48,8 @@ export default ({ store }, inject) => {
       store.commit('subscribeTatami', message);
     else if (message.messageType == "tournamentSubscriptionFail")
       store.commit('failSubscribeTournament', message);
+    else if (message.messageType == "tournamentListing")
+      store.commit('listTournaments', message);
   });
 
   socket.addEventListener('error', function (event) {

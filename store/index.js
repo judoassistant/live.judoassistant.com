@@ -4,6 +4,16 @@ function mapPlayer(player) {
   return { ...player, name : player.firstName + ' ' + player.lastName };
 }
 
+function mapTournament(tournament) {
+  if (tournament == null)
+    return null;
+  return { name: tournament.name, webName : tournament.webName, location: tournament.location, date: new Date(tournament.date) };
+}
+
+function mapTournamentListing(tournament) {
+  return { name: tournament.name, webName : tournament.webName, location: tournament.location, date: new Date(tournament.date) };
+}
+
 function mapId(combinedId) {
   return String(combinedId.categoryId) + "_" + String(combinedId.matchId);
 }
@@ -48,6 +58,9 @@ export const state = () => ({
   connected: false,
   connecting: true,
 
+  tournaments: null,
+  tournamentsLoading: false,
+
   tournamentLoading: false,
   tournament: null,
   players: null,
@@ -86,6 +99,10 @@ export const mutations = {
     state.tournamentLoading = true;
     state.tournament = null;
   },
+  clearTournaments(state) {
+    state.tournamentsLoading = true;
+    state.tournaments = null;
+  },
   closeConnection(state) {
     state.connected = false;
     state.connecting = false;
@@ -113,7 +130,7 @@ export const mutations = {
   subscribeTournament(state, message) {
     state.connecting = false;
     state.tournamentLoading = false;
-    state.tournament = message.tournament;
+    state.tournament = mapTournament(message.tournament);
     state.categories = message.categories;
     state.players = message.players.map(mapPlayer);
     state.matches = message.matches;
@@ -135,6 +152,10 @@ export const mutations = {
   subscribeTatami(state, message) {
     state.subscribedTatamiLoading = false;
     state.subscribedTatami = message.subscribedTatami;
+  },
+  listTournaments(state, message) {
+    state.tournaments = message.tournaments.map(mapTournamentListing);
+    state.tournamentsLoading = false;
   },
   changeTournament(state, message) {
     if ('tournament' in message)
@@ -234,6 +255,11 @@ export const actions = {
     // if (state.tournament != null && state.tournament.webName == id)
     //   return;
     this.$subscribeTournament(id);
+  },
+  listTournaments({ commit, state}) {
+    commit('clearTournaments');
+
+    this.$listTournaments();
   }
 }
 

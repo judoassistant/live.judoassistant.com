@@ -10,16 +10,12 @@
               <td>{{ tournament.name }}</td>
             </tr>
             <tr>
-              <td>Number of Players</td>
-              <td>{{ playerCount }}</td>
+              <td>Date</td>
+              <td>{{ tournament.date.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) }}</td>
             </tr>
             <tr>
-              <td>Number of Categories</td>
-              <td>{{ categoryCount }}</td>
-            </tr>
-            <tr>
-              <td>Number of Clubs</td>
-              <td>{{ clubCount }}</td>
+              <td>Location</td>
+              <td>{{ tournament.location }}</td>
             </tr>
           </tbody>
         </table>
@@ -46,14 +42,14 @@
     computed: {
       ...mapState({
         tournament: state => state.tournament,
-        playerCount: state => state.players.length,
-        categoryCount: state => state.categories.length,
+        /* playerCount: state => state.players.length, */
+        /* categoryCount: state => state.categories.length, */
       }),
-      clubCount() {
-        const clubs = this.$store.state.players.map(player => player.club);
-        const uniqueClubs = new Set(clubs);
-        return uniqueClubs.size;
-      },
+      /* clubCount() { */
+      /*   const clubs = this.$store.state.players.map(player => player.club); */
+      /*   const uniqueClubs = new Set(clubs); */
+      /*   return uniqueClubs.size; */
+      /* }, */
       ...mapGetters({
         tatamis: 'tatamiMatches',
       }),
