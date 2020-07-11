@@ -97,6 +97,10 @@ export default {
     background: #a3be8c;
   }
 
+  .tatami-block.finished {
+    background: #b48ead;
+  }
+
   .tatami-block a, p {
     text-decoration: none;
     color: #4c566a;
