@@ -39,7 +39,7 @@ export default {
     ...mapState({
       loading: state => state.subscribeTatamiLoading,
       tournament: state => state.tournament,
-      tatamiCount: state => state.tournament.tatamiCount,
+      tatamiCount: state => state.tatamis.length,
     }),
     tatami: function() {
       const subscribedTatami = this.$store.state.subscribedTatami;

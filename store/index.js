@@ -219,7 +219,7 @@ export const mutations = {
     // update tatamis
     var tatamis = [];
     var j = 0;
-    for (var i = 0; i < state.tournament.tatamiCount; ++i) {
+    for (var i = 0; i < state.tatamis.length; ++i) {
       if (j < message.tatamis.length && message.tatamis[j].index == i) {
         tatamis.push(message.tatamis[j]);
         ++j;
