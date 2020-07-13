@@ -1,7 +1,68 @@
+function mapRank(rank) {
+  switch (rank) {
+    case "KYU_6":
+      return "6th kyu";
+    case "KYU_5":
+      return "5th kyu";
+    case "KYU_4":
+      return "4th kyu";
+    case "KYU_3":
+      return "3rd kyu";
+    case "KYU_2":
+      return "2nd kyu";
+    case "KYU_1":
+      return "1st kyu";
+    case "DAN_1":
+      return "1st dan";
+    case "DAN_2":
+      return "2nd dan";
+    case "DAN_3":
+      return "3rd dan";
+    case "DAN_4":
+      return "4th dan";
+    case "DAN_5":
+      return "5th dan";
+    case "DAN_6":
+      return "6th dan";
+    case "DAN_7":
+      return "7th dan";
+    case "DAN_8":
+      return "8th dan";
+    case "DAN_9":
+      return "9th dan";
+    case "DAN_10":
+      return "10th dan";
+    default:
+      return "";
+  }
+}
+
+function mapCountry(country) {
+  switch (country) {
+    case "DENMARK":
+      return "Denmark";
+    case "FRANCE":
+      return "France";
+    default:
+      return "";
+  }
+}
+
+function mapSex(sex) {
+  switch (sex) {
+    case "MALE":
+      return "Male";
+    case "FEMALE":
+      return "Female";
+    default:
+      return "";
+  }
+}
+
 function mapPlayer(player) {
   if (player == null)
     return null;
-  return { ...player, name : player.firstName + ' ' + player.lastName };
+  return { ...player, name : player.firstName + ' ' + player.lastName, country: mapCountry(player.country), rank: mapRank(player.rank), sex: mapSex(player.sex) };
 }
 
 function mapTournament(tournament) {
