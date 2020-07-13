@@ -277,12 +277,12 @@ export const getters = {
   subscribedCategoryMatches(state, getters) {
     if (state.subscribedCategory == null) return [];
 
-    var matchIds = new Map();
-    for (const [i, combinedId] of state.subscribedCategory.matches.entries())
-      matchIds.set(mapId(combinedId), i);
+    var combinedIds = new Set(state.subscribedCategory.matches);
+    for (const combinedId of state.subscribedCategory.matches)
+      combinedIds.add(mapId(combinedId));
 
-    const orderPred = (a, b) => (matchIds.get(mapId(a.combinedId)) - matchIds.get(mapId(b.combinedId)));
-    return state.matches.filter(match => matchIds.has(mapId(match.combinedId))).sort(orderPred);
+    const orderPred = (a, b) => (a.position - b.position);
+    return state.matches.filter(match => combinedIds.has(mapId(match.combinedId))).sort(orderPred);
   },
   subscribedCategoryResults(state, getters) {
     if (state.subscribedCategory == null) return null;
@@ -307,12 +307,18 @@ export const getters = {
   subscribedPlayerMatches(state, getters) {
     if (state.subscribedPlayer == null) return [];
 
-    var matchIds = new Map();
-    for (const [i, combinedId] of state.subscribedPlayer.matches.entries())
-      matchIds.set(mapId(combinedId), i);
+    var combinedIds = new Set(state.subscribedPlayer.matches);
+    for (const combinedId of state.subscribedPlayer.matches)
+      combinedIds.add(mapId(combinedId));
 
-    const orderPred = (a, b) => (matchIds.get(mapId(a.combinedId)) - matchIds.get(mapId(b.combinedId)));
-    return state.matches.filter(match => matchIds.has(mapId(match.combinedId))).sort(orderPred);
+    function orderPred(a,b) {
+      console.log("Order pred", a);
+      if (a.combinedId.categoryId != b.combinedId.categoryId)
+        return a.combinedId.categoryId - b.combinedId.categoryId;
+      return a.position - b.position;
+    }
+
+    return state.matches.filter(match => combinedIds.has(mapId(match.combinedId))).sort(orderPred);
   },
   subscribedCategoryPlayers(state, getters) {
     if (state.subscribedCategory == null) return [];
