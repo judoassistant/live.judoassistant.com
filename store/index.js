@@ -354,6 +354,7 @@ export const getters = {
       playerIds.set(row.player, row.pos);
 
     function orderPred(a, b) {
+      // Sort by pos. null considered infinity
       if (a.pos == null && b.pos == null)
         return 0;
       if (a.pos == null)
@@ -373,7 +374,7 @@ export const getters = {
       combinedIds.add(mapId(combinedId));
 
     function orderPred(a,b) {
-      console.log("Order pred", a);
+      // Sort by categoryId then position
       if (a.combinedId.categoryId != b.combinedId.categoryId)
         return a.combinedId.categoryId - b.combinedId.categoryId;
       return a.position - b.position;
