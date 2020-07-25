@@ -220,7 +220,7 @@ export const mutations = {
   },
   changeTournament(state, message) {
     if ('tournament' in message)
-      state.tournament = message.tournament;
+      state.tournament = mapTournament(message.tournament);
 
     // update categories
     const erasedCategories = new Set(message.erasedCategories);
