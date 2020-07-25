@@ -63,6 +63,6 @@ export default {
   ** Environment variables
   */
   env: {
-    webSocketUrl: process.env.WEB_SOCKET_URL || 'wss://live.judoassistant.com'
+    webSocketUrl: process.env.WEB_SOCKET_URL || 'ws://localhost:9001'
   }
 }
