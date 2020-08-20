@@ -20,15 +20,14 @@
           </tbody>
         </table>
       <h2 class="subtitle">Upcoming Matches</h2>
-      <div class="columns is-desktop">
-        <div class="column" v-for="(matches, index) of tatamis">
-          <h3>Tatami {{ index + 1 }}</h3>
+      <b-tabs>
+        <b-tab-item :label="'Tatami ' + (index + 1)" :key="index" v-for="(matches, index) of tatamis">
           <MatchCard v-for="match in matches" v-if="!match.bye" :key="String(match.combinedId.categoryId) + '_' + String(match.combinedId.matchId)" :match="match" size="small"></MatchCard>
           <div class="has-text-grey has-text-centered" v-if="matches.length == 0">
             <p>This tatami has no upcoming matches</p>
           </div>
-        </div>
-      </div>
+        </b-tab-item>
+      </b-tabs>
     </div>
   </section>
 </template>
