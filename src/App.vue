@@ -6,6 +6,18 @@
   <router-view/>
 </template>
 
+<script>
+// @ is an alias to /src
+/* import HelloWorld from '@/components/HelloWorld.vue' */
+
+export default {
+  name: 'App',
+  created: function() {
+    this.$store.dispatch('connect')
+  }
+}
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
