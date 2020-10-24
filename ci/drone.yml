@@ -8,6 +8,9 @@ steps:
   image: alpine/git
   commands:
   - git clone https://github.com/judoassistant/docker.git docker
+  when:
+    branch:
+    - master
 - name: web-publish
   image: plugins/docker
   depends_on:
