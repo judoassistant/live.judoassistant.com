@@ -1,0 +1,172 @@
+/* Base style */
+body {
+  margin: 0;
+  font-family: "Noto Sans";
+}
+
+h1, h2 {
+  font-weight: 250;
+  color: #2e3440;
+}
+
+h1 {
+  font-size: 30pt;
+}
+
+h2 {
+  font-size: 24pt;
+}
+
+p {
+  font-weight: 300;
+  line-height: 2em;
+  color: #2e3440;
+}
+
+a {
+  font-weight: 300;
+  line-height: 2em;
+  color: #5e81ac;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Styling of navbar */
+nav {
+  background: #5e81ac;
+}
+
+nav #logo {
+  float: left;
+}
+
+nav #logo a {
+  padding: 0;
+  height: 60px;
+  display: block;
+}
+
+nav #logo img {
+  height: 40px;
+  margin: 10px;
+  float: left;
+}
+
+nav ul {
+  max-width: 1200px;
+  margin: auto;
+  list-style-type: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+nav ul li {
+  float: right;
+}
+
+nav .menu-item a, nav #menu-button i {
+  display: block;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  padding: 0 16px;
+  color: white;
+}
+
+nav a:hover {
+  text-decoration: none;
+}
+
+
+nav .menu-item a {
+  text-transform: uppercase;
+  font-size: .80em;
+  font-weight: 400;
+}
+
+nav .menu-item:hover, nav #logo:hover {
+  background: #5678a0;
+}
+
+nav #menu-button a {
+  text-decoration: none;
+  display: none;
+}
+
+/* Styling of main area */
+main {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table tr {
+  padding: 0;
+}
+
+table td, table th {
+  padding: 16px 8px;
+  border-bottom: 1px solid #d8dee9;
+  margin: 0;
+}
+
+table th.active {
+  border-bottom: 1px solid #4c566a;
+}
+
+table td {
+  color: #2e3440;
+  font-weight: 300;
+}
+
+table th {
+  color: #788296;
+  font-weight: 300;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+/* Styling of tabs element */
+ul.tabs {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+ul.tabs li {
+  margin: 0;
+  display: block;
+  padding: 8px 16px;
+  border-bottom: 1px solid #d8dee9;
+}
+
+ul.tabs li:last-child {
+  flex-grow: 1;
+}
+
+ul.tabs a {
+  color: #2e3440;
+}
+
+ul.tabs a:hover {
+  text-decoration: none;
+  color: #5e81ac;
+}
+
+ul.tabs li.active {
+  border-bottom: 1px solid #5e81ac;
+}
+
+ul.tabs li.active a {
+  color: #5e81ac;
+}
+
