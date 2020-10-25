@@ -243,3 +243,24 @@ table th {
   text-transform: uppercase;
 }
 
+.match-card-penalties {
+  display: flex;
+  flex-direction: row;
+  padding-right: 18px;
+}
+
+.match-card .shido, .match-card .hansoku {
+  display: block;
+  height: .9em;
+  width: .5em;
+  margin-left: 10px;
+}
+
+.match-card .shido{
+  background: #ebcb8b;
+}
+
+.match-card .hansoku{
+  background: #bf616a;
+}
+
