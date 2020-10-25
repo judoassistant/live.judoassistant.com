@@ -48,6 +48,7 @@ nav > div {
 
 nav a#logo {
   height: 60px;
+  transition: 0.3s;
 }
 
 nav a#logo img {
@@ -68,11 +69,42 @@ nav .menu-item {
   text-transform: uppercase;
   font-size: .80em;
   font-weight: 400;
+  transition: 0.3s;
 }
 
 nav a.menu-item:hover, nav a#logo:hover {
   text-decoration: none;
   background: #5678a0;
+}
+
+/* Styling of curtain menu */
+#curtain-nav {
+  background: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 300px;
+  box-shadow: 0 0 10px 0 #6c7b99;
+  border-right: 1px solid #d8dee9;
+  display: none;
+}
+
+#curtain-nav a {
+  display: block;
+  color: #2e3440;
+  text-transform: uppercase;
+  font-size: .80em;
+  font-weight: 400;
+  text-align: center;
+  padding: 16px 0;
+  transition: 0.3s;
+}
+
+#curtain-nav a.active, #curtain-nav a:hover {
+  text-decoration: none;
+  background: #eceff4;
+  color: #5e81ac;
 }
 
 /* Styling of main area */
@@ -126,6 +158,7 @@ table th {
   padding: 8px 16px;
   border-bottom: 1px solid #d8dee9;
   color: #2e3440;
+  transition: 0.3s;
 }
 
 .tabs a:hover, .tabs a.active {
