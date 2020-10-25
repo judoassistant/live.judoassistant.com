@@ -136,37 +136,27 @@ table th {
 }
 
 /* Styling of tabs element */
-ul.tabs {
-  padding: 0;
+.tabs {
   display: flex;
   flex-direction: row;
 }
 
-ul.tabs li {
+.tabs a {
   margin: 0;
   display: block;
   padding: 8px 16px;
   border-bottom: 1px solid #d8dee9;
-}
-
-ul.tabs li:last-child {
-  flex-grow: 1;
-}
-
-ul.tabs a {
   color: #2e3440;
 }
 
-ul.tabs a:hover {
+.tabs a:hover, .tabs a.active {
   text-decoration: none;
   color: #5e81ac;
-}
-
-ul.tabs li.active {
   border-bottom: 1px solid #5e81ac;
 }
 
-ul.tabs li.active a {
-  color: #5e81ac;
+.tabs .filler {
+  flex-grow: 1;
+  border-bottom: 1px solid #d8dee9;
 }
 
