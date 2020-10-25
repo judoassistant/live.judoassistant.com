@@ -256,11 +256,16 @@ table th {
   margin-left: 10px;
 }
 
-.match-card .shido{
+.match-card .shido {
   background: #ebcb8b;
 }
 
-.match-card .hansoku{
+.match-card .hansoku {
   background: #bf616a;
+}
+
+.match-card-events {
+  height: 50px;
+  border-top: 1px solid #e5e9f0;
 }
 
