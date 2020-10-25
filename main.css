@@ -39,61 +39,40 @@ nav {
   background: #5e81ac;
 }
 
-nav #logo {
-  float: left;
-}
-
-nav #logo a {
-  padding: 0;
-  height: 60px;
-  display: block;
-}
-
-nav #logo img {
-  height: 40px;
-  margin: 10px;
-  float: left;
-}
-
-nav ul {
+nav > div {
   max-width: 1200px;
   margin: auto;
-  list-style-type: none;
-  padding: 0;
-  overflow: hidden;
+  display: flex;
+  flex-direction: row;
 }
 
-nav ul li {
-  float: right;
+nav a#logo {
+  height: 60px;
 }
 
-nav .menu-item a, nav #menu-button i {
+nav a#logo img {
+  height: 40px;
+  margin: 10px 16px;
+}
+
+nav .filler {
+  flex-grow: 1;
+}
+
+nav .menu-item {
   display: block;
   height: 60px;
   line-height: 60px;
-  text-align: center;
   padding: 0 16px;
   color: white;
-}
-
-nav a:hover {
-  text-decoration: none;
-}
-
-
-nav .menu-item a {
   text-transform: uppercase;
   font-size: .80em;
   font-weight: 400;
 }
 
-nav .menu-item:hover, nav #logo:hover {
-  background: #5678a0;
-}
-
-nav #menu-button a {
+nav a.menu-item:hover, nav a#logo:hover {
   text-decoration: none;
-  display: none;
+  background: #5678a0;
 }
 
 /* Styling of main area */
