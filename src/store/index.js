@@ -52,6 +52,7 @@ export default createStore({
 
           commit('setClockDiff', diff);
           commit('setClockSyncBegin', 0);
+          console.log("Synced clock", diff);
         }
       }
 
