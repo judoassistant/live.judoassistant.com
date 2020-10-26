@@ -181,6 +181,7 @@ table th {
 .match-card {
   border: 1px solid #e5e9f0;
   margin: 15px 0;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 5px 15px 0px;
 }
 
 .match-card p {
@@ -203,6 +204,12 @@ table th {
 
 .match-card-header .match-card-category {
   flex-grow: 1;
+}
+
+.match-card-header .match-card-category span {
+  color: #788296;
+  font-size: .9em;
+  padding-left: 10px;
 }
 
 .match-card-body > div {
@@ -265,7 +272,48 @@ table th {
 }
 
 .match-card-events {
-  height: 50px;
   border-top: 1px solid #e5e9f0;
+  padding: 10px 16px;
+}
+
+.match-card-event {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.match-card-event p {
+  display: block;
+  flex-basis: 150px;
+}
+
+.match-card-event-white {
+  flex-grow: .5;
+  text-align: right;
+}
+
+.match-card-event-time {
+  flex-basis: 100px;
+  text-align: center;
+  color: #788296;
+  font-size: .8em;
+}
+
+.match-card-event-blue {
+  flex-grow: .5;
+  text-align: left;
+}
+
+.match-card-button {
+  display: block;
+  border-top: 1px solid #e5e9f0;
+  text-align: center;
+  transition: 0.2s;
+  color: #788296;
+  font-size: .8em;
+}
+
+.match-card-button:hover {
+  background: #eceff4;
 }
 
