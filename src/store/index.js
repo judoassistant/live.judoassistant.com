@@ -1,9 +1,26 @@
 import { createStore } from 'vuex'
 
+function delayedSend(socket, message) {
+  if (socket.readyState == 1) {
+    socket.send(message);
+    return;
+  }
+
+  socket.addEventListener('open', () => {
+    socket.send(message);
+  });
+}
+
 const connection_state = {
   NOT_CONNECTED: 'NOT_CONNECTED',
   CONNECTING: 'CONNECTING',
   CONNECTED: 'CONNECTED',
+};
+
+const loading_state = {
+  NOT_LOADED: 'NOT_LOADED',
+  LOADING: 'LOADING',
+  LOADED: 'LOADED',
 };
 
 export default createStore({
@@ -12,6 +29,8 @@ export default createStore({
     connection: null,
     clockSyncBegin: 0,
     clockDiff: 0,
+    tournaments: null,
+    tournamentsState: loading_state.NOT_LOADED,
   },
   mutations: {
     setConnectionState(state, connectionState) {
@@ -25,6 +44,12 @@ export default createStore({
     },
     setClockSyncBegin(state, time) {
       state.clockSyncBegin = time;
+    },
+    setTournamentsState(state, tournamentsState) {
+      state.tournamentsState = tournamentsState;
+    },
+    setTournaments(state, tournaments) {
+      state.tournaments = tournaments;
     },
   },
   actions: {
@@ -52,7 +77,10 @@ export default createStore({
 
           commit('setClockDiff', diff);
           commit('setClockSyncBegin', 0);
-          console.log("Synced clock", diff);
+        }
+        else if (message.type == 'tournamentListing') {
+          commit('setTournamentsState', loading_state.LOADED)
+          commit('setTournaments', message.tournaments)
         }
       }
 
@@ -67,7 +95,11 @@ export default createStore({
       }
 
       commit('setConnection', connection);
-    }
+    },
+    fetchTournaments({ commit, state }) {
+      commit('setTournamentsState', loading_state.LOADING);
+      delayedSend(state.connection, 'listTournaments')
+    },
   },
   modules: {
   }
