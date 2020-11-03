@@ -69,7 +69,7 @@ export default {
   }
 
   /* Styling of curtain menu */
-#curtain-nav {
+  #curtain-nav {
     background: white;
     position: fixed;
     left: 0;
@@ -82,7 +82,7 @@ export default {
     display: none;
   }
 
-#curtain-nav a {
+  #curtain-nav a {
     display: block;
     color: $color1;
     text-transform: uppercase;
@@ -93,7 +93,7 @@ export default {
     transition: 0.2s;
   }
 
-#curtain-nav a.active, #curtain-nav a:hover {
+  #curtain-nav a.active, #curtain-nav a:hover {
     text-decoration: none;
     background: #eceff4;
     color: $color5;
