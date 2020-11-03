@@ -1,9 +1,9 @@
 <template>
   <main>
-    <h1>Tournament Overview</h1>
+    <h1>Tournaments Overview</h1>
     <h2>Upcoming Tournaments</h2>
     <Table :data="tournaments" :fields="fields" v-slot="props">
-      <td><a href="#">{{ props.row.name }}</a></td>
+      <td><router-link :to="{ name: 'tournament', params: { tournament: props.row.webName }}">{{ props.row.name }}</router-link></td>
       <td>{{ props.row.location }}</td>
       <td>{{ props.row.date }}</td>
     </Table>
@@ -57,3 +57,4 @@ export default {
   },
 }
 </script>
+
