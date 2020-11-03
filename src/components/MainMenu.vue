@@ -1,12 +1,12 @@
 <template>
   <nav>
     <div>
-      <a id="logo" href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/UNESCO_white_logo.svg" alt="logo" /></a>
+      <router-link id="logo" to="/"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/UNESCO_white_logo.svg" alt="logo" /></router-link>
       <div class="filler"></div>
-      <a class="menu-item" href="#">Overview</a>
-      <a class="menu-item" href="#">Players</a>
-      <a class="menu-item" href="#">Categories</a>
-      <a class="menu-item" href="#">Tatamis</a>
+      <router-link class="menu-item" to="/fredericia/">Overview</router-link>
+      <router-link class="menu-item" to="/fredericia/players">Players</router-link>
+      <router-link class="menu-item" to="/fredericia/categories">Categories</router-link>
+      <router-link class="menu-item" to="/fredericia/tatamis">Tatamis</router-link>
       <a class="menu-item" id="curtain-button" href="#"><span class="mdi mdi-menu"></span></a>
     </div>
   </nav>
@@ -58,7 +58,7 @@ export default {
     transition: 0.2s;
   }
 
-  nav a.menu-item:hover, nav a#logo:hover {
+  nav a.menu-item:hover, nav a#logo:hover, nav .router-link-active {
     text-decoration: none;
     background: darken($color5, 6);
   }
