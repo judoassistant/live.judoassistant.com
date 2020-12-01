@@ -25,7 +25,11 @@
       </table>
       <h2>Upcoming Matches</h2>
       <Tabs>
-        <TabItem :label="'Tatami ' + (index + 1)" :key="index" v-for="(matches, index) of tatamiMatches">
+        <TabItem title="Tatami 1" selected="true">
+          <p>Hello from Tab 1</p>
+        </TabItem>
+        <TabItem title="Tatami 2">
+          <p>Hello from Tab 2</p>
         </TabItem>
       </Tabs>
     </template>
@@ -33,6 +37,7 @@
 </template>
 
 <script>
+/* <TabItem :label="'Tatami ' + (index + 1)" :key="index" v-for="(matches, index) of tatamiMatches"> */
 import Tabs from '@/components/Tabs.vue'
 import TabItem from '@/components/TabItem.vue'
 import { mapState, mapGetters } from 'vuex'

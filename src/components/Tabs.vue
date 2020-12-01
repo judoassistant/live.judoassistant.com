@@ -1,8 +1,8 @@
 <template>
   <div class="tabs">
-    <a class="active" href="#">Tatami 1</a>
-    <a href="#">Tatami 2</a>
-    <a href="#">Tatami 3</a>
+    <a v-for="tab in tabs" :key="tab.title" href="#" @click.prevent="selectTab(tab)" :class="{ 'active' : tab.isActive }">
+      {{ tab.title }}
+    </a>
     <div class="filler"></div>
   </div>
   <slot></slot>
@@ -11,10 +11,19 @@
 <script>
 export default {
   name: 'Tabs',
-  /* props: { */
-  /*   data: Array, */
-  /*   fields: Array, */
-  /* } */
+  data() {
+    return {
+      selectedIndex: 0,
+      tabs: [],
+    }
+  },
+  methods: {
+    selectTab(selectedTab) {
+      this.tabs.forEach(tab => {
+        tab.isActive = (tab.title == selectedTab.title);
+      });
+    },
+  },
 }
 </script>
 
