@@ -26,7 +26,7 @@ import { mapState } from 'vuex'
 export default {
   components: { },
   mounted: function() {
-    this.$store.dispatch('fetchTournaments')
+    this.$store.dispatch('subscribeTournament', this.$route.params.tournament);
   },
   computed: {
     ...mapState({

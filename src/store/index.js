@@ -100,6 +100,10 @@ export default createStore({
       commit('setTournamentsState', loading_state.LOADING);
       delayedSend(state.connection, 'listTournaments')
     },
+    subscribeTournament({ commit, state }) {
+      commit('setTournamentState', loading_state.LOADING);
+      delayedSend(state.connection, 'listTournaments')
+    },
   },
   modules: {
   }

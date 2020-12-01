@@ -3,18 +3,27 @@
     <div>
       <router-link id="logo" to="/"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/UNESCO_white_logo.svg" alt="logo" /></router-link>
       <div class="filler"></div>
-      <router-link class="menu-item" to="/fredericia/">Overview</router-link>
-      <router-link class="menu-item" to="/fredericia/players">Players</router-link>
-      <router-link class="menu-item" to="/fredericia/categories">Categories</router-link>
-      <router-link class="menu-item" to="/fredericia/tatamis">Tatamis</router-link>
+      <template v-if="tournamentState == 'LOADED'">
+        <router-link class="menu-item" to="/fredericia/">Overview</router-link>
+        <router-link class="menu-item" to="/fredericia/players">Players</router-link>
+        <router-link class="menu-item" to="/fredericia/categories">Categories</router-link>
+        <router-link class="menu-item" to="/fredericia/tatamis">Tatamis</router-link>
+      </template>
       <a class="menu-item" id="curtain-button" href="#"><span class="mdi mdi-menu"></span></a>
     </div>
   </nav>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'MainMenu',
+  computed: {
+    ...mapState({
+      tournamentState: state => state.tournamentState,
+    }),
+  },
 }
 </script>
 
