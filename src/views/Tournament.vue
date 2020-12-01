@@ -24,15 +24,21 @@
         </tr>
       </table>
       <h2>Upcoming Matches</h2>
+      <Tabs>
+        <TabItem :label="'Tatami ' + (index + 1)" :key="index" v-for="(matches, index) of tatamiMatches">
+        </TabItem>
+      </Tabs>
     </template>
   </main>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import Tabs from '@/components/Tabs.vue'
+import TabItem from '@/components/TabItem.vue'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  components: { },
+  components: { Tabs, TabItem, },
   mounted: function() {
     this.$store.dispatch('subscribeTournament', this.$route.params.tournament);
   },
@@ -40,6 +46,9 @@ export default {
     ...mapState({
       tournamentState: state => state.tournamentState,
       tournament: state => state.tournament,
+    }),
+    ...mapGetters({
+      tatamiMatches: 'tatamiMatches',
     }),
   },
 }

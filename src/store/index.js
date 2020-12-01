@@ -133,6 +133,11 @@ export default createStore({
       delayedSend(state.connection, 'subscribeTournament ' + webName)
     },
   },
+  getters: {
+    tatamiMatches()  {
+      return {0: [], 1: []};
+    }
+  },
   modules: {
-  }
+  },
 })
