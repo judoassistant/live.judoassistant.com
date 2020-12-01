@@ -1,22 +1,30 @@
 <template>
   <main>
-    <h1>Ungdomsturnering Fredericia</h1>
-    <h2>Overview</h2>
-    <table>
-      <tr>
-        <th>Name</th>
-        <td>Bjergkøbing Grandprix</td>
-      </tr>
-      <tr>
-        <th>Date</th>
-        <td>Saturday, October 24, 2020</td>
-      </tr>
-      <tr>
-        <th>Location</th>
-        <td>Fredericia</td>
-      </tr>
-    </table>
-    <h2>Upcoming Matches</h2>
+    <template v-if="tournamentState == 'NOT_LOADED'">
+      <p style='text-align: center;'>not loaded....</p>
+    </template>
+    <template v-if="tournamentState == 'LOADING'">
+      <p style='text-align: center;'>loading....</p>
+    </template>
+    <template v-if="tournamentState == 'LOADED'">
+      <h1>{{ tournament.name }}</h1>
+      <h2>Overview</h2>
+      <table>
+        <tr>
+          <th>Tournament</th>
+          <td>{{ tournament.name }}</td>
+        </tr>
+        <tr>
+          <th>Date</th>
+          <td>{{ tournament.date }}</td>
+        </tr>
+        <tr>
+          <th>Location</th>
+          <td>{{ tournament.location }}</td>
+        </tr>
+      </table>
+      <h2>Upcoming Matches</h2>
+    </template>
   </main>
 </template>
 
@@ -30,7 +38,7 @@ export default {
   },
   computed: {
     ...mapState({
-      loading: state => state.tournamentState,
+      tournamentState: state => state.tournamentState,
       tournament: state => state.tournament,
     }),
   },

@@ -2,11 +2,13 @@ import { createStore } from 'vuex'
 
 function delayedSend(socket, message) {
   if (socket.readyState == 1) {
+    console.log("Sending message", message);
     socket.send(message);
     return;
   }
 
   socket.addEventListener('open', () => {
+    console.log("Sending message (delayed)", message);
     socket.send(message);
   });
 }
@@ -31,6 +33,11 @@ export default createStore({
     clockDiff: 0,
     tournaments: null,
     tournamentsState: loading_state.NOT_LOADED,
+    tournamentState: loading_state.NOT_LOADED,
+    tournament: null,
+    categories: null,
+    players: null,
+    tatamis: null,
   },
   mutations: {
     setConnectionState(state, connectionState) {
@@ -51,6 +58,15 @@ export default createStore({
     setTournaments(state, tournaments) {
       state.tournaments = tournaments;
     },
+    setTournamentState(state, tournamentState) {
+      state.tournamentState = tournamentState;
+    },
+    setTournament(state, tournament, categories, players, tatamis) {
+      state.tournament = tournament;
+      state.categories = categories;
+      state.players = players;
+      state.tatamis = tatamis;
+    },
   },
   actions: {
     connect({ commit, state }) {
@@ -68,6 +84,8 @@ export default createStore({
       connection.onmessage = function(event) {
         const message = JSON.parse(event.data);
 
+        console.log(message.type);
+
         if (message.type == 'clock') {
           const t1 = state.clockSyncBegin;
           const t2 = message.clock;
@@ -81,6 +99,16 @@ export default createStore({
         else if (message.type == 'tournamentListing') {
           commit('setTournamentsState', loading_state.LOADED)
           commit('setTournaments', message.tournaments)
+        }
+        else if (message.type == 'tournamentSubscription') {
+          commit('setTournamentState', loading_state.LOADED)
+          commit('setTournament', message.tournament, message.categories, message.players, message.tatamis)
+
+          console.log(message);
+        }
+        else if (message.type == 'tournamentSubscriptionFail') {
+          commit('setTournamentState', loading_state.NOT_LOADED)
+          commit('setTournament', null)
         }
       }
 
@@ -100,9 +128,9 @@ export default createStore({
       commit('setTournamentsState', loading_state.LOADING);
       delayedSend(state.connection, 'listTournaments')
     },
-    subscribeTournament({ commit, state }) {
+    subscribeTournament({ commit, state }, webName) {
       commit('setTournamentState', loading_state.LOADING);
-      delayedSend(state.connection, 'listTournaments')
+      delayedSend(state.connection, 'subscribeTournament ' + webName)
     },
   },
   modules: {
