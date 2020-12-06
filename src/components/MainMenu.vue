@@ -4,7 +4,7 @@
       <router-link id="logo" :to="{ name: 'home' }"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/UNESCO_white_logo.svg" alt="logo" /></router-link>
       <div class="filler"></div>
       <template v-if="this.$route.params.tournament != null">
-        <router-link class="menu-item" :to="{ name: 'tournament', params: { tournament: this.$route.params.tournament }}">Overview</router-link>
+        <router-link class="menu-item" :to="{ name: 'tournament-home', params: { tournament: this.$route.params.tournament }}">Overview</router-link>
         <router-link class="menu-item" :to="{ name: 'tournament-players', params: { tournament: this.$route.params.tournament }}">Players</router-link>
         <router-link class="menu-item" :to="{ name: 'tournament-categories', params: { tournament: this.$route.params.tournament }}">Categories</router-link>
         <router-link class="menu-item" :to="{ name: 'tournament-tatamis', params: { tournament: this.$route.params.tournament }}">Tatamis</router-link>

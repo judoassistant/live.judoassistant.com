@@ -61,11 +61,20 @@ export default createStore({
     setTournamentState(state, tournamentState) {
       state.tournamentState = tournamentState;
     },
-    setTournament(state, tournament, categories, players, tatamis) {
-      state.tournament = tournament;
-      state.categories = categories;
-      state.players = players;
-      state.tatamis = tatamis;
+    setTournament(state, payload) {
+      if (payload == null) {
+        state.tournament = null;
+        state.categories = null;
+        state.players = null;
+        state.tatamis = null;
+        return;
+      }
+
+      console.log("Setting tournament",payload);
+      state.tournament = payload.tournament;
+      state.categories = payload.categories;
+      state.players = payload.players;
+      state.tatamis = payload.tatamis;
     },
   },
   actions: {
@@ -97,18 +106,16 @@ export default createStore({
           commit('setClockSyncBegin', 0);
         }
         else if (message.type == 'tournamentListing') {
-          commit('setTournamentsState', loading_state.LOADED)
-          commit('setTournaments', message.tournaments)
+          commit('setTournamentsState', loading_state.LOADED);
+          commit('setTournaments', message.tournaments);
         }
         else if (message.type == 'tournamentSubscription') {
-          commit('setTournamentState', loading_state.LOADED)
-          commit('setTournament', message.tournament, message.categories, message.players, message.tatamis)
-
-          console.log(message);
+          commit('setTournamentState', loading_state.LOADED);
+          commit('setTournament', message);
         }
         else if (message.type == 'tournamentSubscriptionFail') {
-          commit('setTournamentState', loading_state.NOT_LOADED)
-          commit('setTournament', null)
+          commit('setTournamentState', loading_state.NOT_LOADED);
+          commit('setTournament', null);
         }
       }
 
