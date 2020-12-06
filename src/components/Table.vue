@@ -2,9 +2,9 @@
   <table>
     <tr>
       <!-- <th class="active">Date <span class="mdi mdi-arrow-down"></span></th> -->
-      <th v-for="field in fields" :key="field.field">{{field.label}}</th>
+      <th v-for="column in columns" :key="column.field">{{ column.label }}</th>
     </tr>
-    <tr v-for="row in data" :key="row.id">
+    <tr v-for="row in rows" :key="row.id">
       <slot v-bind:row="row"></slot>
     </tr>
   </table>
@@ -14,9 +14,13 @@
 export default {
   name: 'Table',
   props: {
-    data: Array,
-    fields: Array,
-  }
+    rows: Array,
+  },
+  data() {
+    return {
+      columns: {},
+    }
+  },
 }
 </script>
 
