@@ -26,7 +26,8 @@ import { mapState } from 'vuex'
 export default {
   components: { Table },
   mounted: function() {
-    this.$store.dispatch('fetchTournaments')
+    this.$store.commit('setTournamentState', 'NOT_LOADED');
+    this.$store.dispatch('fetchTournaments');
   },
   computed: {
     ...mapState({

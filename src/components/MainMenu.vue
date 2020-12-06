@@ -1,13 +1,13 @@
 <template>
   <nav>
     <div>
-      <router-link id="logo" to="/"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/UNESCO_white_logo.svg" alt="logo" /></router-link>
+      <router-link id="logo" :to="{ name: 'home' }"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/UNESCO_white_logo.svg" alt="logo" /></router-link>
       <div class="filler"></div>
-      <template v-if="tournamentState == 'LOADED'">
-        <router-link class="menu-item" to="/fredericia/">Overview</router-link>
-        <router-link class="menu-item" to="/fredericia/players">Players</router-link>
-        <router-link class="menu-item" to="/fredericia/categories">Categories</router-link>
-        <router-link class="menu-item" to="/fredericia/tatamis">Tatamis</router-link>
+      <template v-if="this.$route.params.tournament != null">
+        <router-link class="menu-item" :to="{ name: 'tournament', params: { tournament: this.$route.params.tournament }}">Overview</router-link>
+        <router-link class="menu-item" :to="{ name: 'tournament-players', params: { tournament: this.$route.params.tournament }}">Players</router-link>
+        <router-link class="menu-item" :to="{ name: 'tournament-categories', params: { tournament: this.$route.params.tournament }}">Categories</router-link>
+        <router-link class="menu-item" :to="{ name: 'tournament-tatamis', params: { tournament: this.$route.params.tournament }}">Tatamis</router-link>
       </template>
       <a class="menu-item" id="curtain-button" href="#"><span class="mdi mdi-menu"></span></a>
     </div>
@@ -15,15 +15,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+/* import { mapState } from 'vuex' */
 
 export default {
   name: 'MainMenu',
-  computed: {
-    ...mapState({
-      tournamentState: state => state.tournamentState,
-    }),
-  },
+  /* computed: { */
+  /*   ...mapState({ */
+  /*     tournamentState: state => state.tournamentState, */
+  /*   }), */
+
+  /* }, */
 }
 </script>
 
