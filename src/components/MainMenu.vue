@@ -68,7 +68,7 @@ export default {
     transition: 0.2s;
   }
 
-  nav a.menu-item:hover, nav a#logo:hover, nav .router-link-active {
+  nav a.menu-item:hover, nav a#logo:hover, nav .router-link-exact-active {
     text-decoration: none;
     background: darken($color5, 6);
   }
