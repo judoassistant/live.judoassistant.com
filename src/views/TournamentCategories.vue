@@ -1,32 +1,24 @@
 <template>
   <h2>Categories</h2>
-  <Table :data="players" :fields="fields" v-slot="props">
-    <td>{{ props.row.firstName }}</td>
-    <td>{{ props.row.lastName }}</td>
-    <td>{{ props.row.club }}</td>
+  <Table :rows="categories" v-slot="props">
+    <TableColumn label='Name' field='name'>
+      <router-link class="menu-item" :to="{ name: 'tournament-category', params: { tournament: this.$route.params.tournament, categoryId: props.row.id }}">{{ props.row.name }}</router-link>
+    </TableColumn>
   </Table>
 </template>
 
 <script>
 /* <TabItem :label="'Tatami ' + (index + 1)" :key="index" v-for="(matches, index) of tatamiMatches"> */
 import Table from '@/components/Table.vue'
+import TableColumn from '@/components/TableColumn.vue'
 import { mapState } from 'vuex'
 
 export default {
-  components: { Table },
+  components: { Table, TableColumn },
   computed: {
     ...mapState({
-      players: state => state.players,
+      categories: state => state.categories,
     }),
-  },
-  data: function() {
-    return {
-      fields: [
-        { field: 'firstName', label: 'First Name'},
-        { field: 'lastName', label: 'Last Name'},
-        { field: 'club', label: 'Club'},
-      ]
-    }
   },
 }
 </script>
