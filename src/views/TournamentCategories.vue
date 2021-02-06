@@ -1,7 +1,7 @@
 <template>
   <h2>Categories</h2>
-  <Table :rows="categories" v-slot="props">
-    <TableColumn label='Name' field='name'>
+  <Table :headers="headers" :rows="categories" v-slot="props">
+    <TableColumn>
       <router-link class="menu-item" :to="{ name: 'tournament-category', params: { tournament: this.$route.params.tournament, categoryId: props.row.id }}">{{ props.row.name }}</router-link>
     </TableColumn>
   </Table>
@@ -15,9 +15,16 @@ import { mapState } from 'vuex'
 
 export default {
   components: { Table, TableColumn },
+  data() {
+    return {
+      headers: [
+        { 'field': 'name', 'label': 'name', 'sortable': true },
+      ],
+    }
+  },
   computed: {
     ...mapState({
-      categories: state => state.categories,
+      categories: state => Array.from(state.categories.values()),
     }),
   },
 }

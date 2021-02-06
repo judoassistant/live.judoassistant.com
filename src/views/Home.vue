@@ -9,14 +9,14 @@
     <template v-if="tournamentsState == 'LOADED'">
       <h1>Tournaments Overview</h1>
       <h2>Upcoming Tournaments</h2>
-      <Table :rows="tournaments" v-slot="props">
-        <TableColumn label='Name' field='name'>
+      <Table :headers="headers" :rows="tournaments" v-slot="props">
+        <TableColumn>
           <router-link :to="{ name: 'tournament-home', params: { tournament: props.row.webName }}">{{ props.row.name }}</router-link>
         </TableColumn>
-        <TableColumn label='Location' field='location'>
+        <TableColumn>
           {{ props.row.location }}
         </TableColumn>
-        <TableColumn label='Date' field='date'>
+        <TableColumn>
           {{ props.row.date }}
         </TableColumn>
       </Table>
@@ -36,10 +36,19 @@ export default {
     this.$store.commit('setTournamentState', 'NOT_LOADED');
     this.$store.dispatch('fetchTournaments');
   },
+  data() {
+    return {
+      headers: [
+        { 'field': 'name', 'label': 'Name', 'sortable': true },
+        { 'field': 'location', 'label': 'Location', 'sortable': true },
+        { 'field': 'date', 'label': 'Date', 'sortable': false },
+      ],
+    }
+  },
   computed: {
     ...mapState({
       tournamentsState: state => state.tournamentsState,
-      tournaments: state => state.tournaments,
+      tournaments: state => Array.from(state.tournaments.values()),
     }),
   },
 }

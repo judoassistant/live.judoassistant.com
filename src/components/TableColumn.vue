@@ -7,14 +7,6 @@
 <script>
 export default {
   name: 'TableColumn',
-  props: {
-    label: String,
-    field: String,
-  },
-  created() {
-    if (!(this.field in this.$parent.columns))
-      this.$parent.columns[this.field] = this;
-  }
 }
 </script>
 

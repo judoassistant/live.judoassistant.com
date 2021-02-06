@@ -1,13 +1,13 @@
 <template>
   <h2>Players</h2>
-  <Table :rows="players" v-slot="props">
-    <TableColumn label='First Name' field='firstName'>
+  <Table :headers="headers" :rows="players" v-slot="props">
+    <TableColumn>
       <router-link class="menu-item" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: props.row.id }}">{{ props.row.firstName }}</router-link>
     </TableColumn>
-    <TableColumn label='Last Name' field='lastName'>
+    <TableColumn>
       {{ props.row.lastName }}
     </TableColumn>
-    <TableColumn label='Club' field='club'>
+    <TableColumn>
       {{ props.row.club }}
     </TableColumn>
   </Table>
@@ -21,9 +21,18 @@ import { mapState } from 'vuex'
 
 export default {
   components: { Table, TableColumn },
+  data() {
+    return {
+      headers: [
+        { 'field': 'firstName', 'label': 'First Name', 'sortable': true },
+        { 'field': 'lastName', 'label': 'Last Name', 'sortable': true },
+        { 'field': 'club', 'label': 'Club', 'sortable': false },
+      ],
+    }
+  },
   computed: {
     ...mapState({
-      players: state => state.players,
+      players: state => Array.from(state.players.values()),
     }),
   },
 }
