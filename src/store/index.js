@@ -31,13 +31,26 @@ export default createStore({
     connection: null,
     clockSyncBegin: 0,
     clockDiff: 0,
-    tournaments: null,
+
+    // List of tournaments
     tournamentsState: loading_state.NOT_LOADED,
+    tournaments: null,
+
+    // Subscribed tournament
     tournamentState: loading_state.NOT_LOADED,
     tournament: null,
     categories: null,
     players: null,
     tatamis: null,
+    matches: null,
+
+    // Subscribed player
+    playerState: loading_state.NOT_LOADED,
+    player: null,
+
+    // Subscribed category
+    categoryState: loading_state.NOT_LOADED,
+    category: null,
   },
   mutations: {
     setConnectionState(state, connectionState) {
@@ -70,11 +83,58 @@ export default createStore({
         return;
       }
 
-      console.log("Setting tournament",payload);
       state.tournament = payload.tournament;
-      state.categories = payload.categories;
-      state.players = payload.players;
-      state.tatamis = payload.tatamis;
+
+      // Create maps
+      var categories = new Map();
+      for (const category of payload.categories)
+        categories.set(category.id, category);
+
+      var players = new Map();
+      for (const player of payload.players)
+        players.set(player.id, player);
+
+      var tatamis = new Map();
+      for (const tatami of payload.tatamis)
+        tatamis.set(tatami.id, tatami);
+
+      var matches = new Map();
+      for (const match of payload.matches)
+        matches.set(match.id, match);
+
+      state.categories = categories;
+      state.players = players;
+      state.tatamis = tatamis;
+      state.matches = matches;
+    },
+    setCategoryState(state, categoryState) {
+      state.categoryState = categoryState;
+    },
+    setCategory(state, payload) {
+      if (payload == null) {
+        state.category = null;
+        return;
+      }
+
+      state.category = payload.subscribedCategory;
+      for (const match of payload.matches)
+        state.matches.set(match.id, match);
+      // TODO: Ensure state.matches cleanup
+    },
+    setPlayerState(state, playerState) {
+      state.playerState = playerState;
+    },
+    setPlayer(state, payload) {
+      if (payload == null) {
+        state.player = null;
+        return;
+      }
+
+      console.log(payload);
+      state.player = payload.subscribedPlayer;
+      for (const match of payload.matches)
+        state.matches.set(match.id, match);
+      // TODO: Ensure state.matches cleanup
     },
   },
   actions: {
@@ -114,8 +174,25 @@ export default createStore({
           commit('setTournament', message);
         }
         else if (message.type == 'tournamentSubscriptionFail') {
+          // TODO: Have a fail state
           commit('setTournamentState', loading_state.NOT_LOADED);
           commit('setTournament', null);
+        }
+        else if (message.type == 'playerSubscription') {
+          commit('setPlayerState', loading_state.LOADED);
+          commit('setPlayer', message);
+        }
+        else if (message.type == 'playerSubscriptionFail') {
+          commit('setPlayerState', loading_state.NOT_LOADED);
+          commit('setPlayer', null);
+        }
+        else if (message.type == 'categorySubscription') {
+          commit('setCategoryState', loading_state.LOADED);
+          commit('setCategory', message);
+        }
+        else if (message.type == 'categorySubscriptionFail') {
+          commit('setCategoryState', loading_state.NOT_LOADED);
+          commit('setCategory', null);
         }
       }
 
@@ -138,6 +215,14 @@ export default createStore({
     subscribeTournament({ commit, state }, webName) {
       commit('setTournamentState', loading_state.LOADING);
       delayedSend(state.connection, 'subscribeTournament ' + webName)
+    },
+    subscribeCategory({ commit, state }, webName) {
+      commit('setCategoryState', loading_state.LOADING);
+      delayedSend(state.connection, 'subscribeCategory ' + webName)
+    },
+    subscribePlayer({ commit, state }, webName) {
+      commit('setPlayerState', loading_state.LOADING);
+      delayedSend(state.connection, 'subscribePlayer ' + webName)
     },
   },
   getters: {
