@@ -1,14 +1,13 @@
 import { createStore } from 'vuex'
+import { mapId } from '@/store/helpers.js'
 
 function delayedSend(socket, message) {
   if (socket.readyState == 1) {
-    console.log("Sending message", message);
     socket.send(message);
     return;
   }
 
   socket.addEventListener('open', () => {
-    console.log("Sending message (delayed)", message);
     socket.send(message);
   });
 }
@@ -94,13 +93,11 @@ export default createStore({
       for (const player of payload.players)
         players.set(player.id, player);
 
-      var tatamis = new Map();
-      for (const tatami of payload.tatamis)
-        tatamis.set(tatami.id, tatami);
+      var tatamis = payload.tatamis;
 
       var matches = new Map();
       for (const match of payload.matches)
-        matches.set(match.id, match);
+        matches.set(mapId(match.combinedId), match);
 
       state.categories = categories;
       state.players = players;
@@ -130,7 +127,6 @@ export default createStore({
         return;
       }
 
-      console.log(payload);
       state.player = payload.subscribedPlayer;
       for (const match of payload.matches)
         state.matches.set(match.id, match);
@@ -152,8 +148,6 @@ export default createStore({
 
       connection.onmessage = function(event) {
         const message = JSON.parse(event.data);
-
-        console.log(message.type);
 
         if (message.type == 'clock') {
           const t1 = state.clockSyncBegin;
@@ -226,8 +220,21 @@ export default createStore({
     },
   },
   getters: {
-    tatamiMatches()  {
-      return {0: [], 1: []};
+    tatamiMatches(state)  {
+      var res = [];
+      for (const tatami of state.tatamis) {
+        var matches = [];
+        for (const combinedId of tatami.matches) {
+          const match = state.matches.get(mapId(combinedId));
+
+          if (match.bye)
+            continue;
+          matches.push(match);
+        }
+        res.push(matches);
+      }
+
+      return res;
     }
   },
   modules: {
