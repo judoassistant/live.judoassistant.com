@@ -16,11 +16,8 @@
   </table>
   <h2>Upcoming Matches</h2>
   <Tabs>
-    <TabItem title="Tatami 1" selected="true">
-      <p>Hello from Tab 1</p>
-    </TabItem>
-    <TabItem title="Tatami 2">
-      <p>Hello from Tab 2</p>
+    <TabItem v-for="(matches, index) in tatamiMatches" :key="index" :title="'Tatami ' + (index+1)">
+      <MatchCard v-for="match in matches" :key="match.combinedId.matchId" :match="match" ></MatchCard>
     </TabItem>
   </Tabs>
 </template>
@@ -29,10 +26,11 @@
 /* <TabItem :label="'Tatami ' + (index + 1)" :key="index" v-for="(matches, index) of tatamiMatches"> */
 import Tabs from '@/components/Tabs.vue'
 import TabItem from '@/components/TabItem.vue'
+import MatchCard from '@/components/MatchCard.vue'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-  components: { Tabs, TabItem, },
+  components: { Tabs, TabItem, MatchCard, },
   mounted: function() {
     /* this.$store.dispatch('subscribeTournament', this.$route.params.tournament); */
   },
