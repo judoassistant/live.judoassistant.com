@@ -17,7 +17,7 @@
   <h2>Upcoming Matches</h2>
   <Tabs>
     <TabItem v-for="(matches, index) in tatamiMatches" :key="index" :title="'Tatami ' + (index+1)">
-      <MatchCard v-for="match in matches" :key="match.combinedId.matchId" :match="match" ></MatchCard>
+      <MatchCard v-for="match in matches" :key="mapId(match.combinedId)" :match="match" ></MatchCard>
     </TabItem>
   </Tabs>
 </template>
@@ -27,6 +27,7 @@
 import Tabs from '@/components/Tabs.vue'
 import TabItem from '@/components/TabItem.vue'
 import MatchCard from '@/components/MatchCard.vue'
+import { mapId } from '@/store/helpers.js'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -43,6 +44,9 @@ export default {
       tatamiMatches: 'tatamiMatches',
     }),
   },
+  methods: {
+    mapId: mapId,
+  }
 }
 </script>
 

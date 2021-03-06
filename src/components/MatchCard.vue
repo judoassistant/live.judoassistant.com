@@ -1,55 +1,159 @@
 <template>
   <div class="match-card">
-    <div class="match-card-header">
-      <p class="match-card-category">A4 <span>Pool</span></p>
-      <p class="match-card-time"><span class="golden-score">GS</span> 3:51</p>
+    <div :class="{'match-card-header': true, 'paused': match.status == 'PAUSED', 'unpaused': match.status == 'UNPAUSED'}">
+      <p class="match-card-category">{{ category.name }} <span>{{ match.title }}</span></p>
+      <p class="match-card-time">
+        <span v-if="match.goldenScore && !match.osaekomi" class="golden-score">GS</span>
+        <span v-if="match.osaekomi" class="osaekomi">OSK</span>
+        {{ match.status != 'NOT_STARTED' ? formatDuration(clock) : "" }}
+      </p>
     </div>
     <div class="match-card-body">
       <div>
         <div class="match-card-player">
-          <p class="match-card-name">Jens Jensen</p>
-          <p class="match-card-club">Aarhus Judo Klub</p>
+          <p class="match-card-name">{{ whitePlayer?.firstName }} {{ whitePlayer?.lastName }} </p>
+          <p class="match-card-club">{{ whitePlayer?.club }}</p>
         </div>
         <div class="match-card-penalties"></div>
-        <p class="match-card-score">Ippon</p>
+            <div class="match-card-penalties">
+              <span v-if="match.whiteScore.hansokuMake" class="hansoku"></span>
+              <span v-if="match.whiteScore.shido > 0 && !match.whiteScore.hansokuMake" class="shido"></span>
+              <span v-if="match.whiteScore.shido > 1 && !match.whiteScore.hansokuMake" class="shido"></span>
+            </div>
+        <p class="match-card-score">{{ whiteScore }}</p>
       </div>
       <div class="winner">
         <div class="match-card-player">
-          <p class="match-card-name">Hans Hansen</p>
-          <p class="match-card-club">Kodokan Odense</p>
+          <p class="match-card-name">{{ bluePlayer?.firstName }} {{ bluePlayer?.lastName }} </p>
+          <p class="match-card-club">{{ bluePlayer?.club }}</p>
         </div>
-        <div class="match-card-penalties"></div>
-        <p class="match-card-score">1</p>
+        <div class="match-card-penalties">
+          <span v-if="match.blueScore.hansokuMake" class="hansoku"></span>
+          <span v-if="match.blueScore.shido > 0 && !match.blueScore.hansokuMake" class="shido"></span>
+          <span v-if="match.blueScore.shido > 1 && !match.blueScore.hansokuMake" class="shido"></span>
+        </div>
+        <p class="match-card-score">{{ blueScore }}</p>
       </div>
     </div>
-    <div class="match-card-events">
-      <div class="match-card-event">
-        <p class="match-card-event-white">Wazari</p>
-        <p class="match-card-event-time">01:59</p>
-        <p class="match-card-event-blue"></p>
-      </div>
-      <div class="match-card-event">
-        <p class="match-card-event-white">Wazari</p>
-        <p class="match-card-event-time">02:28</p>
-        <p class="match-card-event-blue">Wazari</p>
-      </div>
-      <div class="match-card-event">
-        <p class="match-card-event-white"></p>
-        <p class="match-card-event-time">02:50</p>
-        <p class="match-card-event-blue">Wazari (Osaekomi)</p>
+    <div class="match-card-events" v-if="isExpanded">
+      <div v-for="(event, index) in match.events" :key="index" class="match-card-event">
+        <p class="match-card-event-white">
+          {{ event.playerIndex == 'WHITE' ? mapEventType(event) : "" }}
+        </p>
+        <p class="match-card-event-time">
+          {{ formatDuration(event.duration) }}
+        </p>
+        <p class="match-card-event-blue">
+          {{ event.playerIndex == 'BLUE' ? mapEventType(event) : "" }}
+        </p>
       </div>
     </div>
-    <a class="match-card-button" href="#">
-      <span class="mdi mdi-menu-down"></span>
+    <a class="match-card-button" @click.prevent="isExpanded = !isExpanded" href="#">
+      <span :class="{'mdi': true, 'mdi-menu-down': !isExpanded, 'mdi-menu-up': isExpanded}"></span>
     </a>
   </div>
 </template>
 
 <script>
+import { mapEventType } from '@/store/helpers.js'
+
+function pad(n, size) {
+  var s = String(n);
+  while (s.length < (size))
+    s = "0" + s;
+  return s;
+}
+
 export default {
   name: 'MatchCard',
+  data() {
+    return {
+      isExpanded: false,
+      clock: 0,
+      osaekomi: null,
+      interval: null,
+    }
+  },
   props: {
     match: Object,
+  },
+  methods: {
+    mapEventType: mapEventType,
+    formatDuration(duration) { // TODO: Move this somewhere else
+      const seconds = Math.floor(duration / 1000) % 60;
+      const minutes = Math.floor(duration / (1000 * 60));
+      return pad(minutes, 2) + ":" + pad(seconds,2);
+    },
+    formatOsaekomi(osaekomi) { // TODO: Move this somewhere else
+      const seconds = Math.floor(osaekomi / 1000);
+      return pad(seconds,2);
+    },
+    calcClock() {
+      var duration = this.match.duration;
+      if (this.match.status  == 'UNPAUSED')
+        duration += Date.now() - new Date(this.match.resumeTime);
+
+      const clock = this.match.normalTime - duration;
+
+      if (clock < 0) {
+        if (this.match.goldenScore)
+          return Math.abs(clock);
+        return 0;
+      }
+
+      return clock;
+    },
+    calcOsaekomi() {
+      if (this.match.osaekomi == null)
+        return null;
+
+      return Date.now() - new Date(this.match.osaekomi.start);
+    },
+  },
+  mounted() {
+    this.clock = this.calcClock();
+    this.osaekomi = this.calcOsaekomi();
+    this.interval = setInterval(() => {
+      this.clock = this.calcClock();
+      this.osaekomi = this.calcOsaekomi();
+    }, 1000);
+    console.log(this.match);
+  },
+  beforeUnmount() {
+    clearInterval(this.interval);
+  },
+  computed: {
+    category() {
+      const id = this.match.combinedId.categoryId;
+      return this.$store.getters.getCategory(id);
+    },
+    whitePlayer() {
+      const id = this.match.whitePlayer;
+      if (id == null)
+        return null;
+      return this.$store.getters.getPlayer(id);
+    },
+    bluePlayer() {
+      const id = this.match.bluePlayer;
+      if (id == null)
+        return null;
+      return this.$store.getters.getPlayer(id);
+    },
+    whiteScore() {
+      if (this.match.status == 'NOT_STARTED')
+        return "";
+      if (this.match.whiteScore.ippon)
+        return "IPPON";
+      return this.match.whiteScore.wazari;
+    },
+    blueScore() {
+      if (this.match.status == 'NOT_STARTED')
+        return "";
+      if (this.match.blueScore.ippon)
+        return "IPPON";
+        console.log(this.match.blueScore);
+      return this.match.blueScore.wazari;
+    },
   },
 }
 </script>
@@ -71,12 +175,18 @@ export default {
   }
 
   .match-card-header {
-    /* border-bottom: 1px solid #e5e9f0; */
-    /* border-bottom: 2px solid #ebcb8b; */
-    border-bottom: 2px solid #a3be8c;
+    border-bottom: 1px solid #e5e9f0;
     padding: 10px 16px;
     display: flex;
     flex-direction: row;
+  }
+
+  .match-card-header.paused {
+    border-bottom: 2px solid #ebcb8b;
+  }
+
+  .match-card-header.unpaused {
+    border-bottom: 2px solid #a3be8c;
   }
 
   .match-card-body {

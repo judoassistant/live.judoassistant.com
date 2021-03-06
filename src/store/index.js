@@ -235,7 +235,13 @@ export default createStore({
       }
 
       return res;
-    }
+    },
+    getPlayer: (state) => (id) => {
+      return state.players.get(id);
+    },
+    getCategory: (state) => (id) => {
+      return state.categories.get(id);
+    },
   },
   modules: {
   },
