@@ -97,13 +97,15 @@ export default {
       if (this.match.status  == 'UNPAUSED')
         duration += Date.now() - new Date(this.match.resumeTime);
 
+      if (this.match.goldenScore)
+        return duration - this.match.normalTime;
+      if (this.match.status == 'FINISHED')
+        return duration;
+
       const clock = this.match.normalTime - duration;
 
-      if (clock < 0) {
-        if (this.match.goldenScore)
-          return Math.abs(clock);
+      if (clock < 0)
         return 0;
-      }
 
       return clock;
     },
