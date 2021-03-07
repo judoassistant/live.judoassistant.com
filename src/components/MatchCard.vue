@@ -5,11 +5,12 @@
       <p class="match-card-time">
         <span v-if="match.goldenScore && !match.osaekomi" class="golden-score">GS</span>
         <span v-if="match.osaekomi" class="osaekomi">OSK</span>
-        {{ match.status != 'NOT_STARTED' ? formatDuration(clock) : "" }}
+        {{ (match.status != 'NOT_STARTED' && !match.osaekomi) ? formatClock(clock) : "" }}
+        {{ match.osaekomi ? formatOsaekomi(osaekomi) : "" }}
       </p>
     </div>
     <div class="match-card-body">
-      <div>
+      <div class="{winner: match.winner == 'WHITE'}">
         <div class="match-card-player">
           <p class="match-card-name">{{ whitePlayer?.firstName }} {{ whitePlayer?.lastName }} </p>
           <p class="match-card-club">{{ whitePlayer?.club }}</p>
@@ -22,7 +23,7 @@
             </div>
         <p class="match-card-score">{{ whiteScore }}</p>
       </div>
-      <div class="winner">
+      <div class="{winner: match.winner == 'BLUE'}">
         <div class="match-card-player">
           <p class="match-card-name">{{ bluePlayer?.firstName }} {{ bluePlayer?.lastName }} </p>
           <p class="match-card-club">{{ bluePlayer?.club }}</p>
@@ -36,12 +37,15 @@
       </div>
     </div>
     <div class="match-card-events" v-if="isExpanded">
+      <p v-if="match.events.length == 0" class="match-card-empty-message">
+        {{ match.status == 'NOT_STARTED' ? 'This match has not yet started' : 'No scores have been awarded yet' }}
+      </p>
       <div v-for="(event, index) in match.events" :key="index" class="match-card-event">
         <p class="match-card-event-white">
           {{ event.playerIndex == 'WHITE' ? mapEventType(event) : "" }}
         </p>
         <p class="match-card-event-time">
-          {{ formatDuration(event.duration) }}
+          {{ formatClock(event.duration) }}
         </p>
         <p class="match-card-event-blue">
           {{ event.playerIndex == 'BLUE' ? mapEventType(event) : "" }}
@@ -79,7 +83,7 @@ export default {
   },
   methods: {
     mapEventType: mapEventType,
-    formatDuration(duration) { // TODO: Move this somewhere else
+    formatClock(duration) { // TODO: Move this somewhere else
       const seconds = Math.floor(duration / 1000) % 60;
       const minutes = Math.floor(duration / (1000 * 60));
       return pad(minutes, 2) + ":" + pad(seconds,2);
@@ -288,6 +292,12 @@ export default {
     text-align: center;
     color: $color4;
     font-size: .8em;
+  }
+
+  .match-card-empty-message {
+    text-align: center;
+    color: $color4;
+    font-size: .9em;
   }
 
   .match-card-event-blue {
