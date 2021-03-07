@@ -12,6 +12,37 @@ function delayedSend(socket, message) {
   });
 }
 
+function mergeMatches(state, matches) {
+  // Compute ids to be kept
+  const matchIds = new Set();
+  if (state.subscribedPlayer != null) {
+    for (const combinedId of state.subscribedPlayer.matches)
+      matchIds.add(mapId(combinedId));
+  }
+
+  if (state.subscribedCategory != null) {
+    for (const combinedId of state.subscribedCategory.matches)
+      matchIds.add(mapId(combinedId));
+  }
+
+  for (const tatami of state.tatamis) {
+    for (const combinedId of tatami.matches)
+      matchIds.add(mapId(combinedId));
+  }
+
+  for (const match of state.matches.values()) {
+    const matchId = mapId(match.combinedId);
+    if (!matchIds.has(matchId))
+      state.matches.delete(matchId);
+  }
+
+  // Update matches with changed matches
+  for (const match of matches) {
+    const matchId = mapId(match.combinedId);
+    state.matches.set(matchId, match);
+  }
+}
+
 const connection_state = {
   NOT_CONNECTED: 'NOT_CONNECTED',
   CONNECTING: 'CONNECTING',
@@ -104,6 +135,44 @@ export default createStore({
       state.tatamis = tatamis;
       state.matches = matches;
     },
+    changeTournament(state, payload) {
+      if ('tournament' in payload)
+        state.tournament = payload.tournament;
+
+      // Update categories
+      for (const categoryId of payload.erasedCategories)
+        state.categories.delete(categoryId);
+      for (const category of payload.categories)
+        state.categories.set(category.id, category);
+
+      if ('subscribedCategory' in payload)
+        state.subscribedCategory = payload.subscribedCategory;
+
+      // Update players
+      for (const playerId of payload.erasedPlayers)
+        state.players.delete(playerId);
+      for (const player of payload.players)
+        state.players.set(player.id, player);
+
+      if ('subscribedPlayer' in payload)
+        state.subscribedPlayer = payload.subscribedPlayer;
+
+      // Update tatamis
+      var tatamis = [];
+      var j = 0;
+      for (var i = 0; i < state.tatamis.length; ++i) {
+        if (j < payload.tatamis.length && payload.tatamis[j].index == i) {
+          tatamis.push(payload.tatamis[j]);
+          ++j;
+        } else {
+          tatamis.push(state.tatamis[i]);
+        }
+      }
+      state.tatamis = tatamis;
+
+      // Update matches
+      mergeMatches(state, payload.matches);
+    },
     setCategoryState(state, categoryState) {
       state.categoryState = categoryState;
     },
@@ -114,9 +183,7 @@ export default createStore({
       }
 
       state.category = payload.subscribedCategory;
-      for (const match of payload.matches)
-        state.matches.set(match.id, match);
-      // TODO: Ensure state.matches cleanup
+      mergeMatches(state, payload.matches);
     },
     setPlayerState(state, playerState) {
       state.playerState = playerState;
@@ -128,9 +195,7 @@ export default createStore({
       }
 
       state.player = payload.subscribedPlayer;
-      for (const match of payload.matches)
-        state.matches.set(match.id, match);
-      // TODO: Ensure state.matches cleanup
+      mergeMatches(state, payload.matches);
     },
   },
   actions: {
@@ -187,6 +252,9 @@ export default createStore({
         else if (message.type == 'categorySubscriptionFail') {
           commit('setCategoryState', loading_state.NOT_LOADED);
           commit('setCategory', null);
+        }
+        else if (message.type == 'tournamentChanges') {
+          commit('changeTournament', message);
         }
       }
 
