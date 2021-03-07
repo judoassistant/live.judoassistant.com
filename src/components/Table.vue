@@ -66,6 +66,12 @@ export default {
   },
   created() {
     this.sortField = this.headers[0].field;
+    for (const header of this.headers) {
+      if (header.sortable) {
+        this.sortField = header.field;
+        break;
+      }
+    }
     this.sortAsc = true;
   }
 }
