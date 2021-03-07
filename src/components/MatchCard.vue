@@ -42,13 +42,13 @@
       </p>
       <div v-for="(event, index) in match.events" :key="index" class="match-card-event">
         <p class="match-card-event-white">
-          {{ event.playerIndex == 'WHITE' ? mapEventType(event) : "" }}
+          {{ event.playerIndex == 'WHITE' ? eventTypeFilter(event) : "" }}
         </p>
         <p class="match-card-event-time">
           {{ formatClock(event.duration) }}
         </p>
         <p class="match-card-event-blue">
-          {{ event.playerIndex == 'BLUE' ? mapEventType(event) : "" }}
+          {{ event.playerIndex == 'BLUE' ? eventTypeFilter(event) : "" }}
         </p>
       </div>
     </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapEventType } from '@/store/helpers.js'
+import { eventTypeFilter } from '@/store/filters.js'
 
 function pad(n, size) {
   var s = String(n);
@@ -82,13 +82,13 @@ export default {
     match: Object,
   },
   methods: {
-    mapEventType: mapEventType,
-    formatClock(duration) { // TODO: Move this somewhere else
+    eventTypeFilter: eventTypeFilter,
+    formatClock(duration) {
       const seconds = Math.floor(duration / 1000) % 60;
       const minutes = Math.floor(duration / (1000 * 60));
       return pad(minutes, 2) + ":" + pad(seconds,2);
     },
-    formatOsaekomi(osaekomi) { // TODO: Move this somewhere else
+    formatOsaekomi(osaekomi) {
       const seconds = Math.floor(osaekomi / 1000);
       return pad(seconds,2);
     },
@@ -121,7 +121,6 @@ export default {
       this.clock = this.calcClock();
       this.osaekomi = this.calcOsaekomi();
     }, 1000);
-    console.log(this.match);
   },
   beforeUnmount() {
     clearInterval(this.interval);
@@ -155,7 +154,6 @@ export default {
         return "";
       if (this.match.blueScore.ippon)
         return "IPPON";
-        console.log(this.match.blueScore);
       return this.match.blueScore.wazari;
     },
   },
