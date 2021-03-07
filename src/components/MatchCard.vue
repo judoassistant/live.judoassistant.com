@@ -10,7 +10,7 @@
       </p>
     </div>
     <div class="match-card-body">
-      <div class="{winner: match.winner == 'WHITE'}">
+      <div :class="{winner: match.winner == 'WHITE'}">
         <div class="match-card-player">
           <p class="match-card-name">{{ whitePlayer?.firstName }} {{ whitePlayer?.lastName }} </p>
           <p class="match-card-club">{{ whitePlayer?.club }}</p>
@@ -23,7 +23,7 @@
             </div>
         <p class="match-card-score">{{ whiteScore }}</p>
       </div>
-      <div class="{winner: match.winner == 'BLUE'}">
+      <div :class="{winner: match.winner == 'BLUE'}">
         <div class="match-card-player">
           <p class="match-card-name">{{ bluePlayer?.firstName }} {{ bluePlayer?.lastName }} </p>
           <p class="match-card-club">{{ bluePlayer?.club }}</p>
