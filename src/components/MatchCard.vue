@@ -42,13 +42,13 @@
       </p>
       <div v-for="(event, index) in match.events" :key="index" class="match-card-event">
         <p class="match-card-event-white">
-          {{ event.playerIndex == 'WHITE' ? eventTypeFilter(event) : "" }}
+          {{ event.playerIndex == 'WHITE' ? eventTypeFilter(event.type) : "" }}
         </p>
         <p class="match-card-event-time">
           {{ formatClock(event.duration) }}
         </p>
         <p class="match-card-event-blue">
-          {{ event.playerIndex == 'BLUE' ? eventTypeFilter(event) : "" }}
+          {{ event.playerIndex == 'BLUE' ? eventTypeFilter(event.type) : "" }}
         </p>
       </div>
     </div>
