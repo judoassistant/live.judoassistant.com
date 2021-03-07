@@ -355,6 +355,9 @@ export default createStore({
     getCategory: (state) => (id) => {
       return state.categories.get(id);
     },
+    tatamiBlocks() {
+      return []
+    },
   },
   modules: {
   },
