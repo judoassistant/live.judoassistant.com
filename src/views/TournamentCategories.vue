@@ -14,13 +14,14 @@ import Table from '@/components/Table.vue'
 import TableColumn from '@/components/TableColumn.vue'
 import InfoText from '@/components/InfoText.vue'
 import { mapState } from 'vuex'
+import { lexicographicalCompare } from '@/store/helpers.js'
 
 export default {
   components: { Table, TableColumn, InfoText },
   data() {
     return {
       headers: [
-        { 'field': 'name', 'label': 'name', 'sortable': true },
+        { 'field': 'name', 'label': 'name', 'sortable': true, 'comparator': lexicographicalCompare },
       ],
     }
   },

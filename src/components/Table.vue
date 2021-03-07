@@ -3,7 +3,7 @@
     <tr>
       <!-- <th class="active">Date <span class="mdi mdi-arrow-down"></span></th> -->
       <th v-for="header in headers" :key="header.field" :class="{ 'active' : header.field == sortField, 'sortable' : header.sortable }" @click="sortBy(header)">
-        {{ header.label }} <span v-if="header.field == sortField" :class="{ 'mdi' : true, 'mdi-arrow-down': sortDir == 1, 'mdi-arrow-up': sortDir == -1 }"></span>
+        {{ header.label }} <span v-if="header.field == sortField" :class="{ 'mdi' : true, 'mdi-arrow-down': sortAsc, 'mdi-arrow-up': !sortAsc }"></span>
       </th>
     </tr>
     <tr v-for="row in sortedRows" :key="row.id">
@@ -13,6 +13,12 @@
 </template>
 
 <script>
+function defaultCompare(a, b, isAsc) {
+  if (isAsc)
+    return a > b;
+  return a < b;
+}
+
 export default {
   name: 'Table',
   props: {
@@ -22,16 +28,26 @@ export default {
   data() {
     return {
       sortField: null,
-      sortDir: null,
+      sortAsc: null,
     }
   },
   computed: {
     sortedRows: function() {
       var field = this.sortField;
-      var sortDir = this.sortDir;
+      var sortAsc = this.sortAsc;
 
       var res = [...this.rows];
-      res.sort(function(a, b) { if (sortDir == 1) return a[field] > b[field]; else return a[field] < b[field]; });
+      var comparator = defaultCompare;
+
+      for (const header of this.headers) {
+        if (header.field != field)
+          continue;
+        if (!('comparator' in header))
+          continue;
+        comparator = header['comparator'];
+      }
+
+      res.sort(function(a, b) { return comparator(a[field], b[field], sortAsc); });
       return res;
     },
   },
@@ -40,17 +56,17 @@ export default {
       if (!header.sortable)
         return;
       if (this.sortField == header.field) {
-        this.sortDir = -this.sortDir;
+        this.sortAsc = !this.sortAsc;
       }
       else {
         this.sortField = header.field;
-        this.sortDir = 1;
+        this.sortAsc = true;
       }
     },
   },
   created() {
     this.sortField = this.headers[0].field;
-    this.sortDir = 1;
+    this.sortAsc = true;
   }
 }
 </script>
