@@ -76,7 +76,6 @@ export default {
     }
   },
   mounted: function() {
-    console.log("Loading ", this.$route.params.categoryId);
     this.$store.dispatch('subscribeCategory', this.$route.params.categoryId);
   },
   computed: {

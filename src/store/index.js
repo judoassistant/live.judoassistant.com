@@ -335,7 +335,6 @@ export default createStore({
         }
       }
 
-      console.log("Got players", players);
       return players;
     },
     categoryResults(state) {
