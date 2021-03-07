@@ -1,6 +1,7 @@
 <template>
   <h2>Players</h2>
-  <Table :headers="headers" :rows="players" v-slot="props">
+  <InfoText v-if="players.length == 0">This tournament has no players yet.</InfoText>
+  <Table v-if="players.length > 0" :headers="headers" :rows="players" v-slot="props">
     <TableColumn>
       <router-link class="menu-item" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: props.row.id }}">{{ props.row.firstName }}</router-link>
     </TableColumn>
@@ -17,16 +18,17 @@
 /* <TabItem :label="'Tatami ' + (index + 1)" :key="index" v-for="(matches, index) of tatamiMatches"> */
 import Table from '@/components/Table.vue'
 import TableColumn from '@/components/TableColumn.vue'
+import InfoText from '@/components/InfoText.vue'
 import { mapState } from 'vuex'
 
 export default {
-  components: { Table, TableColumn },
+  components: { Table, TableColumn, InfoText },
   data() {
     return {
       headers: [
         { 'field': 'firstName', 'label': 'First Name', 'sortable': true },
         { 'field': 'lastName', 'label': 'Last Name', 'sortable': true },
-        { 'field': 'club', 'label': 'Club', 'sortable': false },
+        { 'field': 'club', 'label': 'Club', 'sortable': true },
       ],
     }
   },

@@ -304,6 +304,52 @@ export default createStore({
 
       return res;
     },
+    playerMatches(state)  {
+      var matches = [];
+      if (state.player != null) {
+        for (const combinedId of state.player.matches) {
+          const match = state.matches.get(mapId(combinedId));
+          matches.push(match);
+        }
+      }
+
+      return matches;
+    },
+    categoryMatches(state)  {
+      var matches = [];
+      if (state.category != null) {
+        for (const combinedId of state.category.matches) {
+          const match = state.matches.get(mapId(combinedId));
+          matches.push(match);
+        }
+      }
+
+      return matches;
+    },
+    categoryPlayers(state)  {
+      var players = [];
+      if (state.category != null) {
+        for (const playerId of state.category.players) {
+          const player = state.players.get(playerId);
+          players.push(player);
+        }
+      }
+
+      console.log("Got players", players);
+      return players;
+    },
+    categoryResults(state) {
+      if (state.category == null) return null;
+      if (state.category.results == null) return;
+
+      var results = [];
+      for (const row of state.category.results) {
+        const player = state.players.get(row.player);
+        results.push({ ... player, pos: row.pos });
+      }
+
+      return results;
+    },
     getPlayer: (state) => (id) => {
       return state.players.get(id);
     },

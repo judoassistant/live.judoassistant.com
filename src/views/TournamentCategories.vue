@@ -1,6 +1,7 @@
 <template>
   <h2>Categories</h2>
-  <Table :headers="headers" :rows="categories" v-slot="props">
+  <InfoText v-if="categories.length == 0">This tournament has no categories yet.</InfoText>
+  <Table v-if="categories.length > 0" :headers="headers" :rows="categories" v-slot="props">
     <TableColumn>
       <router-link class="menu-item" :to="{ name: 'tournament-category', params: { tournament: this.$route.params.tournament, categoryId: props.row.id }}">{{ props.row.name }}</router-link>
     </TableColumn>
@@ -11,10 +12,11 @@
 /* <TabItem :label="'Tatami ' + (index + 1)" :key="index" v-for="(matches, index) of tatamiMatches"> */
 import Table from '@/components/Table.vue'
 import TableColumn from '@/components/TableColumn.vue'
+import InfoText from '@/components/InfoText.vue'
 import { mapState } from 'vuex'
 
 export default {
-  components: { Table, TableColumn },
+  components: { Table, TableColumn, InfoText },
   data() {
     return {
       headers: [
