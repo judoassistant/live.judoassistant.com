@@ -50,6 +50,7 @@ export default {
   .tabs {
     display: flex;
     flex-direction: row;
+    margin: 0 0 10px 0;
   }
 
   .tabs a {
