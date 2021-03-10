@@ -86,3 +86,27 @@ export function sexFilter(sex) {
   }
 }
 
+export function blockTypeFilter(type) {
+  switch(type) {
+    case "ELIMINATION":
+      return "Elimination";
+    case "FINAL":
+      return "Finals";
+    default:
+      return "";
+  }
+}
+
+export function blockStatusFilter(status) {
+  switch(status) {
+    case "NOT_STARTED":
+      return "Not Started";
+    case "STARTED":
+      return "In Progress";
+    case "FINISHED":
+      return "Finished";
+    default:
+      return "";
+  }
+}
+
