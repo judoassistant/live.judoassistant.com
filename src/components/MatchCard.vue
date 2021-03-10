@@ -1,7 +1,10 @@
 <template>
   <div class="match-card">
     <div :class="{'match-card-header': true, 'paused': match.status == 'PAUSED', 'unpaused': match.status == 'UNPAUSED'}">
-      <p class="match-card-category">{{ category.name }} <span>{{ match.title }}</span></p>
+      <p class="match-card-category">
+        <router-link :to="{ name: 'tournament-category', params: { tournament: this.$route.params.tournament, categoryId: category.id }}">{{ category.name }}</router-link>
+        <span>{{ match.title }}</span>
+      </p>
       <p class="match-card-time">
         <span v-if="match.goldenScore && !match.osaekomi" class="golden-score">GS</span>
         <span v-if="match.osaekomi" class="osaekomi">OSK</span>
@@ -12,7 +15,9 @@
     <div class="match-card-body">
       <div :class="{winner: match.winner == 'WHITE'}">
         <div class="match-card-player">
-          <p class="match-card-name">{{ whitePlayer?.firstName }} {{ whitePlayer?.lastName }} </p>
+          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: whitePlayer.id }}">
+            {{ whitePlayer?.firstName }} {{ whitePlayer?.lastName }}
+          </router-link>
           <p class="match-card-club">{{ whitePlayer?.club }}</p>
         </div>
         <div class="match-card-penalties"></div>
@@ -25,7 +30,9 @@
       </div>
       <div :class="{winner: match.winner == 'BLUE'}">
         <div class="match-card-player">
-          <p class="match-card-name">{{ bluePlayer?.firstName }} {{ bluePlayer?.lastName }} </p>
+          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: bluePlayer.id }}">
+            {{ bluePlayer?.firstName }} {{ bluePlayer?.lastName }}
+          </router-link>
           <p class="match-card-club">{{ bluePlayer?.club }}</p>
         </div>
         <div class="match-card-penalties">
@@ -201,6 +208,10 @@ export default {
     flex-grow: 1;
   }
 
+  .match-card-header .match-card-category a {
+    color: $color1;
+  }
+
   .match-card-header .match-card-category span {
     color: $color4;
     font-size: .9em;
@@ -211,6 +222,10 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+
+  .match-card .match-card-name {
+    color: $color1;
   }
 
   .match-card .winner .match-card-name {
