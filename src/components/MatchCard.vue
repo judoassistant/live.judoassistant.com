@@ -155,14 +155,14 @@ export default {
       if (this.match.status == 'NOT_STARTED')
         return "";
       if (this.match.whiteScore.ippon)
-        return "IPPON";
+        return "Ippon";
       return this.match.whiteScore.wazari;
     },
     blueScore() {
       if (this.match.status == 'NOT_STARTED')
         return "";
       if (this.match.blueScore.ippon)
-        return "IPPON";
+        return "Ippon";
       return this.match.blueScore.wazari;
     },
   },
@@ -234,10 +234,6 @@ export default {
 
   .match-card .winner .match-card-score {
     font-weight: 400;
-  }
-
-  .match-card-score {
-    text-transform: uppercase;
   }
 
   .match-card-club {
