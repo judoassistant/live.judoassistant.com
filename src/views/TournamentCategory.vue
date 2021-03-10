@@ -1,10 +1,6 @@
 <template>
-  <template v-if="categoryState == 'NOT_LOADED'">
-    <p style='text-align: center;'>not loaded....</p>
-  </template>
-  <template v-if="categoryState == 'LOADING'">
-    <p style='text-align: center;'>loading....</p>
-  </template>
+  <InfoText v-if="categoryState == 'NOT_LOADED'" icon="cloud-off-outline">Category not found. The category does not exist.</InfoText>
+  <InfoText v-if="categoryState == 'LOADING'" icon="loading" rotating>Loading category..</InfoText>
   <template v-if="categoryState == 'LOADED'">
     <h2>{{ category.name }}</h2>
     <Tabs>

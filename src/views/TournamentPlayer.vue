@@ -1,10 +1,6 @@
 <template>
-  <template v-if="playerState == 'NOT_LOADED'">
-    <p style='text-align: center;'>not loaded....</p>
-  </template>
-  <template v-if="playerState == 'LOADING'">
-    <p style='text-align: center;'>loading....</p>
-  </template>
+  <InfoText v-if="playerState == 'NOT_LOADED'" icon="cloud-off-outline">Player not found. The player does not exist.</InfoText>
+  <InfoText v-if="playerState == 'LOADING'" icon="loading" rotating>Loading player..</InfoText>
   <template v-if="playerState == 'LOADED'">
     <h2>{{ player.firstName }} {{ player.lastName }}</h2>
     <Tabs>

@@ -248,7 +248,6 @@ export default createStore({
           commit('setTournament', message);
         }
         else if (message.type == 'tournamentSubscriptionFail') {
-          // TODO: Have a fail state
           commit('setTournamentState', loading_state.NOT_LOADED);
           commit('setTournament', null);
         }

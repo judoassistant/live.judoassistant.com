@@ -2,12 +2,8 @@
   <h2>Tatamis</h2>
   <Tabs @change="changeTab">
     <TabItem v-for="tatamiIndex in tatamiCount" :key="tatamiIndex" :title="'Tatami ' + tatamiIndex">
-      <template v-if="tatamiState == 'NOT_LOADED'">
-        <p style='text-align: center;'>not loaded....</p>
-      </template>
-      <template v-if="tatamiState == 'LOADING'">
-        <p style='text-align: center;'>loading....</p>
-      </template>
+      <InfoText v-if="tatamiState == 'NOT_LOADED'" icon="cloud-off-outline">Tatami not found. The tatami does not exist.</InfoText>
+      <InfoText v-if="tatamiState == 'LOADING'" icon="loading" rotating>Loading tatami..</InfoText>
       <template v-if="tatamiState == 'LOADED'">
         <InfoText v-if="tatamiBlocks.length == 0">This tatami has no matches yet.</InfoText>
         <div class="concurrent-group" v-for="(concurrentGroup, concurrentIndex) in tatamiBlocks" :key="concurrentIndex">
