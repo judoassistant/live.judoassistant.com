@@ -81,6 +81,10 @@ export default createStore({
     // Subscribed category
     categoryState: loading_state.NOT_LOADED,
     category: null,
+
+    // Subscribed tatami
+    tatamiState: loading_state.NOT_LOADED,
+    tatami: null,
   },
   mutations: {
     setConnectionState(state, connectionState) {
@@ -197,6 +201,17 @@ export default createStore({
       state.player = payload.subscribedPlayer;
       mergeMatches(state, payload.matches);
     },
+    setTatami(state, payload) {
+      if (payload == null) {
+        state.tatami = null;
+        return;
+      }
+
+      state.tatami = payload.subscribedTatami;
+    },
+    setTatamiState(state, tatamiState) {
+      state.tatamiState = tatamiState;
+    },
   },
   actions: {
     connect({ commit, state }) {
@@ -253,8 +268,20 @@ export default createStore({
           commit('setCategoryState', loading_state.NOT_LOADED);
           commit('setCategory', null);
         }
+        else if (message.type == 'tatamiSubscription') {
+          commit('setTatamiState', loading_state.LOADED);
+          commit('setTatami', message);
+        }
+        else if (message.type == 'tatamiSubscriptionFail') {
+          commit('setTatamiState', loading_state.NOT_LOADED);
+          commit('setTatami', null);
+        }
         else if (message.type == 'tournamentChanges') {
           commit('changeTournament', message);
+        }
+        else {
+          console.log("Unexpected message type received", message);
+
         }
       }
 
@@ -285,6 +312,10 @@ export default createStore({
     subscribePlayer({ commit, state }, webName) {
       commit('setPlayerState', loading_state.LOADING);
       delayedSend(state.connection, 'subscribePlayer ' + webName)
+    },
+    subscribeTatami({ commit, state }, webName) {
+      commit('setTatamiState', loading_state.LOADING);
+      delayedSend(state.connection, 'subscribeTatami ' + webName)
     },
   },
   getters: {
@@ -339,7 +370,7 @@ export default createStore({
     },
     categoryResults(state) {
       if (state.category == null) return null;
-      if (state.category.results == null) return;
+      if (state.category.results == null) return null;
 
       var results = [];
       for (const row of state.category.results) {
@@ -355,8 +386,27 @@ export default createStore({
     getCategory: (state) => (id) => {
       return state.categories.get(id);
     },
-    tatamiBlocks() {
-      return []
+    tatamiBlocks(state) {
+      if (state.tatami == null)
+        return [];
+
+      var res = [];
+      for (const concurrentGroup of state.tatami.blocks) {
+        var mappedConcurrentGroup = [];
+        for (const sequentialGroup of concurrentGroup) {
+          var mappedSequentialGroup = [];
+          for (const block of sequentialGroup) {
+            const category = state.categories.get(block.categoryId);
+            mappedSequentialGroup.push({id: category.id, name: category.name, type: block.type, status: block.status});
+          }
+
+          mappedConcurrentGroup.push(mappedSequentialGroup);
+        }
+
+        res.push(mappedConcurrentGroup);
+      }
+
+      return res;
     },
   },
   modules: {

@@ -1,55 +1,41 @@
 <template>
   <h2>Tatamis</h2>
-  <div class="concurrent-group">
-    <div class="sequential-group">
-      <div class="tatami-block">
-        <div class="tatami-block-inner">
-          <a href="#">A10</a>
-          <p>Elimination</p>
+  <Tabs @change="changeTab">
+    <TabItem v-for="tatamiIndex in tatamiCount" :key="tatamiIndex" :title="'Tatami ' + tatamiIndex">
+      <template v-if="tatamiState == 'NOT_LOADED'">
+        <p style='text-align: center;'>not loaded....</p>
+      </template>
+      <template v-if="tatamiState == 'LOADING'">
+        <p style='text-align: center;'>loading....</p>
+      </template>
+      <template v-if="tatamiState == 'LOADED'">
+        <InfoText v-if="tatamiBlocks.length == 0">This tatami has no matches yet.</InfoText>
+        <div class="concurrent-group" v-for="(concurrentGroup, concurrentIndex) in tatamiBlocks" :key="concurrentIndex">
+          <div class="sequential-group" v-for="(sequentialGroup, sequentialIndex) in concurrentGroup" :key="sequentialIndex">
+            <div v-for="(block, blockIndex) in sequentialGroup" :key="blockIndex"
+                :class="{'tatami-block': true, 'finished': block.status == 'FINISHED', 'started': block.status == 'STARTED'}">
+              <div class="tatami-block-inner">
+                <router-link :to="{ name: 'tournament-category', params: { tournament: this.$route.params.tournament, categoryId: block.id }}">{{ block.name }}</router-link>
+                <p>{{ blockTypeFilter(block.type) }} <span v-if="block.status != 'NOT_STARTED'">({{ blockStatusFilter(block.status) }})</span></p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="tatami-block started">
-        <div class="tatami-block-inner">
-          <a href="#">A10</a>
-          <p>Elimination</p>
-        </div>
-      </div>
-      <div class="tatami-block finished">
-        <div class="tatami-block-inner">
-          <a href="#">A10</a>
-          <p>Elimination (Finished)</p>
-        </div>
-      </div>
-    </div>
-    <div class="sequential-group">
-      <div class="tatami-block">
-        <div class="tatami-block-inner">
-          <a href="#">A10</a>
-          <p>Elimination</p>
-        </div>
-      </div>
-      <div class="tatami-block">
-        <div class="tatami-block-inner">
-          <a href="#">A10</a>
-          <p>Elimination</p>
-        </div>
-      </div>
-      <div class="tatami-block">
-        <div class="tatami-block-inner">
-          <a href="#">A10</a>
-          <p>Elimination</p>
-        </div>
-      </div>
-    </div>
-  </div>
+      </template>
+    </TabItem>
+  </Tabs>
 </template>
 
 <script>
 /* <TabItem :label="'Tatami ' + (index + 1)" :key="index" v-for="(matches, index) of tatamiMatches"> */
-import { mapState } from 'vuex'
+import Tabs from '@/components/Tabs.vue'
+import TabItem from '@/components/TabItem.vue'
+import InfoText from '@/components/InfoText.vue'
+import { mapState, mapGetters } from 'vuex'
+import { blockTypeFilter, blockStatusFilter } from '@/store/filters.js'
 
 export default {
-  components: {},
+  components: { Tabs, TabItem, InfoText, },
   mounted() {
     this.$store.dispatch('subscribeTatami', 0);
   },
@@ -57,10 +43,17 @@ export default {
     changeTab: function(index) {
       this.$store.dispatch('subscribeTatami', index);
     },
+    blockTypeFilter: blockTypeFilter,
+    blockStatusFilter: blockStatusFilter,
   },
   computed: {
     ...mapState({
-      tournament: state => state.tournament,
+      tatami: state => state.tatami,
+      tatamiState: state => state.tatamiState,
+      tatamiCount: state => state.tournament.tatamiCount,
+    }),
+    ...mapGetters({
+      tatamiBlocks: 'tatamiBlocks',
     }),
   },
 }
@@ -85,6 +78,7 @@ export default {
     margin: 0 5px 10px 5px;
     box-shadow: rgba(0, 0, 0, 0.08) 0px 5px 15px 0px;
     padding: 10px 0;
+    flex: 1;
   }
 
   .tatami-block.finished {
