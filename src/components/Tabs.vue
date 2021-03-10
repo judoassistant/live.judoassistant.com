@@ -1,6 +1,6 @@
 <template>
   <div class="tabs">
-    <a v-for="tab in tabs" :key="tab.title" href="#" @click.prevent="selectTab(tab)" :class="{ 'active' : tab.isActive }">
+    <a v-for="(tab, tabIndex) in tabs" :key="tab.title" href="#" @click.prevent="selectTab(tabIndex)" :class="{ 'active' : tab.isActive }">
       {{ tab.title }}
     </a>
     <div class="filler"></div>
@@ -11,6 +11,7 @@
 <script>
 export default {
   name: 'Tabs',
+  emits: ['change'],
   data() {
     return {
       selectedIndex: 0,
@@ -18,10 +19,10 @@ export default {
     }
   },
   methods: {
-    selectTab(selectedTab) {
-      this.tabs.forEach(tab => {
-        tab.isActive = (tab.title == selectedTab.title);
-      });
+    selectTab(selectedIndex) {
+      for (var i = 0; i < this.tabs.length; ++i)
+          this.tabs[i].isActive = (i == selectedIndex);
+      this.$emit('change', selectedIndex);
     },
   },
   mounted() {
