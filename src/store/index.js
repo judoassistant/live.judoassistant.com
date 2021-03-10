@@ -369,13 +369,13 @@ export default createStore({
       return players;
     },
     categoryResults(state) {
-      if (state.category == null) return null;
-      if (state.category.results == null) return null;
-
       var results = [];
-      for (const row of state.category.results) {
-        const player = state.players.get(row.player);
-        results.push({ ... player, pos: row.pos });
+
+      if (state.category != null && state.category.results != null) {
+        for (const row of state.category.results) {
+          const player = state.players.get(row.player);
+          results.push({ ... player, pos: row.pos });
+        }
       }
 
       return results;
