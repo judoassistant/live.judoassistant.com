@@ -11,7 +11,7 @@
     </tr>
   </table>
 
-  <PaginationControls :currentPage="page" :pageCount="pageCount" />
+  <PaginationControls v-model:page="page" :pageCount="pageCount" />
 </template>
 
 <script>

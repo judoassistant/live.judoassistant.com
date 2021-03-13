@@ -1,23 +1,34 @@
 <template>
-  <ul class="pagination">
-    <li class="pagination-previous"><a href="#">&lt;</a></li>
-    <li class="pagination-number"><a href="#">1</a></li>
-    <li class="pagination-dots">...</li>
-    <li class="pagination-number"><a href="#">4</a></li>
-    <li class="pagination-number"><a href="#">5</a></li>
-    <li class="pagination-number"><a href="#">6</a></li>
-    <li class="pagination-number"><a href="#">7</a></li>
-    <li class="pagination-next"><a href="#">&gt;</a></li>
+  <ul v-if="pageCount > 1" class="pagination">
+    <li v-if="page > 0" class="pagination-previous"><a @click.prevent="changePage(page-1)" href="#">&lt;</a></li>
+    <li v-if="page > 2" class="pagination-number"><a @click.prevent="changePage(0)" href="#">1</a></li>
+    <li v-if="page > 3" class="pagination-dots">...</li>
+
+    <li v-if="page > 1" class="pagination-number"><a @click.prevent="changePage(page-2)" href="#">{{ page - 1 }}</a></li>
+    <li v-if="page > 0" class="pagination-number"><a @click.prevent="changePage(page-1)" href="#">{{ page }}</a></li>
+    <li class="pagination-current">{{ page + 1 }} </li>
+    <li v-if="page < pageCount - 1" class="pagination-number"><a @click.prevent="changePage(page+1)" href="#">{{ page + 2}}</a></li>
+    <li v-if="page < pageCount - 2" class="pagination-number"><a @click.prevent="changePage(page+2)" href="#">{{ page + 3}}</a></li>
+
+    <li v-if="page < pageCount - 4" class="pagination-dots">...</li>
+    <li v-if="page < pageCount - 3" class="pagination-number"><a @click.prevent="changePage(pageCount-1)" href="#">{{ pageCount }}</a></li>
+    <li v-if="page < pageCount - 1" class="pagination-next"><a @click.prevent="changePage(page+1)" href="#">&gt;</a></li>
   </ul>
 </template>
-
 <script>
+
 export default {
   name: 'PaginationControls',
   props: {
-    currentPage: Number,
+    page: Number,
     pageCount: Number,
   },
+  emits: ['update:page'],
+  methods: {
+    changePage(page) {
+      this.$emit('update:page', page);
+    },
+  }
 }
 </script>
 
@@ -25,7 +36,7 @@ export default {
   @import "../styles/colors.module.scss";
 
   $long-distance: .8em;
-  $short-distance: .4em;
+  $short-distance: .6em;
 
   .pagination {
     list-style-type: none;
@@ -41,6 +52,11 @@ export default {
     color: $color4;
   }
 
+  .pagination-current {
+    color: $color1;
+    font-weight: 300;
+  }
+
   .pagination a:hover {
     text-decoration: none;
     color: $color1;
@@ -50,7 +66,7 @@ export default {
     margin-right: $long-distance;
   }
 
-  .pagination-number {
+  .pagination-number, .pagination-current {
     margin-left: $short-distance;
     margin-right: $short-distance;
   }
@@ -63,6 +79,5 @@ export default {
   .pagination-next {
     margin-left: $long-distance;
   }
-
 </style>
 
