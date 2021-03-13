@@ -13,13 +13,13 @@ export function eventTypeFilter(type) {
     case 'WAZARI_OSAEKOMI':
       return 'Wazari (Osaekomi)';
     case 'CANCEL_IPPON':
-      return 'Cancel Ippon';
+      return 'Ippon Cancelled';
     case 'CANCEL_WAZARI':
-      return 'Cancel Wazari';
+      return 'Wazari Cancelled';
     case 'CANCEL_SHIDO':
-      return 'Cancel Shido';
+      return 'Shido Cancelled';
     case 'CANCEL_HANSOKU_MAKE':
-      return 'Cancel Hansoku-Make';
+      return 'Hansoku-Make Cancelled';
     default:
       return '';
   }
