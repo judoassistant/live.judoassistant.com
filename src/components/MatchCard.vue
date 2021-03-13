@@ -100,9 +100,10 @@ export default {
       return pad(seconds,2);
     },
     calcClock() {
+      const clockDiff = this.$store.state.clockDiff;
       var duration = this.match.duration;
       if (this.match.status  == 'UNPAUSED')
-        duration += Date.now() - new Date(this.match.resumeTime);
+        duration += Date.now() - new Date(this.match.resumeTime - clockDiff);
 
       if (this.match.goldenScore)
         return duration - this.match.normalTime;
