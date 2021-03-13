@@ -80,14 +80,19 @@ export default {
     },
   },
   created() {
-    this.sortField = this.headers[0].field;
+    if (this.headers.length == 0)
+      return;
+
+    this.sortField = null;
     for (const header of this.headers) {
-      if (header.sortable) {
+      if ('sortable' in header && header.sortable && this.sortField == null)
+        this.sortField = header.field
+      if ('defaultSort' in header) {
         this.sortField = header.field;
-        break;
+        this.sortAsc = (header.defaultSort != 'DESC');
+        return;
       }
     }
-    this.sortAsc = true;
   }
 }
 </script>

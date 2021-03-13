@@ -29,16 +29,13 @@ export default {
     if (this.tabs.length == 0)
       return;
 
-    var hasActive = false;
     for (const tab of this.tabs) {
       if (tab.isActive) {
-        hasActive = true;
-        break;
+        return;
       }
     }
 
-    if (!hasActive)
-      this.tabs[0].isActive = true;
+    this.tabs[0].isActive = true;
   },
 }
 </script>
