@@ -31,7 +31,7 @@ export default {
     rows: Array,
     pageSize: {
       type: Number,
-      default: 10,
+      default: 50,
     }
   },
   data() {
