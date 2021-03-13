@@ -103,7 +103,7 @@ export default createStore({
       state.tournamentsState = tournamentsState;
     },
     setTournaments(state, tournaments) {
-      state.tournaments = tournaments;
+      state.tournaments = tournaments.map((tournament) => { return {...tournament, date: new Date(tournament.date), } });
     },
     setTournamentState(state, tournamentState) {
       state.tournamentState = tournamentState;
@@ -118,6 +118,7 @@ export default createStore({
       }
 
       state.tournament = payload.tournament;
+      state.tournament.date = new Date(payload.tournament.date);
 
       // Create maps
       var categories = new Map();
@@ -140,8 +141,10 @@ export default createStore({
       state.matches = matches;
     },
     changeTournament(state, payload) {
-      if ('tournament' in payload)
+      if ('tournament' in payload) {
         state.tournament = payload.tournament;
+        state.tournament.date = new Date(payload.tournament.date);
+      }
 
       // Update categories
       for (const categoryId of payload.erasedCategories)

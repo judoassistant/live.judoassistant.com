@@ -7,7 +7,7 @@
     </tr>
     <tr>
       <th>Date</th>
-      <td>{{ tournament.date }}</td>
+      <td>{{ dateFilter(tournament.date) }}</td>
     </tr>
     <tr>
       <th>Location</th>
@@ -30,6 +30,7 @@ import TabItem from '@/components/TabItem.vue'
 import MatchCard from '@/components/MatchCard.vue'
 import InfoText from '@/components/InfoText.vue'
 import { mapId } from '@/store/helpers.js'
+import { dateFilter } from '@/store/filters.js'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -48,6 +49,7 @@ export default {
   },
   methods: {
     mapId: mapId,
+    dateFilter: dateFilter,
   }
 }
 </script>

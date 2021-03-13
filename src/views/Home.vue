@@ -14,7 +14,7 @@
         {{ props.row.location }}
       </TableColumn>
       <TableColumn>
-        {{ props.row.date }}
+        {{ dateFilter(props.row.date) }}
       </TableColumn>
     </Table>
     <h2>Previous Tournaments</h2>
@@ -27,6 +27,7 @@ import Table from '@/components/Table.vue'
 import TableColumn from '@/components/TableColumn.vue'
 import InfoText from '@/components/InfoText.vue'
 import { mapState } from 'vuex'
+import { dateFilter } from '@/store/filters.js'
 
 export default {
   components: { Table, TableColumn, InfoText },
@@ -37,11 +38,14 @@ export default {
   data() {
     return {
       headers: [
-        { 'field': 'name', 'label': 'Name', 'sortable': true },
-        { 'field': 'location', 'label': 'Location', 'sortable': true },
-        { 'field': 'date', 'label': 'Date', 'sortable': false },
+        { 'field': 'name', 'label': 'Name', 'sortable': false },
+        { 'field': 'location', 'label': 'Location', 'sortable': false },
+        { 'field': 'date', 'label': 'Date', 'sortable': true },
       ],
     }
+  },
+  methods: {
+    dateFilter: dateFilter,
   },
   computed: {
     ...mapState({
