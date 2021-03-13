@@ -10,9 +10,13 @@
       <slot v-bind:row="row"></slot>
     </tr>
   </table>
+
+  <PaginationControls :currentPage="page" :pageCount="pageCount" />
 </template>
 
 <script>
+import PaginationControls from '@/components/PaginationControls.vue'
+
 function defaultCompare(a, b, isAsc) {
   if (isAsc)
     return a > b;
@@ -21,17 +25,26 @@ function defaultCompare(a, b, isAsc) {
 
 export default {
   name: 'Table',
+  components: { PaginationControls },
   props: {
-    headers: Object,
-    rows: Object,
+    headers: Array,
+    rows: Array,
+    pageSize: {
+      type: Number,
+      default: 10,
+    }
   },
   data() {
     return {
       sortField: null,
       sortAsc: null,
+      page: 0,
     }
   },
   computed: {
+    pageCount: function() {
+      return Math.ceil(this.rows.length / this.pageSize);
+    },
     sortedRows: function() {
       var field = this.sortField;
       var sortAsc = this.sortAsc;
@@ -48,6 +61,8 @@ export default {
       }
 
       res.sort(function(a, b) { return comparator(a[field], b[field], sortAsc); });
+      res = res.slice(this.page*this.pageSize, (this.page+1)*this.pageSize);
+
       return res;
     },
   },
