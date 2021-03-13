@@ -6,7 +6,8 @@
   <template v-if="tournamentsState == 'LOADED'">
     <h1>Tournaments Overview</h1>
     <h2>Upcoming Tournaments</h2>
-    <Table :headers="headers" :rows="tournaments" v-slot="props">
+    <InfoText v-if="tournaments.length == 0">There are no upcoming tournaments.</InfoText>
+    <Table v-if="tournaments.length > 0" :headers="headers" :rows="tournaments" v-slot="props" :pageSize=10>
       <TableColumn>
         <router-link :to="{ name: 'tournament-home', params: { tournament: props.row.webName }}">{{ props.row.name }}</router-link>
       </TableColumn>
@@ -18,6 +19,7 @@
       </TableColumn>
     </Table>
     <h2>Previous Tournaments</h2>
+    <InfoText>There are no previous tournaments.</InfoText>
   </template>
   </main>
 </template>
