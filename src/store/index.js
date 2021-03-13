@@ -64,7 +64,8 @@ export default createStore({
 
     // List of tournaments
     tournamentsState: loading_state.NOT_LOADED,
-    tournaments: null,
+    pastTournaments: null,
+    upcomingTournaments: null,
 
     // Subscribed tournament
     tournamentState: loading_state.NOT_LOADED,
@@ -102,8 +103,15 @@ export default createStore({
     setTournamentsState(state, tournamentsState) {
       state.tournamentsState = tournamentsState;
     },
-    setTournaments(state, tournaments) {
-      state.tournaments = tournaments.map((tournament) => { return {...tournament, date: new Date(tournament.date), } });
+    setTournaments(state, payload) {
+      if (payload == null) {
+        state.pastTournaments = [];
+        state.upcomingTournaments = [];
+        return;
+      }
+
+      state.pastTournaments = payload.pastTournaments.map((tournament) => { return {...tournament, date: new Date(tournament.date), } });
+      state.upcomingTournaments = payload.upcomingTournaments.map((tournament) => { return {...tournament, date: new Date(tournament.date), } });
     },
     setTournamentState(state, tournamentState) {
       state.tournamentState = tournamentState;
@@ -244,7 +252,11 @@ export default createStore({
         }
         else if (message.type == 'tournamentListing') {
           commit('setTournamentsState', loading_state.LOADED);
-          commit('setTournaments', message.tournaments);
+          commit('setTournaments', message);
+        }
+        else if (message.type == 'tournamentListingFail') {
+          commit('setTournamentsState', loading_state.NOT_LOADED);
+          commit('setTournaments', null);
         }
         else if (message.type == 'tournamentSubscription') {
           commit('setTournamentState', loading_state.LOADED);

@@ -6,8 +6,8 @@
   <template v-if="tournamentsState == 'LOADED'">
     <h1>Tournaments Overview</h1>
     <h2>Upcoming Tournaments</h2>
-    <InfoText v-if="tournaments.length == 0">There are no upcoming tournaments.</InfoText>
-    <Table v-if="tournaments.length > 0" :headers="headers" :rows="tournaments" v-slot="props" :pageSize=10>
+    <InfoText v-if="upcomingTournaments.length == 0">There are no upcoming tournaments.</InfoText>
+    <Table v-if="upcomingTournaments.length > 0" :headers="upcomingHeaders" :rows="upcomingTournaments" v-slot="props" :pageSize=10>
       <TableColumn>
         <router-link :to="{ name: 'tournament-home', params: { tournament: props.row.webName }}">{{ props.row.name }}</router-link>
       </TableColumn>
@@ -18,8 +18,19 @@
         {{ dateFilter(props.row.date) }}
       </TableColumn>
     </Table>
-    <h2>Previous Tournaments</h2>
-    <InfoText>There are no previous tournaments.</InfoText>
+    <h2>Past Tournaments</h2>
+    <InfoText v-if="pastTournaments.length == 0">There are no past tournaments.</InfoText>
+    <Table v-if="pastTournaments.length > 0" :headers="pastHeaders" :rows="pastTournaments" v-slot="props" :pageSize=10>
+      <TableColumn>
+        <router-link :to="{ name: 'tournament-home', params: { tournament: props.row.webName }}">{{ props.row.name }}</router-link>
+      </TableColumn>
+      <TableColumn>
+        {{ props.row.location }}
+      </TableColumn>
+      <TableColumn>
+        {{ dateFilter(props.row.date) }}
+      </TableColumn>
+    </Table>
   </template>
   </main>
 </template>
@@ -39,10 +50,15 @@ export default {
   },
   data() {
     return {
-      headers: [
+      upcomingHeaders: [
         { 'field': 'name', 'label': 'Name', 'sortable': false },
         { 'field': 'location', 'label': 'Location', 'sortable': false },
-        { 'field': 'date', 'label': 'Date', 'sortable': true },
+        { 'field': 'date', 'label': 'Date', 'sortable': true, 'defaultSort': 'ASC' },
+      ],
+      pastHeaders: [
+        { 'field': 'name', 'label': 'Name', 'sortable': false },
+        { 'field': 'location', 'label': 'Location', 'sortable': false },
+        { 'field': 'date', 'label': 'Date', 'sortable': true, 'defaultSort': 'DESC' },
       ],
     }
   },
@@ -52,7 +68,8 @@ export default {
   computed: {
     ...mapState({
       tournamentsState: state => state.tournamentsState,
-      tournaments: state => Array.from(state.tournaments.values()),
+      pastTournaments: state => state.pastTournaments,
+      upcomingTournaments: state => state.upcomingTournaments,
     }),
   },
 }
