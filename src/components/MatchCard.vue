@@ -15,7 +15,7 @@
     <div class="match-card-body">
       <div :class="{winner: match.winner == 'WHITE'}">
         <div class="match-card-player">
-          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: whitePlayer.id }}">
+          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: whitePlayer.id }}" v-if="whitePlayer != null">
             {{ whitePlayer?.firstName }} {{ whitePlayer?.lastName }}
           </router-link>
           <p class="match-card-club">{{ whitePlayer?.club }}</p>
@@ -30,7 +30,7 @@
       </div>
       <div :class="{winner: match.winner == 'BLUE'}">
         <div class="match-card-player">
-          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: bluePlayer.id }}">
+          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: bluePlayer.id }}" v-if="bluePlayer != null">
             {{ bluePlayer?.firstName }} {{ bluePlayer?.lastName }}
           </router-link>
           <p class="match-card-club">{{ bluePlayer?.club }}</p>
