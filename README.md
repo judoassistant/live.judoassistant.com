@@ -16,6 +16,6 @@ $ yarn run dev
 The frontend can be run in production using either the [docker image](https://hub.docker.com/r/judoassistant/judoassistant-web) or running yarn manually:
 ``` bash
 $ yarn run build
-$ yarn start
+$ yarn run serve
 ```
 
