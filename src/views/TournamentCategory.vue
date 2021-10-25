@@ -78,7 +78,6 @@ export default {
     ...mapState({
       categoryState: state => state.categoryState,
       category: state => state.category,
-      players: state => state.players,
     }),
     ...mapGetters({
       matches: 'categoryMatches',

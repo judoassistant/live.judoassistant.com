@@ -24,7 +24,12 @@
           </tr>
           <tr>
             <th>Categories</th>
-            <td>{{ player.country }}</td>
+            <td>
+              <template v-for="(category, index) in categories" :key="category.id">
+                <router-link class="menu-item" :to="{ name: 'tournament-category', params: { tournament: this.$route.params.tournament, categoryId: category.id }}">{{ category.name }}</router-link>
+                <template v-if="index < categories.length - 1">, </template>
+              </template>
+            </td>
           </tr>
         </table>
       </TabItem>
@@ -63,6 +68,7 @@ export default {
     }),
     ...mapGetters({
       matches: 'playerMatches',
+      categories: 'playerCategories',
     }),
   },
 }

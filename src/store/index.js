@@ -15,13 +15,13 @@ function delayedSend(socket, message) {
 function mergeMatches(state, matches) {
   // Compute ids to be kept
   const matchIds = new Set();
-  if (state.subscribedPlayer != null) {
-    for (const combinedId of state.subscribedPlayer.matches)
+  if (state.player != null) {
+    for (const combinedId of state.player.matches)
       matchIds.add(mapId(combinedId));
   }
 
-  if (state.subscribedCategory != null) {
-    for (const combinedId of state.subscribedCategory.matches)
+  if (state.category != null) {
+    for (const combinedId of state.category.matches)
       matchIds.add(mapId(combinedId));
   }
 
@@ -128,24 +128,24 @@ export default createStore({
       state.tournament = payload.tournament;
       state.tournament.date = new Date(payload.tournament.date);
 
-      // Create maps
+      state.tatamis = payload.tatamis;
+
+      // Map categories
       var categories = new Map();
       for (const category of payload.categories)
         categories.set(category.id, category);
+      state.categories = categories;
 
+      // Map players
       var players = new Map();
       for (const player of payload.players)
         players.set(player.id, player);
+      state.players = players;
 
-      var tatamis = payload.tatamis;
-
+      // Map matches
       var matches = new Map();
       for (const match of payload.matches)
         matches.set(mapId(match.combinedId), match);
-
-      state.categories = categories;
-      state.players = players;
-      state.tatamis = tatamis;
       state.matches = matches;
     },
     changeTournament(state, payload) {
@@ -161,7 +161,7 @@ export default createStore({
         state.categories.set(category.id, category);
 
       if ('subscribedCategory' in payload)
-        state.subscribedCategory = payload.subscribedCategory;
+        state.category = payload.subscribedCategory;
 
       // Update players
       for (const playerId of payload.erasedPlayers)
@@ -170,7 +170,7 @@ export default createStore({
         state.players.set(player.id, player);
 
       if ('subscribedPlayer' in payload)
-        state.subscribedPlayer = payload.subscribedPlayer;
+        state.player = payload.subscribedPlayer;
 
       // Update tatamis
       var tatamis = [];
@@ -184,6 +184,9 @@ export default createStore({
         }
       }
       state.tatamis = tatamis;
+
+      if ('subscribedTatami' in payload)
+        state.tatami = payload.subscribedTatami;
 
       // Update matches
       mergeMatches(state, payload.matches);
@@ -359,6 +362,17 @@ export default createStore({
       }
 
       return matches;
+    },
+    playerCategories(state)  {
+      var categories = [];
+      if (state.player != null) {
+        for (const id of state.player.categories) {
+          const category = state.categories.get(id);
+          categories.push(category);
+        }
+      }
+
+      return categories;
     },
     categoryMatches(state)  {
       var matches = [];
