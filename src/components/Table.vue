@@ -3,7 +3,9 @@
     <tr>
       <!-- <th class="active">Date <span class="mdi mdi-arrow-down"></span></th> -->
       <th v-for="header in headers" :key="header.field" :class="{ 'active' : header.field == sortField, 'sortable' : header.sortable }" @click="sortBy(header)">
-        {{ header.label }} <span v-if="header.field == sortField" :class="{ 'mdi' : true, 'mdi-arrow-down': sortAsc, 'mdi-arrow-up': !sortAsc }"></span>
+        {{ header.label }}
+        <span v-if="header.field == sortField" :class="{ 'mdi' : true, 'mdi-arrow-down': sortAsc, 'mdi-arrow-up': !sortAsc }"></span>
+        <span v-if="header.field != sortField" :class="{ 'mdi' : true, 'mdi-arrow-down': sortAsc, 'mdi-arrow-up': !sortAsc, 'hidden-icon': true }"></span>
       </th>
     </tr>
     <tr v-for="row in sortedRows" :key="row.id">
@@ -84,9 +86,13 @@ export default {
       return;
 
     this.sortField = null;
+    this.sortAsc = null;
     for (const header of this.headers) {
-      if ('sortable' in header && header.sortable && this.sortField == null)
+      if ('sortable' in header && header.sortable && this.sortField == null) {
         this.sortField = header.field
+        this.sortAsc = 'ASC';
+      }
+
       if ('defaultSort' in header) {
         this.sortField = header.field;
         this.sortAsc = (header.defaultSort != 'DESC');
@@ -108,6 +114,10 @@ export default {
   table th.active {
     border-bottom: 1px solid $color3;
     color: $color1;
+  }
+
+  .hidden-icon {
+    color: white;
   }
 </style>
 
