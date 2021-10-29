@@ -1,7 +1,7 @@
 <template>
   <nav id="nav-bar">
     <div>
-      <router-link id="logo" :to="{ name: 'home' }"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/UNESCO_white_logo.svg" alt="logo" /></router-link>
+      <router-link id="logo" :to="{ name: 'home' }"><img src="@/assets/logo.svg" alt="logo" /></router-link>
       <div class="filler"></div>
       <template v-if="this.$route.params.tournament != null">
         <router-link class="menu-item" :to="{ name: 'tournament-home', params: { tournament: this.$route.params.tournament }}">Overview</router-link>
