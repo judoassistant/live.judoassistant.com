@@ -35,8 +35,8 @@ export default {
 <style scoped lang="scss">
   @import "../styles/colors.module.scss";
 
-  $long-distance: .8em;
-  $short-distance: .6em;
+  $long-distance: 1.4em;
+  $short-distance: 1.0em;
 
   .pagination {
     list-style-type: none;
@@ -62,22 +62,22 @@ export default {
     color: $color1;
   }
 
-  .pagination-previous {
-    margin-right: $long-distance;
+  .pagination-previous a {
+    padding-right: $long-distance;
   }
 
-  .pagination-number, .pagination-current {
-    margin-left: $short-distance;
-    margin-right: $short-distance;
+  .pagination-number a , .pagination-current a {
+    padding-left: $short-distance;
+    padding-right: $short-distance;
   }
 
   .pagination-dots {
-    margin-left: $long-distance;
-    margin-right: $long-distance;
+    padding-left: $long-distance;
+    padding-right: $long-distance;
   }
 
-  .pagination-next {
-    margin-left: $long-distance;
+  .pagination-next a {
+    padding-left: $long-distance;
   }
 </style>
 

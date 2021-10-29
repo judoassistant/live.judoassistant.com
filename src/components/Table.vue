@@ -106,6 +106,10 @@ export default {
 <style scoped lang="scss">
   @import "../styles/colors.module.scss";
 
+  table th {
+    white-space: nowrap;
+  }
+
   table th.sortable:hover {
     cursor: pointer;
     text-decoration: none;
