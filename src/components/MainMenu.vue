@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav id="nav-bar">
     <div>
       <router-link id="logo" :to="{ name: 'home' }"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/UNESCO_white_logo.svg" alt="logo" /></router-link>
       <div class="filler"></div>
@@ -8,9 +8,19 @@
         <router-link class="menu-item" :to="{ name: 'tournament-players', params: { tournament: this.$route.params.tournament }}">Players</router-link>
         <router-link class="menu-item" :to="{ name: 'tournament-categories', params: { tournament: this.$route.params.tournament }}">Categories</router-link>
         <router-link class="menu-item" :to="{ name: 'tournament-tatamis', params: { tournament: this.$route.params.tournament }}">Tatamis</router-link>
+
+        <a class="menu-item" id="curtain-button" href="#" @click.prevent="showNavCurtain = true"><span class="mdi mdi-menu"></span></a>
       </template>
-      <a class="menu-item" id="curtain-button" href="#"><span class="mdi mdi-menu"></span></a>
     </div>
+  </nav>
+  <div id="nav-fade" v-if="showNavCurtain" @click="showNavCurtain = false"></div>
+  <nav id="nav-curtain" v-if="showNavCurtain">
+      <template v-if="this.$route.params.tournament != null">
+        <router-link class="menu-item" :to="{ name: 'tournament-home', params: { tournament: this.$route.params.tournament }}" @click="showNavCurtain = false">Overview</router-link>
+        <router-link class="menu-item" :to="{ name: 'tournament-players', params: { tournament: this.$route.params.tournament }}" @click="showNavCurtain = false">Players</router-link>
+        <router-link class="menu-item" :to="{ name: 'tournament-categories', params: { tournament: this.$route.params.tournament }}" @click="showNavCurtain = false">Categories</router-link>
+        <router-link class="menu-item" :to="{ name: 'tournament-tatamis', params: { tournament: this.$route.params.tournament }}" @click="showNavCurtain = false"> Tatamis</router-link>
+      </template>
   </nav>
 </template>
 
@@ -19,6 +29,16 @@
 
 export default {
   name: 'MainMenu',
+  data() {
+    return {
+      showNavCurtain: false,
+    };
+  },
+  methods: {
+    toggleNavCurtain: function() {
+      this.showNavCurtain = !this.showNavCurtain;
+    }
+  }
   /* computed: { */
   /*   ...mapState({ */
   /*     tournamentState: state => state.tournamentState, */
@@ -31,32 +51,33 @@ export default {
 <style scoped lang="scss">
   @import "../styles/colors.module.scss";
 
-  nav {
+  /* styling of nav-bar */
+  #nav-bar {
     background: $color5;
   }
 
-  nav > div {
+  #nav-bar > div {
     max-width: 1200px;
     margin: auto;
     display: flex;
     flex-direction: row;
   }
 
-  nav a#logo {
+  #nav-bar a#logo {
     height: 60px;
     transition: 0.2s;
   }
 
-  nav a#logo img {
+  #nav-bar a#logo img {
     height: 40px;
     margin: 10px 16px;
   }
 
-  nav .filler {
+  #nav-bar .filler {
     flex-grow: 1;
   }
 
-  nav .menu-item {
+  #nav-bar .menu-item {
     display: block;
     height: 60px;
     line-height: 60px;
@@ -68,18 +89,18 @@ export default {
     transition: 0.2s;
   }
 
-  nav a.menu-item:hover, nav a#logo:hover, nav .router-link-exact-active {
+  #nav-bar a.menu-item:hover, #nav-bar a#logo:hover, #nav-bar .router-link-exact-active {
     text-decoration: none;
     background: darken($color5, 6);
   }
 
-  nav #curtain-button {
+  #nav-bar #curtain-button {
     font-size: 1.2em;
     display: none;
   }
 
-  /* Styling of curtain menu */
-  #curtain-nav {
+  /* Styling of curtain nav */
+  #nav-curtain {
     background: white;
     position: fixed;
     left: 0;
@@ -89,10 +110,19 @@ export default {
     box-shadow: 0 0 10px 0 #6c7b99;
     /* box-shadow: rgba(0, 0, 0, 0.08) 0px 5px 15px 0px; */
     border-right: 1px solid #d8dee9;
-    display: none;
   }
 
-  #curtain-nav a {
+  #nav-fade {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    width: 100%;
+    transition: 0.2;
+  }
+
+  #nav-curtain .menu-item {
     display: block;
     color: $color1;
     text-transform: uppercase;
@@ -103,9 +133,21 @@ export default {
     transition: 0.2s;
   }
 
-  #curtain-nav a.active, #curtain-nav a:hover {
+  #nav-curtain .router-link-exact-active, #nav-curtain a.menu-item:hover {
     text-decoration: none;
     background: #eceff4;
     color: $color5;
   }
+
+  /* Media queries (tablets and down) */
+  @media (max-width: 768px) {
+    #nav-bar .menu-item {
+      display: none;
+    }
+
+    #nav-bar #curtain-button {
+      display: block;
+    }
+  }
 </style>
+
