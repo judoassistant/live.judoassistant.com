@@ -171,10 +171,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "../styles/colors.module.scss";
+  @import "../styles/constants.module.scss";
 
   .match-card {
-    border: 1px solid #e5e9f0;
+    border: 1px solid $color6;
     margin: 15px 0;
     box-shadow: rgba(0, 0, 0, 0.08) 0px 5px 15px 0px;
   }
@@ -182,12 +182,11 @@ export default {
   .match-card p {
     margin: 0;
     padding: 0;
-    /* border: 1px dashed green; */
     display: block;
   }
 
   .match-card-header {
-    border-bottom: 1px solid #e5e9f0;
+    border-bottom: 1px solid $color6;
     padding: 10px 16px;
     display: flex;
     flex-direction: row;
@@ -279,7 +278,7 @@ export default {
   }
 
   .match-card-events {
-    border-top: 1px solid #e5e9f0;
+    border-top: 1px solid $color6;
     padding: 10px 16px;
   }
 
@@ -319,7 +318,7 @@ export default {
 
   .match-card-button {
     display: block;
-    border-top: 1px solid #e5e9f0;
+    border-top: 1px solid $color6;
     text-align: center;
     transition: 0.2s;
     color: #788296;

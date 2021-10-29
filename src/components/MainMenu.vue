@@ -49,7 +49,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "../styles/colors.module.scss";
+  @import "../styles/constants.module.scss";
 
   /* styling of nav-bar */
   #nav-bar {

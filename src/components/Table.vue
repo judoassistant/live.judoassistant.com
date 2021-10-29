@@ -104,7 +104,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "../styles/colors.module.scss";
+  @import "../styles/constants.module.scss";
 
   table th {
     white-space: nowrap;

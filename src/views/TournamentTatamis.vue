@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "../styles/colors.module.scss";
+  @import "../styles/constants.module.scss";
 
   .concurrent-group {
     display: flex;
@@ -70,7 +70,7 @@ export default {
   }
 
   .tatami-block {
-    border: 1px solid #e5e9f0; /* Move into colors module */
+    border: 1px solid $color6;
     margin: 0 5px 10px 5px;
     box-shadow: rgba(0, 0, 0, 0.08) 0px 5px 15px 0px;
     padding: 10px 0;

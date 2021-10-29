@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "../styles/colors.module.scss";
+  @import "../styles/constants.module.scss";
 
   $long-distance: 1.4em;
   $short-distance: 1.0em;
