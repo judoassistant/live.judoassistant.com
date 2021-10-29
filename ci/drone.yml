@@ -8,6 +8,9 @@ steps:
   image: alpine/git
   commands:
   - git clone https://github.com/judoassistant/docker.git docker
+  when:
+    branch:
+    - master
 - name: web-publish
   image: plugins/docker
   depends_on:
@@ -21,7 +24,6 @@ steps:
         from_secret: docker_password
     tags:
     - latest
-    custom_dns: [10.83.252.10, 10.83.16.53, 10.88.1.95]
     cache_from: "judoassistant/judoassistant-web-frontend:latest"
   when:
     branch:

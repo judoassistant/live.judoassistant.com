@@ -1,0 +1,80 @@
+@import "@/styles/constants.module.scss";
+
+// $nord1: #2e3440;
+
+// Base styling
+body {
+  margin: 0 0 50px 0;
+  font-family: "Noto Sans";
+}
+
+h1, h2 {
+  font-weight: 250;
+  color: $color1;
+}
+
+h1 {
+  font-size: 30pt;
+}
+
+h2 {
+  font-size: 24pt;
+}
+
+p {
+  font-weight: 300;
+  line-height: 2em;
+  color: $color1;
+}
+
+a {
+  font-weight: 300;
+  line-height: 2em;
+  color: $color5;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: $color1;
+}
+
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table tr {
+  padding: 0;
+}
+
+table td, table th {
+  padding: 16px 8px;
+  border-bottom: 1px solid $color2;
+  margin: 0;
+}
+
+table th.active {
+  border-bottom: 1px solid $color2;
+}
+
+table td {
+  color: $color1;
+  font-weight: 300;
+}
+
+table th {
+  color: $color4;
+  font-weight: 300;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  text-align: left;
+}
+
