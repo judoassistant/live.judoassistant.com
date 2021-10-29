@@ -108,6 +108,7 @@ export default {
 
   table th {
     white-space: nowrap;
+    user-select: none;
   }
 
   table th.sortable:hover {
