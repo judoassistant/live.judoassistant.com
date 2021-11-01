@@ -21,5 +21,5 @@ steps:
   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   - rsync --delete -ra -e "ssh -p 22" dist/ ci@judoassistant.com:/var/www/live.judoassistant.com/html
   when:
-    branch:
-    - master
+    event:
+    - tag
