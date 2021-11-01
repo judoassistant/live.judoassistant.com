@@ -8,7 +8,7 @@ steps:
   image: node
   commands:
   - npm install
-  - npm build
+  - npm run build
 - name: deploy
   image: eeacms/rsync
   environment:
