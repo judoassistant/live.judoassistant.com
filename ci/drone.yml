@@ -4,28 +4,24 @@ type: docker
 name: linux
 
 steps:
-- name: dockerfiles
-  image: alpine/git
+- name: build
+  image: node
   commands:
-  - git clone https://github.com/judoassistant/docker.git docker
-  when:
-    branch:
-    - master
-- name: web-publish
-  image: plugins/docker
+  - npm install
+  - npm build
+- name: deploy
+  image: eeacms
   depends_on:
   - dockerfiles
-  settings:
-    repo: judoassistant/judoassistant-web-frontend
-    dockerfile: docker/web-frontend/Dockerfile
-    username:
-        from_secret: docker_username
-    password:
-        from_secret: docker_password
-    tags:
-    - latest
-    cache_from: "judoassistant/judoassistant-web-frontend:latest"
+  environment:
+    SSH_KEY:
+      from_secret: ssh_key
+  commands:
+  - mkdir -p ~/.ssh
+  - eval `ssh-agent -s`
+  - echo "$SSH_KEY" | ssh-add -
+  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  - rsync --delete -ra -e "ssh -p 22" html/ ci@judoassistant.com:/var/www/live.judoassistant.com/html
   when:
     branch:
     - master
-
