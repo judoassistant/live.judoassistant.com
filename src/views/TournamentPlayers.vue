@@ -2,7 +2,7 @@
   <InfoText v-if="!hasPlayers">This tournament has no players yet.</InfoText>
 
   <template v-if="hasPlayers">
-    <h2>Players</h2>
+    <h2>Fighters</h2>
 
     <Input v-model="searchTerm" placeholder="Search" />
     <Table :headers="headers" :rows="players" v-slot="props">
@@ -23,11 +23,11 @@
 import Table from '@/components/Table.vue'
 import TableColumn from '@/components/TableColumn.vue'
 import InfoText from '@/components/InfoText.vue'
-import Input from '@/components/Input.vue'
+import SearchInput from '@/components/SearchInput.vue'
 import { mapState } from 'vuex'
 
 export default {
-  components: { Table, TableColumn, InfoText, Input },
+  components: { Table, TableColumn, InfoText, Input: SearchInput },
   data() {
     return {
       searchTerm: "",
