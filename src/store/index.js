@@ -1,5 +1,5 @@
-import { createStore } from 'vuex'
 import { mapId } from '@/store/helpers.js'
+import { createStore } from 'vuex'
 
 function delayedSend(socket, message) {
   if (socket.readyState == 1) {
@@ -233,12 +233,25 @@ export default createStore({
 
       const connection = new WebSocket('ws://localhost:9001');
 
-      connection.onopen = function() {
-        commit('setConnectionState', connection_state.CONNECTED);
-        commit('setClockSyncBegin', Date.now());
-
-        connection.send('clock');
-      }
+      const connectToServer = () => {
+        connection.onopen = function() {
+          commit('setConnectionState', connection_state.CONNECTED);
+          commit('setClockSyncBegin', Date.now());
+    
+          connection.send("clock");
+        };
+      };
+    
+      //When the tab/page get focus, check the connection, and reconnect if the connection is closed
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          if (connection.readyState === WebSocket.CLOSED) {
+            connectToServer();
+          }
+        }
+      });
+    
+      connectToServer();
 
       connection.onmessage = function(event) {
         const message = JSON.parse(event.data);
