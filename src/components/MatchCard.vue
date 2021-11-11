@@ -14,11 +14,11 @@
     </div>
     <div class="match-card-body">
       <div :class="{winner: match.winner == 'WHITE'}">
-        <div class="match-card-player">
-          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: whitePlayer.id }}" v-if="whitePlayer != null">
-            {{ whitePlayer?.firstName }} {{ whitePlayer?.lastName }}
+        <div class="match-card-player" v-if="whitePlayer != null">
+          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: whitePlayer.id }}">
+            {{ whitePlayer.firstName }} {{ whitePlayer.lastName }}
           </router-link>
-          <p class="match-card-club">{{ whitePlayer?.club }}</p>
+          <p class="match-card-club">{{ whitePlayer.club }}</p>
         </div>
         <div class="match-card-penalties"></div>
             <div class="match-card-penalties">
@@ -29,11 +29,11 @@
         <p class="match-card-score">{{ whiteScore }}</p>
       </div>
       <div :class="{winner: match.winner == 'BLUE'}">
-        <div class="match-card-player">
-          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: bluePlayer.id }}" v-if="bluePlayer != null">
-            {{ bluePlayer?.firstName }} {{ bluePlayer?.lastName }}
+        <div class="match-card-player" v-if="bluePlayer != null">
+          <router-link class="match-card-name" :to="{ name: 'tournament-player', params: { tournament: this.$route.params.tournament, playerId: bluePlayer.id }}">
+            {{ bluePlayer.firstName }} {{ bluePlayer.lastName }}
           </router-link>
-          <p class="match-card-club">{{ bluePlayer?.club }}</p>
+          <p class="match-card-club">{{ bluePlayer.club }}</p>
         </div>
         <div class="match-card-penalties">
           <span v-if="match.blueScore.hansokuMake" class="hansoku"></span>
