@@ -74,6 +74,11 @@ export default {
   mounted: function() {
     this.$store.dispatch('subscribeCategory', this.$route.params.categoryId);
   },
+  watch: {
+    '$route.params.categoryId': function() {
+      this.$store.dispatch('subscribeCategory', this.$route.params.categoryId);
+    }
+  },
   computed: {
     ...mapState({
       categoryState: state => state.categoryState,
