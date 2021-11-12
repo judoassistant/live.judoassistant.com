@@ -20,6 +20,11 @@
 import PaginationControls from '@/components/PaginationControls.vue'
 
 function defaultCompare(a, b, isAsc) {
+  const areBothStrings = (typeof a == "string") && (typeof b == "string");
+  if (areBothStrings) {
+    return a.localeCompare(b, "da") * (isAsc ? 1 : -1);
+  }
+
   if (isAsc)
     return a > b;
   return a < b;
