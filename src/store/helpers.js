@@ -2,51 +2,6 @@ export function mapId(combinedId) {
   return String(combinedId.categoryId) + "_" + String(combinedId.matchId);
 }
 
-// export function lexicographicalCompare(a, b, isAsc) {
-//   // Split the string and compare each part
-//   // Compare numbers as numbers
-//   if (a == b)
-//     return 0;
-
-//   const aName = a.split(" ");
-//   const bName = b.split(" ");
-
-//   for (var i = 0; i < aName.length && i < bName.length; i++) {
-//     const aPart = aName[i]
-//     const bPart = bName[i]
-
-//     if (aPart == bPart)
-//       continue;
-
-//     const aNumber = Number(aPart);
-//     const bNumber = Number(bPart);
-
-//     // Compare parts as numbers
-//     if (!Number.isNaN(aNumber) && !Number.isNaN(bNumber)) {
-//       if (aNumber == bNumber)
-//         continue;
-//       return (aNumber < bNumber && isAsc ? -1 : 1);
-//     }
-
-//     // Compare parts as strings
-//     if (Number.isNaN(aNumber) && Number.isNaN(bNumber)) {
-//       if (aPart == bPart)
-//         continue;
-//       return (aPart < bPart && isAsc ? -1 : 1);
-//     }
-
-//     // Numbers should appear first in the ordering
-//     if (!Number.isNaN(aNumber))
-//       return (isAsc ? -1 : 1);
-
-//     // if (!Number.isNaN(bNumber))
-//     return (isAsc ? 1 : -1);
-//   }
-
-//   // Both compare equal so far. The shortest should appear first
-//   return (aName.length < bName.length && isAsc ? -1 : 1);
-// }
-
 function isNumeric(c) {
   return '0' <= c && c <= '9';
 
@@ -75,7 +30,12 @@ function splitString(str) {
   return res;
 }
 
-export function lexicographicalCompare(a, b, isAsc) {
+/*
+ * This comparator compares two strings by splitting each string into words.
+ * Pairs of words are then compared lexicographically or as numbers if
+ * possible.
+ */
+export function lexicographicalComparator(a, b, isAsc) {
   const splitA = splitString(a);
   const splitB = splitString(b);
 
@@ -98,5 +58,29 @@ export function lexicographicalCompare(a, b, isAsc) {
   }
 
   return (isAsc ? splitA.length > splitB.length : splitB.length > splitA.length);
+}
+
+/*
+ * Compares two match lexicographically by categoryId, position
+ */
+export function playerMatchesComparator(a, b) {
+  if (a.combinedId.categoryId != b.combinedId.categoryId)
+    return a.combinedId.categoryId - b.combinedId.categoryId;
+
+  return a.position - b.position;
+}
+
+/*
+ * Compare numbers but order null values at the end
+ */
+export function resultsComparator(a, b) {
+  if (a == null && b == null)
+    return 0;
+  if (a == null)
+    return 1;
+  if (b == null)
+    return -1;
+
+  return a - b;
 }
 

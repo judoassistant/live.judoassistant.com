@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { mapId } from '@/store/helpers.js'
+import { mapId, playerMatchesComparator } from '@/store/helpers.js'
 
 function delayedSend(socket, message) {
   if (socket.readyState == 1) {
@@ -361,7 +361,7 @@ export default createStore({
         }
       }
 
-      return matches;
+      return matches.sort(playerMatchesComparator);
     },
     playerCategories(state)  {
       var categories = [];
