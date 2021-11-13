@@ -31,11 +31,26 @@ function splitString(str) {
 }
 
 /*
- * This comparator compares two strings by splitting each string into words.
- * Pairs of words are then compared lexicographically or as numbers if
- * possible.
+ * Compares object using localeCompare on strings
  */
-export function lexicographicalComparator(a, b, isAsc) {
+export function localeComparator(a, b) {
+  const areBothStrings = (typeof a == "string") && (typeof b == "string");
+  if (areBothStrings) {
+    return a.localeCompare(b, "da");
+  }
+
+  if (a > b)
+    return 1;
+  if (a < b)
+    return -1;
+  return 0;
+}
+
+/*
+ * This comparator compares two strings by splitting each string into words.
+ * Pairs of words are then compared as strings or numbers.
+ */
+export function lexicographicalComparator(a, b) {
   const splitA = splitString(a);
   const splitB = splitString(b);
 
@@ -50,14 +65,14 @@ export function lexicographicalComparator(a, b, isAsc) {
       const aNumber = Number(aPart.str);
       const bNumber = Number(bPart.str);
 
-      return (isAsc ? aNumber > bNumber : bNumber > aNumber);
+      return aNumber - bNumber;
     }
 
     // Not numbers
-    return (isAsc ? aPart.str > bPart.str : bPart.str > aPart.str);
+    return localeComparator(aPart, bPart);
   }
 
-  return (isAsc ? splitA.length > splitB.length : splitB.length > splitA.length);
+  return splitA.length - splitB.length;
 }
 
 /*
