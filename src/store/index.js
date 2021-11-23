@@ -231,7 +231,7 @@ export default createStore({
     connect({ commit, state }) {
       commit('setConnectionState', connection_state.CONNECTING);
 
-      const connection = new WebSocket('ws://localhost:9001');
+      const connection = new WebSocket(process.env.VUE_APP_BACKEND_URL);
 
       const connectToServer = () => {
         connection.onopen = function() {
