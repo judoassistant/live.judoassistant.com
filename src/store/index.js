@@ -1,4 +1,4 @@
-import { mapId } from '@/store/helpers.js'
+import { mapId, playerMatchesComparator } from '@/store/helpers.js'
 import { createStore } from 'vuex'
 
 function delayedSend(socket, message) {
@@ -242,14 +242,25 @@ export default createStore({
         };
       };
     
-      //When the tab/page get focus, check the connection, and reconnect if the connection is closed
+      //When the tab/page becomes visible, check the connection, and reconnect if the connection is closed
       document.addEventListener('visibilitychange', () => {
+        console.log('visibilitychange: ')
+        console.log('document.visibilityState: ', document.visibilityState)
         if (document.visibilityState === 'visible') {
           if (connection.readyState === WebSocket.CLOSED) {
             connectToServer();
           }
         }
       });
+      
+      //When the window gets focus, check the connection, and reconnect if the connection is closed
+      //This is used when mobile screen is turned on
+      window.addEventListener("focus", ()=>{
+        if (connection.readyState === WebSocket.CLOSED) {
+          connectToServer();
+        }
+      })
+  
     
       connectToServer();
 
@@ -374,7 +385,7 @@ export default createStore({
         }
       }
 
-      return matches;
+      return matches.sort(playerMatchesComparator);
     },
     playerCategories(state)  {
       var categories = [];

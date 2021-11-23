@@ -55,6 +55,11 @@ export default {
   mounted: function() {
     this.$store.dispatch('subscribePlayer', this.$route.params.playerId);
   },
+  watch: {
+    '$route.params.playerId': function() {
+      this.$store.dispatch('subscribePlayer', this.$route.params.playerId);
+    }
+  },
   methods: {
     sexFilter: sexFilter,
     rankFilter: rankFilter,

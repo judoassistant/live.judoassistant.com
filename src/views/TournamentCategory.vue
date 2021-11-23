@@ -52,7 +52,7 @@ import Table from '@/components/Table.vue'
 import TableColumn from '@/components/TableColumn.vue'
 import MatchCard from '@/components/MatchCard.vue'
 import InfoText from '@/components/InfoText.vue'
-import { mapId } from '@/store/helpers.js'
+import { mapId, resultsComparator } from '@/store/helpers.js'
 
 export default {
   components: { Tabs, TabItem, MatchCard, Table, TableColumn, InfoText },
@@ -67,12 +67,17 @@ export default {
         { 'field': 'firstName', 'label': 'First Name', 'sortable': false },
         { 'field': 'lastName', 'label': 'Last Name', 'sortable': false },
         { 'field': 'club', 'label': 'Club', 'sortable': false },
-        { 'field': 'pos', 'label': 'Position', 'sortable': true },
+        { 'field': 'pos', 'label': 'Position', 'sortable': true, 'comparator': resultsComparator },
       ],
     }
   },
   mounted: function() {
     this.$store.dispatch('subscribeCategory', this.$route.params.categoryId);
+  },
+  watch: {
+    '$route.params.categoryId': function() {
+      this.$store.dispatch('subscribeCategory', this.$route.params.categoryId);
+    }
   },
   computed: {
     ...mapState({

@@ -18,12 +18,7 @@
 
 <script>
 import PaginationControls from '@/components/PaginationControls.vue'
-
-function defaultCompare(a, b, isAsc) {
-  if (isAsc)
-    return a > b;
-  return a < b;
-}
+import { localeComparator } from '@/store/helpers.js'
 
 export default {
   name: 'Table',
@@ -52,7 +47,7 @@ export default {
       var sortAsc = this.sortAsc;
 
       var res = [...this.rows];
-      var comparator = defaultCompare;
+      var comparator = localeComparator;
 
       for (const header of this.headers) {
         if (header.field != field)
@@ -62,7 +57,7 @@ export default {
         comparator = header['comparator'];
       }
 
-      res.sort(function(a, b) { return comparator(a[field], b[field], sortAsc); });
+      res.sort(function(a, b) { return (sortAsc ? 1 : -1) * comparator(a[field], b[field]); });
       res = res.slice(this.page*this.pageSize, (this.page+1)*this.pageSize);
 
       return res;

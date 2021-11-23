@@ -19,6 +19,11 @@ export default {
   mounted: function() {
     this.$store.dispatch('subscribeTournament', this.$route.params.tournament);
   },
+  watch: {
+    '$route.params.tournament': function() {
+      this.$store.dispatch('subscribeTournament', this.$route.params.tournament);
+    }
+  },
   computed: {
     ...mapState({
       tournamentState: state => state.tournamentState,
