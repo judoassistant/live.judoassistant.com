@@ -4,28 +4,23 @@ export function mapId(combinedId) {
 
 function isNumeric(c) {
   return '0' <= c && c <= '9';
-
 }
 
-function splitString(str) {
+function splitIntoCharacters(str) {
   var res = [];
-  var cur = "";
-  var isNumber;
 
-  for (const c of str) {
-    if (cur.length > 0) {
-      if (isNumeric(c) != isNumber) {
-        res.push({ 'isNumber' : isNumber, 'str': cur });
-        cur = "";
+  for (var i = 0; i < str.length; i++) {
+    var cur = str[i];
+
+    if (isNumeric(str[i])) {
+      while (i + 1 < str.length && isNumeric(str[i+1])) {
+        cur += str[i+1];
+        i++
       }
     }
 
-    isNumber = isNumeric(c);
-    cur += c;
+    res.push({ 'isNumber' : isNumeric(str[i]), 'str': cur });
   }
-
-  if (cur.length > 0)
-    res.push({ 'isNumber' : isNumber, 'str': cur });
 
   return res;
 }
@@ -47,32 +42,38 @@ export function localeComparator(a, b) {
 }
 
 /*
- * This comparator compares two strings by splitting each string into words.
- * Pairs of words are then compared as strings or numbers.
+ * This comparator compares two strings by splitting each string into
+ * characters and comparing the strings character by characters. However,
+ * consecutive digits are considered one character.
  */
 export function lexicographicalComparator(a, b) {
-  const splitA = splitString(a);
-  const splitB = splitString(b);
+  const splitA = splitIntoCharacters(a);
+  const splitB = splitIntoCharacters(b);
 
   for (var i = 0; i < splitA.length && i < splitB.length; i++) {
     const aPart = splitA[i];
     const bPart = splitB[i];
 
-    if (aPart.str == bPart.str)
-      continue;
+    if (aPart.isNumber != bPart.isNumber) {
+      return aPart.isNumber - bPart.isNumber;
+    }
 
     if (aPart.isNumber && bPart.isNumber) {
       const aNumber = Number(aPart.str);
       const bNumber = Number(bPart.str);
 
+      if (aNumber == bNumber)
+        continue;
       return aNumber - bNumber;
     }
 
-    // Not numbers
-    return localeComparator(aPart, bPart);
+    const compareResult = localeComparator(aPart, bPart);
+    if (compareResult == 0)
+      continue;
+    return compareResult;
   }
 
-  return splitA.length - splitB.length;
+  return 0;
 }
 
 /*
