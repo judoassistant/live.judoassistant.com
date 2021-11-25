@@ -55,7 +55,7 @@ export function lexicographicalComparator(a, b) {
     const bPart = splitB[i];
 
     if (aPart.isNumber != bPart.isNumber) {
-      return aPart.isNumber - bPart.isNumber;
+      return bPart.isNumber - aPart.isNumber;
     }
 
     if (aPart.isNumber && bPart.isNumber) {
@@ -67,13 +67,13 @@ export function lexicographicalComparator(a, b) {
       return aNumber - bNumber;
     }
 
-    const compareResult = localeComparator(aPart, bPart);
+    const compareResult = localeComparator(aPart.str, bPart.str);
     if (compareResult == 0)
       continue;
     return compareResult;
   }
 
-  return 0;
+  return splitA.length > splitB.length;
 }
 
 /*
