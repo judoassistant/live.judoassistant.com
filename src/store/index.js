@@ -1,5 +1,5 @@
-import { createStore } from 'vuex'
 import { mapId, playerMatchesComparator } from '@/store/helpers.js'
+import { createStore } from 'vuex'
 
 function delayedSend(socket, message) {
   if (socket.readyState == 1) {
@@ -231,88 +231,108 @@ export default createStore({
     connect({ commit, state }) {
       commit('setConnectionState', connection_state.CONNECTING);
 
-      const connection = new WebSocket(process.env.VUE_APP_BACKEND_URL);
+      var connection = null;
+      const connectToServer = () => {
+        console.log("Connecting to server");
+        connection = new WebSocket(process.env.VUE_APP_BACKEND_URL);
 
-      connection.onopen = function() {
-        commit('setConnectionState', connection_state.CONNECTED);
-        commit('setClockSyncBegin', Date.now());
+        connection.onopen = function() {
+          commit('setConnectionState', connection_state.CONNECTED);
+          commit('setClockSyncBegin', Date.now());
 
-        connection.send('clock');
-      }
+          connection.send("clock");
+        };
 
-      connection.onmessage = function(event) {
-        const message = JSON.parse(event.data);
+        connection.onerror = function() {
+          commit('setConnectionState', connection_state.NOT_CONNECTED);
+          commit('setConnection', null);
+        }
 
-        if (message.type == 'clock') {
-          const t1 = state.clockSyncBegin;
-          const t2 = message.clock;
-          const t3 = Date.now();
-          const latency = (t3 - t1) / 2;
-          const diff = t2 - (t1 + latency);
+        connection.onclose = function() {
+          commit('setConnectionState', connection_state.NOT_CONNECTED);
+          commit('setConnection', null);
+        }
 
-          commit('setClockDiff', diff);
-          commit('setClockSyncBegin', 0);
-        }
-        else if (message.type == 'tournamentListing') {
-          commit('setTournamentsState', loading_state.LOADED);
-          commit('setTournaments', message);
-        }
-        else if (message.type == 'tournamentListingFail') {
-          commit('setTournamentsState', loading_state.NOT_LOADED);
-          commit('setTournaments', null);
-        }
-        else if (message.type == 'tournamentSubscription') {
-          commit('setTournamentState', loading_state.LOADED);
-          commit('setTournament', message);
-        }
-        else if (message.type == 'tournamentSubscriptionFail') {
-          commit('setTournamentState', loading_state.NOT_LOADED);
-          commit('setTournament', null);
-        }
-        else if (message.type == 'playerSubscription') {
-          commit('setPlayerState', loading_state.LOADED);
-          commit('setPlayer', message);
-        }
-        else if (message.type == 'playerSubscriptionFail') {
-          commit('setPlayerState', loading_state.NOT_LOADED);
-          commit('setPlayer', null);
-        }
-        else if (message.type == 'categorySubscription') {
-          commit('setCategoryState', loading_state.LOADED);
-          commit('setCategory', message);
-        }
-        else if (message.type == 'categorySubscriptionFail') {
-          commit('setCategoryState', loading_state.NOT_LOADED);
-          commit('setCategory', null);
-        }
-        else if (message.type == 'tatamiSubscription') {
-          commit('setTatamiState', loading_state.LOADED);
-          commit('setTatami', message);
-        }
-        else if (message.type == 'tatamiSubscriptionFail') {
-          commit('setTatamiState', loading_state.NOT_LOADED);
-          commit('setTatami', null);
-        }
-        else if (message.type == 'tournamentChanges') {
-          commit('changeTournament', message);
-        }
-        else {
-          console.log("Unexpected message type received", message);
+        connection.onmessage = function(event) {
+          const message = JSON.parse(event.data);
 
+          if (message.type == 'clock') {
+            const t1 = state.clockSyncBegin;
+            const t2 = message.clock;
+            const t3 = Date.now();
+            const latency = (t3 - t1) / 2;
+            const diff = t2 - (t1 + latency);
+
+            commit('setClockDiff', diff);
+            commit('setClockSyncBegin', 0);
+          }
+          else if (message.type == 'tournamentListing') {
+            commit('setTournamentsState', loading_state.LOADED);
+            commit('setTournaments', message);
+          }
+          else if (message.type == 'tournamentListingFail') {
+            commit('setTournamentsState', loading_state.NOT_LOADED);
+            commit('setTournaments', null);
+          }
+          else if (message.type == 'tournamentSubscription') {
+            commit('setTournamentState', loading_state.LOADED);
+            commit('setTournament', message);
+          }
+          else if (message.type == 'tournamentSubscriptionFail') {
+            commit('setTournamentState', loading_state.NOT_LOADED);
+            commit('setTournament', null);
+          }
+          else if (message.type == 'playerSubscription') {
+            commit('setPlayerState', loading_state.LOADED);
+            commit('setPlayer', message);
+          }
+          else if (message.type == 'playerSubscriptionFail') {
+            commit('setPlayerState', loading_state.NOT_LOADED);
+            commit('setPlayer', null);
+          }
+          else if (message.type == 'categorySubscription') {
+            commit('setCategoryState', loading_state.LOADED);
+            commit('setCategory', message);
+          }
+          else if (message.type == 'categorySubscriptionFail') {
+            commit('setCategoryState', loading_state.NOT_LOADED);
+            commit('setCategory', null);
+          }
+          else if (message.type == 'tatamiSubscription') {
+            commit('setTatamiState', loading_state.LOADED);
+            commit('setTatami', message);
+          }
+          else if (message.type == 'tatamiSubscriptionFail') {
+            commit('setTatamiState', loading_state.NOT_LOADED);
+            commit('setTatami', null);
+          }
+          else if (message.type == 'tournamentChanges') {
+            commit('changeTournament', message);
+          }
+          else {
+            console.log("Unexpected message type received", message);
+          }
         }
-      }
 
-      connection.onerror = function() {
-        commit('setConnectionState', connection_state.NOT_CONNECTED);
-        commit('setConnection', null);
-      }
+        commit('setConnection', connection);
+      };
 
-      connection.onclose = function() {
-        commit('setConnectionState', connection_state.NOT_CONNECTED);
-        commit('setConnection', null);
-      }
+      //When the tab/page becomes visible, check the connection, and reconnect if the connection is closed
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && connection.readyState === WebSocket.CLOSED) {
+          connectToServer();
+        }
+      });
 
-      commit('setConnection', connection);
+      //When the window gets focus, check the connection, and reconnect if the connection is closed
+      //This is used when mobile screen is turned on
+      window.addEventListener("focus", ()=>{
+        if (connection.readyState === WebSocket.CLOSED) {
+          connectToServer();
+        }
+      })
+
+      connectToServer();
     },
     fetchTournaments({ commit, state }) {
       commit('setTournamentsState', loading_state.LOADING);
