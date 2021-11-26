@@ -73,7 +73,7 @@ export function lexicographicalComparator(a, b) {
     return compareResult;
   }
 
-  return splitA.length > splitB.length;
+  return splitA.length - splitB.length;
 }
 
 /*
