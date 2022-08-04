@@ -19,8 +19,14 @@
         </Table>
       </TabItem>
       <TabItem title="Matches">
-        <InfoText v-if="matches.length == 0">This category has no matches yet.</InfoText>
-        <MatchCard v-for="match in matches" :key="mapId(match.combinedId)" :match="match" ></MatchCard>
+        <template v-if="category.matchesHidden">
+          <InfoText>The matches in this category are hidden.</InfoText>
+        </template>
+        <template v-else>
+          <InfoText v-if="matches.length == 0">This category has no matches yet.</InfoText>
+
+          <MatchCard v-for="match in matches" :key="mapId(match.combinedId)" :match="match"></MatchCard>
+        </template>
       </TabItem>
       <TabItem title="Results">
         <InfoText v-if="results.length == 0">This category has no results yet.</InfoText>
