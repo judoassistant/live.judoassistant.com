@@ -1,5 +1,5 @@
-import { createStore } from 'vuex'
 import { mapId, playerMatchesComparator } from '@/store/helpers.js'
+import { createStore } from 'vuex'
 
 function delayedSend(socket, message) {
   if (socket.readyState == 1) {
@@ -233,12 +233,36 @@ export default createStore({
 
       const connection = new WebSocket(process.env.VUE_APP_BACKEND_URL);
 
-      connection.onopen = function() {
-        commit('setConnectionState', connection_state.CONNECTED);
-        commit('setClockSyncBegin', Date.now());
-
-        connection.send('clock');
-      }
+      const connectToServer = () => {
+        connection.onopen = function() {
+          commit('setConnectionState', connection_state.CONNECTED);
+          commit('setClockSyncBegin', Date.now());
+    
+          connection.send("clock");
+        };
+      };
+    
+      //When the tab/page becomes visible, check the connection, and reconnect if the connection is closed
+      document.addEventListener('visibilitychange', () => {
+        console.log('visibilitychange: ')
+        console.log('document.visibilityState: ', document.visibilityState)
+        if (document.visibilityState === 'visible') {
+          if (connection.readyState === WebSocket.CLOSED) {
+            connectToServer();
+          }
+        }
+      });
+      
+      //When the window gets focus, check the connection, and reconnect if the connection is closed
+      //This is used when mobile screen is turned on
+      window.addEventListener("focus", ()=>{
+        if (connection.readyState === WebSocket.CLOSED) {
+          connectToServer();
+        }
+      })
+  
+    
+      connectToServer();
 
       connection.onmessage = function(event) {
         const message = JSON.parse(event.data);
